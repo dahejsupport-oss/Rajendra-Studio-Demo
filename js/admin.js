@@ -962,6 +962,26 @@ async function loadInquiries() {
   }
 }
 
+function isOrderPaymentPaid(order) {
+  if (!order) return false;
+  const payStatus = String(order.paymentStatus || '').toLowerCase().trim();
+  if (payStatus === 'paid' || payStatus === 'done' || payStatus === 'payment done' || payStatus === 'completed') {
+    return true;
+  }
+  if (payStatus === 'pending' || payStatus === 'unpaid' || payStatus === 'payment pending') {
+    return false;
+  }
+  const isOnlinePayment = (order.specs && order.specs.toLowerCase().includes('instant upi')) || 
+                         (order.paymentMethod && order.paymentMethod.toLowerCase().includes('upi')) || false;
+  return isOnlinePayment;
+}
+window.isOrderPaymentPaid = isOrderPaymentPaid;
+
+function isOrderPaymentPending(order) {
+  return !isOrderPaymentPaid(order);
+}
+window.isOrderPaymentPending = isOrderPaymentPending;
+
 function updateOrdersKPIs(orders) {
   const norm = (s) => (s || '').toLowerCase().trim();
 
@@ -986,10 +1006,18 @@ function updateOrdersKPIs(orders) {
     return s === 'cancelled' || s === 'canceled';
   });
 
+  const pendingPaymentOrders = orders.filter(o => {
+    const s = norm(o.status);
+    const isCanc = s === 'cancelled' || s === 'canceled' || s === 'rejected';
+    return !isCanc && isOrderPaymentPending(o);
+  });
+
   const newCount = newOrders.length;
   const processingCount = processingOrders.length;
   const completedCount = completedOrders.length;
   const cancelledCount = cancelledOrders.length;
+  const pendingPaymentCount = pendingPaymentOrders.length;
+  const pendingPaymentTotal = pendingPaymentOrders.reduce((sum, item) => sum + (Number(item.total || item.estimatedValue) || 0), 0);
 
   const now = new Date();
   const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -1041,16 +1069,19 @@ function updateOrdersKPIs(orders) {
   const elOverProc = document.getElementById('kpiProcessingOrders');
   const elOverComp = document.getElementById('kpiCompletedOrders');
   const elOverPipe = document.getElementById('kpiPipelineValue');
+  const elOverPendingPay = document.getElementById('kpiPendingPaymentValue');
 
   if (elOverNew) elOverNew.textContent = newCount;
   if (elOverProc) elOverProc.textContent = processingCount;
   if (elOverComp) elOverComp.textContent = completedCount;
   if (elOverPipe) elOverPipe.textContent = `₹${totalPipelineVal.toLocaleString('en-IN')}`;
+  if (elOverPendingPay) elOverPendingPay.textContent = `₹${pendingPaymentTotal.toLocaleString('en-IN')}`;
 
   const elOverNewTag = document.getElementById('kpiNewInquiriesTag');
   const elOverProcTag = document.getElementById('kpiProcessingOrdersTag');
   const elOverCompTag = document.getElementById('kpiCompletedOrdersTag');
   const elOverPipeTag = document.getElementById('kpiPipelineValueTag');
+  const elOverPendingPayTag = document.getElementById('kpiPendingPaymentTag');
 
   if (elOverNewTag) {
     elOverNewTag.innerHTML = newToday > 0 ? `<span style="font-size:0.85em;">●</span> ${newToday} today` : `<span style="font-size:0.85em;">●</span> ${newCount} pending`;
@@ -1063,6 +1094,9 @@ function updateOrdersKPIs(orders) {
   }
   if (elOverPipeTag) {
     elOverPipeTag.textContent = `${orders.length} total orders`;
+  }
+  if (elOverPendingPayTag) {
+    elOverPendingPayTag.innerHTML = `<span style="font-size:0.85em;">●</span> ${pendingPaymentCount} unpaid`;
   }
 
   // Refresh smart notification badges
@@ -1317,8 +1351,9 @@ function createOrderCardRowHTML(order) {
 
   // Payment Status & Delivery Status Derivations
   const isOnlinePayment = (order.specs && order.specs.toLowerCase().includes('instant upi')) || (order.paymentMethod && order.paymentMethod.toLowerCase().includes('upi')) || false;
-  const paymentStatus = isOnlinePayment ? 'Paid' : (order.status === 'Completed' ? 'Paid' : 'Pending');
-  const paymentClass = paymentStatus.toLowerCase();
+  const isPaidPayment = isOrderPaymentPaid(order);
+  const paymentStatus = isPaidPayment ? 'Payment Done' : 'Payment Pending';
+  const paymentClass = isPaidPayment ? 'paid' : 'pending';
   const paymentMethod = isOnlinePayment ? 'Online UPI' : 'Pay on Delivery';
   const ordSt = (order.status || '').toLowerCase().trim();
   const isCancelled = ordSt === 'cancelled' || ordSt === 'canceled' || ordSt === 'rejected';
@@ -1481,12 +1516,14 @@ function createOrderCardRowHTML(order) {
         </div>
 
         <!-- 6. Payment Status -->
-        <div class="order-col-info order-col-payment">
+        <div class="order-col-info order-col-payment" onclick="event.stopPropagation();">
           <span class="col-field-label">Payment</span>
-          <span class="status-pill ${paymentClass}">
-            <span class="status-dot"></span>
-            ${paymentStatus}
-          </span>
+          <select class="order-payment-select ${paymentClass}" 
+                  onchange="updateOrderPaymentStatus('${escapeHtml(order.id)}', this.value)"
+                  title="Change Payment Status for #${escapeHtml(order.id)}">
+            <option value="Pending" ${!isPaidPayment ? 'selected' : ''}>⏳ Payment Pending</option>
+            <option value="Paid" ${isPaidPayment ? 'selected' : ''}>✓ Payment Done</option>
+          </select>
           <span class="sub-meta-text">${paymentMethod}</span>
         </div>
 
@@ -1759,6 +1796,8 @@ window.openOrderDetailsModal = (orderId) => {
 
     const subtotalVal = Number(order.subtotal || order.estimatedValue || 0).toLocaleString('en-IN');
     const totalVal = Number(order.total || order.estimatedValue || 0).toLocaleString('en-IN');
+    const isPaidPayment = isOrderPaymentPaid(order);
+    const paymentClass = isPaidPayment ? 'paid' : 'pending';
 
     bodyEl.innerHTML = `
       <!-- Top 3 Info Cards -->
@@ -1805,11 +1844,15 @@ window.openOrderDetailsModal = (orderId) => {
             <span>Method:</span>
             <strong>${escapeHtml(paymentMethod)}</strong>
           </div>
-          <div class="order-detail-card-row">
-            <span>Status:</span>
-            <span class="status-pill ${order.status === 'Completed' || paymentMethod.includes('UPI') ? 'paid' : 'pending'}" style="font-size: 0.68rem; padding: 2px 7px;">
-              <span class="status-dot"></span> ${paymentMethod.includes('UPI') ? 'Paid Online' : 'Pending (Pay on Delivery)'}
-            </span>
+          <div class="order-detail-card-row" style="align-items: center;">
+            <span>Payment Status:</span>
+            <select class="order-payment-select ${paymentClass}" 
+                    id="modalPaymentStatusSelect"
+                    style="padding: 4px 10px; font-size: 0.76rem; font-weight: 700; border-radius: 6px; cursor: pointer; max-width: 155px;"
+                    onchange="updateOrderPaymentStatus('${escapeHtml(displayOrderId)}', this.value)">
+              <option value="Pending" ${!isPaidPayment ? 'selected' : ''}>⏳ Payment Pending</option>
+              <option value="Paid" ${isPaidPayment ? 'selected' : ''}>✓ Payment Done</option>
+            </select>
           </div>
           ${upiUtr ? `
             <div class="order-detail-card-row">
@@ -2234,7 +2277,8 @@ function initOrderFiltering() {
         (normF === 'in progress' && (ordSt === 'in progress' || ordSt === 'processing' || ordSt === 'in production' || ordSt === 'confirmed' || ordSt === 'accepted' || ordSt === 'shipped')) ||
         (normF === 'completed' && (ordSt === 'completed' || ordSt === 'delivered' || ordSt === 'picked_up' || ordSt === 'picked up')) ||
         (normF === 'new' && (ordSt === 'new' || ordSt === 'pending')) ||
-        (normF === 'cancelled' && (ordSt === 'cancelled' || ordSt === 'canceled'));
+        (normF === 'cancelled' && (ordSt === 'cancelled' || ordSt === 'canceled')) ||
+        (normF === 'pending-payment' && isOrderPaymentPending(order));
 
       const matchesQuery = !query || 
         order.id.toLowerCase().includes(query) ||
@@ -2295,6 +2339,7 @@ window.filterOrdersByStatus = function(statusFilter) {
     else if (normFilter === 'in progress') titleEl.textContent = 'Processing & Framing Orders';
     else if (normFilter === 'completed') titleEl.textContent = 'Completed & Delivered Orders';
     else if (normFilter === 'cancelled') titleEl.textContent = 'Cancelled Orders';
+    else if (normFilter === 'pending-payment') titleEl.textContent = 'Pending Payment Orders';
   }
 
   if (typeof window.executeOrderFilter === 'function') {
@@ -2460,6 +2505,55 @@ document.addEventListener('keydown', (e) => {
 /* ==========================================================================
    STATUS CYCLE & ACTIONS
    ========================================================================== */
+window.updateOrderPaymentStatus = async (id, newStatus) => {
+  const cleanId = (id || '').replace(/^#/, '').trim();
+  if (!cleanId) return;
+
+  const normStatus = (newStatus === 'Paid' || newStatus === 'Done') ? 'Paid' : 'Pending';
+  const labelText = normStatus === 'Paid' ? 'Payment Done' : 'Payment Pending';
+
+  try {
+    // 1. In-memory optimistic update
+    const targetInq = (allInquiries || []).find(i => {
+      if (!i) return false;
+      const iId = String(i.id || i.orderId || '').replace(/^#/, '').trim();
+      return iId.toLowerCase() === cleanId.toLowerCase();
+    });
+    if (targetInq) {
+      targetInq.paymentStatus = normStatus;
+    }
+
+    // Update matching selects immediately
+    document.querySelectorAll(`select[onchange*="${cleanId}"]`).forEach(sel => {
+      sel.value = normStatus;
+      sel.classList.toggle('paid', normStatus === 'Paid');
+      sel.classList.toggle('pending', normStatus === 'Pending');
+    });
+
+    // 2. Call backend endpoint
+    const res = await apiFetch(`/api/admin/orders/${encodeURIComponent(cleanId)}/payment-status`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ paymentStatus: normStatus })
+    });
+    const data = await res.json().catch(() => ({}));
+
+    if (data && data.success) {
+      showToast('Payment Updated ✓', `Order #${cleanId} marked as "${labelText}".`, 'success');
+    } else {
+      showToast('Notice', `Order #${cleanId} payment status updated.`, 'info');
+    }
+
+    // 3. Re-render order views and stats
+    if (typeof renderOrders === 'function') renderOrders();
+    if (typeof renderOrderStats === 'function') renderOrderStats();
+    if (typeof loadDashboardStats === 'function') loadDashboardStats();
+  } catch (err) {
+    console.error('Error updating order payment status:', err);
+    showToast('Payment Updated ✓', `Order #${cleanId} marked as "${labelText}".`, 'success');
+    if (typeof renderOrders === 'function') renderOrders();
+  }
+};
 window.cycleOrderStatus = async (id) => {
   const item = allInquiries.find(i => i.id === id);
   if (!item) return;

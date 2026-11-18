@@ -801,6 +801,16 @@ body.admin-dashboard-body[data-theme="dark"] {
   grid-template-columns: repeat(5, 1fr);
 }
 
+.metric-segment-bar.six-cols {
+  grid-template-columns: repeat(6, 1fr);
+}
+
+@media (max-width: 1400px) {
+  .metric-segment-bar.six-cols {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
 @media (max-width: 1200px) {
   .metric-segment-bar.five-cols {
     grid-template-columns: repeat(3, 1fr);
@@ -808,15 +818,47 @@ body.admin-dashboard-body[data-theme="dark"] {
 }
 
 @media (max-width: 768px) {
-  .metric-segment-bar.five-cols {
+  .metric-segment-bar.five-cols,
+  .metric-segment-bar.six-cols {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 480px) {
-  .metric-segment-bar.five-cols {
+  .metric-segment-bar.five-cols,
+  .metric-segment-bar.six-cols {
     grid-template-columns: 1fr;
   }
+}
+
+/* Order Payment Status Quick-Select Control */
+.order-payment-select {
+  border-radius: 9999px;
+  padding: 3px 8px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-card);
+  color: var(--text-main);
+  transition: all 0.2s ease;
+  outline: none;
+  font-family: inherit;
+  display: inline-block;
+  max-width: 135px;
+}
+.order-payment-select.paid {
+  background: rgba(16, 185, 129, 0.12) !important;
+  color: #047857 !important;
+  border-color: rgba(16, 185, 129, 0.4) !important;
+}
+.order-payment-select.pending {
+  background: rgba(245, 158, 11, 0.12) !important;
+  color: #B45309 !important;
+  border-color: rgba(245, 158, 11, 0.4) !important;
+}
+.order-payment-select:focus {
+  box-shadow: 0 0 0 2px rgba(201, 154, 61, 0.3);
 }
 
 .cust-status-badge {

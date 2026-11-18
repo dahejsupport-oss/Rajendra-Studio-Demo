@@ -308,7 +308,8 @@
 
     /* 3-Column Metric Cards on Tablet */
     .metric-segment-bar,
-    .metric-segment-bar.five-cols {
+    .metric-segment-bar.five-cols,
+    .metric-segment-bar.six-cols {
       display: grid !important;
       grid-template-columns: repeat(3, 1fr) !important;
       gap: 12px !important;
@@ -519,7 +520,8 @@
 
     /* 3. Balanced 5-Segment Metric Cards */
     .metric-segment-bar,
-    .metric-segment-bar.five-cols {
+    .metric-segment-bar.five-cols,
+    .metric-segment-bar.six-cols {
       display: grid !important;
       grid-template-columns: repeat(2, 1fr) !important;
       gap: 8px !important;
@@ -600,8 +602,10 @@
       width: fit-content !important;
     }
 
-    /* 5th Card: Customers (Executive Horizontal Highlight Card with Proper Separation) */
-    #viewOverview .metric-segment-bar.five-cols .metric-segment:last-child {
+    /* Executive Highlight Card: Customers */
+    #viewOverview .metric-segment-bar.five-cols .metric-segment:last-child,
+    #viewOverview .metric-segment-bar.six-cols .metric-segment:last-child,
+    #viewOverview .metric-segment-bar #dashKpiCustCard {
       grid-column: 1 / -1 !important;
       display: grid !important;
       grid-template-columns: 1fr auto auto !important;
@@ -2861,8 +2865,8 @@
               </div>
             </div>
 
-            <!-- Connected 5-Segment Metric Bar (Graphura Style) -->
-            <div class="metric-segment-bar five-cols">
+            <!-- Connected Metric Bar (Graphura Style) -->
+            <div class="metric-segment-bar five-cols six-cols">
               <div class="metric-segment" id="dashKpiNewCard" style="cursor: pointer;" onclick="viewOrdersFiltered('New')" title="Click to view New / Pending Orders">
                 <div class="metric-segment-top">
                   <div class="metric-label-group">
@@ -2909,6 +2913,18 @@
                 </div>
                 <div class="metric-segment-val" id="kpiPipelineValue">₹0</div>
                 <div class="metric-segment-tag neutral" id="kpiPipelineValueTag">From online store</div>
+              </div>
+
+              <div class="metric-segment" id="dashKpiPendingPayCard" style="cursor: pointer;" onclick="viewOrdersFiltered('pending-payment')" title="Click to view Pending Payment Orders">
+                <div class="metric-segment-top">
+                  <div class="metric-label-group">
+                    <span class="metric-icon-dot amber" style="background:#F59E0B;box-shadow:0 0 8px rgba(245,158,11,0.5);"></span>
+                    <span class="metric-segment-label">Pending Payment</span>
+                  </div>
+                  <span class="metric-segment-dots" title="View Pending Payments">•••</span>
+                </div>
+                <div class="metric-segment-val" id="kpiPendingPaymentValue">₹0</div>
+                <div class="metric-segment-tag in-progress" id="kpiPendingPaymentTag"><span style="font-size:0.85em;">●</span> 0 unpaid</div>
               </div>
 
               <div class="metric-segment" id="dashKpiCustCard" style="cursor: pointer;" onclick="switchTab('viewCustomers')" title="Click to view Registered Customers">

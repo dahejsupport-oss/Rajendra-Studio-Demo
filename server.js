@@ -2275,6 +2275,7 @@ app.get('/api/admin/inquiries', requireAuth, async (req, res) => {
         customerPhotoName: customerPhotoName || inq.uploadFileName || null,
         items,
         paymentMethod,
+        paymentStatus: (matchedOrder && matchedOrder.paymentStatus) || inq.paymentStatus || (paymentMethod.includes('UPI') ? 'Paid' : 'Pending'),
         upiUtr,
         subtotal: (matchedOrder && matchedOrder.subtotal) || inq.estimatedValue || 0,
         shipping: (matchedOrder && matchedOrder.shipping) || 0,
@@ -2348,6 +2349,7 @@ app.get('/api/admin/inquiries', requireAuth, async (req, res) => {
           deliveryAddress: deliveryAddress || null,
           items: Array.isArray(o.items) ? o.items : [],
           paymentMethod: o.paymentMethod || 'Pick up from shop',
+          paymentStatus: o.paymentStatus || o.payment_status || (o.paymentMethod && o.paymentMethod.includes('UPI') ? 'Paid' : 'Pending'),
           upiUtr: o.upiUtr || null,
           subtotal: Number(o.subtotal) || Number(o.total) || 0,
           shipping: Number(o.shipping) || 0,
@@ -3548,12 +3550,18 @@ async function handleUpdateOrderStatus(req, res) {
       if (isReadyForPickup) inq.readyEmailSent = true;
       if (isCancelling) inq.cancelledEmailSent = true;
       if (isPickup && !inq.pickedUpAt) inq.pickedUpAt = timestamp;
+      if (req.body.paymentStatus !== undefined) {
+        inq.paymentStatus = (req.body.paymentStatus === 'Paid' || req.body.paymentStatus === 'Done') ? 'Paid' : 'Pending';
+      }
       inq.updatedAt = timestamp;
     }
 
     if (order) {
       if (normalizedStatus) order.status = normalizedStatus;
       if (notes !== undefined) order.notes = notes;
+      if (req.body.paymentStatus !== undefined) {
+        order.paymentStatus = (req.body.paymentStatus === 'Paid' || req.body.paymentStatus === 'Done') ? 'Paid' : 'Pending';
+      }
       if (finalConfirmationDate) {
         order.confirmationDate = finalConfirmationDate;
         if (!order.confirmedAt) order.confirmedAt = timestamp;
@@ -3726,6 +3734,61 @@ async function handleUpdateOrderStatus(req, res) {
 
 app.put('/api/admin/inquiries/:id/status', requireAuth, handleUpdateOrderStatus);
 app.put('/api/admin/orders/:id/status', requireAuth, handleUpdateOrderStatus);
+
+/**
+ * Admin: Update Order Payment Status (PUT)
+ * Toggles or sets paymentStatus directly ('Paid' / 'Pending') and syncs db + inquiries
+ */
+app.put('/api/admin/orders/:id/payment-status', requireAuth, async (req, res) => {
+  res.set("Cache-Control", "no-store, no-cache, must-revalidate, private");
+  try {
+    const rawId = (req.params.id || '').trim();
+    const cleanId = rawId.replace(/^#/, '');
+    const { paymentStatus } = req.body;
+    const normStatus = (paymentStatus === 'Paid' || paymentStatus === 'Done' || paymentStatus === 'payment done') ? 'Paid' : 'Pending';
+    const timestamp = new Date().toISOString();
+
+    await db.unrecordDeletedOrderIds([cleanId, rawId]);
+
+    let [order, inq] = await Promise.all([
+      db.getOrderById(cleanId).catch(() => null),
+      db.getInquiryById(cleanId).catch(() => null)
+    ]);
+
+    if (!order && !inq) {
+      const [orders, inquiries] = await Promise.all([
+        db.getOrders().catch(() => []),
+        db.getInquiries().catch(() => [])
+      ]);
+      order = orders.find(o => o.orderId && (o.orderId.toLowerCase() === rawId.toLowerCase() || o.orderId.toLowerCase() === cleanId.toLowerCase()));
+      inq = inquiries.find(i => i.id && (i.id.toLowerCase() === rawId.toLowerCase() || i.id.toLowerCase() === cleanId.toLowerCase()));
+    }
+
+    if (order) {
+      order.paymentStatus = normStatus;
+      order.updatedAt = timestamp;
+      await db.saveOrder(order).catch(e => console.warn('saveOrder paymentStatus notice:', e.message));
+    }
+
+    if (inq) {
+      inq.paymentStatus = normStatus;
+      inq.updatedAt = timestamp;
+      await db.saveInquiry(inq).catch(e => console.warn('saveInquiry paymentStatus notice:', e.message));
+    }
+
+    console.log(`💳 [PAYMENT STATUS UPDATED] Order #${cleanId} payment status set to: ${normStatus}`);
+
+    return res.json({
+      success: true,
+      message: `Order #${cleanId} payment status set to ${normStatus}.`,
+      orderId: cleanId,
+      paymentStatus: normStatus
+    });
+  } catch (err) {
+    console.error('Error updating order payment status:', err);
+    return res.status(500).json({ success: false, message: 'Server error updating payment status: ' + err.message });
+  }
+});
 
 /**
  * Admin: Full Edit Order Details & Status (PUT)
