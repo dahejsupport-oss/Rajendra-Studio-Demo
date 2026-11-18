@@ -293,7 +293,7 @@ async function apiFetch(urlOrEndpoint, options = {}) {
 
   const isLocalDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
   const isMutating = options.method && options.method.toUpperCase() !== 'GET';
-  const timeoutMs = isMutating ? 25000 : 8500;
+  const timeoutMs = isMutating ? 25000 : 12000;
 
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
@@ -956,6 +956,16 @@ async function loadInquiries() {
     renderOverviewOrders(orders.slice(0, 5));
     renderAllOrders(orders);
     renderAllLeads(leads);
+
+    // If customer accounts haven't been loaded from server yet, derive from live orders/inquiries
+    if (allCustomers.length === 0 && allInquiries.length > 0 && typeof deriveCustomersFromInquiries === 'function') {
+      const derived = deriveCustomersFromInquiries(allInquiries);
+      if (derived.length > 0) {
+        allCustomers = derived;
+        if (typeof updateCustomerKpis === 'function') updateCustomerKpis(allCustomers);
+        if (typeof renderCustomersTable === 'function') renderCustomersTable(allCustomers);
+      }
+    }
 
   } catch (err) {
     console.error('Failed to load inquiries/orders:', err);
@@ -6842,56 +6852,128 @@ function getCategoryLabel(category) {
 /* ==========================================================================
    CUSTOMER ACCOUNTS & TRACKING DATA CONTROLLER
    ========================================================================== */
+
+function deriveCustomersFromInquiries(list) {
+  if (!Array.isArray(list) || list.length === 0) return [];
+  const map = new Map();
+  list.forEach(item => {
+    if (!item) return;
+    const rawEmail = ((item.customer && item.customer.email) || item.email || '').toLowerCase().trim();
+    const rawPhone = ((item.customer && item.customer.phone) || item.phone || '').trim();
+    const cleanPhone = rawPhone.replace(/\D/g, '');
+    const key = rawEmail || (cleanPhone ? 'phone:' + cleanPhone : '');
+    if (!key) return;
+
+    const name = (item.customer && item.customer.name) || item.name || (rawEmail ? rawEmail.split('@')[0] : 'Customer');
+    const isOrder = Boolean(item.orderId || (item.id && String(item.id).startsWith('RF-ORD')) || (item.product && item.product.includes('[ONLINE ORDER]')));
+    const amount = Number(item.total || item.estimatedPrice || item.price) || 0;
+    const createdAt = item.createdAt || item.date || new Date().toISOString();
+
+    if (!map.has(key)) {
+      map.set(key, {
+        id: `CUST-${String(map.size + 1).padStart(4, '0')}`,
+        name: name,
+        email: rawEmail || (rawPhone ? rawPhone : 'No email'),
+        phone: rawPhone,
+        registeredAt: createdAt,
+        lastLoginAt: createdAt,
+        loginCount: 1,
+        totalOrders: isOrder ? 1 : 0,
+        totalSpent: isOrder ? amount : 0,
+        status: isOrder ? 'Active' : 'Lead'
+      });
+    } else {
+      const existing = map.get(key);
+      if (isOrder) {
+        existing.totalOrders = (existing.totalOrders || 0) + 1;
+        existing.totalSpent = (existing.totalSpent || 0) + amount;
+        existing.status = 'Active';
+      }
+      if (!existing.phone && rawPhone) existing.phone = rawPhone;
+      if ((!existing.name || existing.name === 'Customer') && name && name !== 'Customer') existing.name = name;
+      if (new Date(createdAt) > new Date(existing.lastLoginAt || 0)) {
+        existing.lastLoginAt = createdAt;
+      }
+    }
+  });
+
+  return Array.from(map.values()).sort((a, b) => {
+    const timeA = new Date(a.lastLoginAt || a.registeredAt || 0).getTime();
+    const timeB = new Date(b.lastLoginAt || b.registeredAt || 0).getTime();
+    return timeB - timeA;
+  });
+}
+
+function updateCustomerKpis(customers) {
+  const list = Array.isArray(customers) ? customers : [];
+  const kpiTotal = document.getElementById('custKpiTotal');
+  const kpiActiveBuyers = document.getElementById('custKpiActiveBuyers');
+  const kpiTotalRevenue = document.getElementById('custKpiTotalRevenue');
+  const kpiTotalLogins = document.getElementById('custKpiTotalLogins');
+  const overviewKpi = document.getElementById('kpiTotalCustomers');
+
+  if (kpiTotal) kpiTotal.textContent = list.length;
+  if (overviewKpi) overviewKpi.textContent = list.length;
+
+  if (localStorage.getItem(STORAGE_SEEN_CUSTOMERS) === null && list.length > 0) {
+    const initialSeen = list.map(c => String(c.id || c.email || c.phone).toLowerCase().trim()).filter(Boolean);
+    saveSeenIds(STORAGE_SEEN_CUSTOMERS, initialSeen);
+  }
+  if (typeof updateNotificationBadges === 'function') updateNotificationBadges();
+
+  const activeBuyers = list.filter(c => (Number(c.totalOrders) || 0) > 0).length;
+  if (kpiActiveBuyers) kpiActiveBuyers.textContent = activeBuyers;
+
+  const totalRevenue = list.reduce((sum, c) => sum + (Number(c.totalSpent) || 0), 0);
+  if (kpiTotalRevenue) kpiTotalRevenue.textContent = `₹${totalRevenue.toLocaleString('en-IN')}`;
+
+  const totalLogins = list.reduce((sum, c) => sum + (Number(c.loginCount) || 1), 0);
+  if (kpiTotalLogins) kpiTotalLogins.textContent = totalLogins;
+
+  const elCustTotTag = document.getElementById('custKpiTotalTag');
+  const elCustBuyersTag = document.getElementById('custKpiActiveBuyersTag');
+  const elCustRevTag = document.getElementById('custKpiTotalRevenueTag');
+  const elCustLogTag = document.getElementById('custKpiTotalLoginsTag');
+  const elOverCustTag = document.getElementById('kpiTotalCustomersTag');
+
+  if (elCustTotTag) elCustTotTag.innerHTML = `<span style="font-size:0.85em;">●</span> ${list.length} registered`;
+  if (elCustBuyersTag) elCustBuyersTag.innerHTML = `<span style="font-size:0.85em;">✓</span> ${activeBuyers} with orders`;
+  if (elCustRevTag) elCustRevTag.innerHTML = `<span style="font-size:0.85em;">★</span> Lifetime spent`;
+  if (elCustLogTag) elCustLogTag.innerHTML = `<span style="font-size:0.85em;">●</span> ${totalLogins} OTP sessions`;
+  if (elOverCustTag) elOverCustTag.innerHTML = `<span style="font-size:0.85em;">●</span> ${activeBuyers} active buyers`;
+}
+
 async function loadCustomers() {
+  // 1. Instant local render if allInquiries is already available
+  if (allCustomers.length === 0 && Array.isArray(allInquiries) && allInquiries.length > 0) {
+    const immediateList = deriveCustomersFromInquiries(allInquiries);
+    if (immediateList.length > 0) {
+      allCustomers = immediateList;
+      updateCustomerKpis(allCustomers);
+      renderCustomersTable(allCustomers);
+    }
+  }
+
   try {
     const res = await apiFetch('/api/admin/customers');
     const data = await res.json();
-    if (!data || !data.success) return;
-
-    allCustomers = data.customers || [];
-
-    // Update KPI badges and numbers
-    const kpiTotal = document.getElementById('custKpiTotal');
-    const kpiActiveBuyers = document.getElementById('custKpiActiveBuyers');
-    const kpiTotalRevenue = document.getElementById('custKpiTotalRevenue');
-    const kpiTotalLogins = document.getElementById('custKpiTotalLogins');
-    const overviewKpi = document.getElementById('kpiTotalCustomers');
-
-    if (kpiTotal) kpiTotal.textContent = allCustomers.length;
-    if (overviewKpi) overviewKpi.textContent = allCustomers.length;
-
-    // If customers seen storage not initialized, initialize it so total customers count isn't treated as new unread
-    if (localStorage.getItem(STORAGE_SEEN_CUSTOMERS) === null && allCustomers.length > 0) {
-      const initialSeen = allCustomers.map(c => String(c.id || c.email || c.phone).toLowerCase().trim()).filter(Boolean);
-      saveSeenIds(STORAGE_SEEN_CUSTOMERS, initialSeen);
+    if (data && data.success && Array.isArray(data.customers)) {
+      if (data.customers.length > 0 || allCustomers.length === 0) {
+        allCustomers = data.customers;
+      }
+    } else if (allCustomers.length === 0 && Array.isArray(allInquiries) && allInquiries.length > 0) {
+      allCustomers = deriveCustomersFromInquiries(allInquiries);
     }
-    updateNotificationBadges();
-
-    const activeBuyers = allCustomers.filter(c => (Number(c.totalOrders) || 0) > 0).length;
-    if (kpiActiveBuyers) kpiActiveBuyers.textContent = activeBuyers;
-
-    const totalRevenue = allCustomers.reduce((sum, c) => sum + (Number(c.totalSpent) || 0), 0);
-    if (kpiTotalRevenue) kpiTotalRevenue.textContent = `₹${totalRevenue.toLocaleString('en-IN')}`;
-
-    const totalLogins = allCustomers.reduce((sum, c) => sum + (Number(c.loginCount) || 1), 0);
-    if (kpiTotalLogins) kpiTotalLogins.textContent = totalLogins;
-
-    const elCustTotTag = document.getElementById('custKpiTotalTag');
-    const elCustBuyersTag = document.getElementById('custKpiActiveBuyersTag');
-    const elCustRevTag = document.getElementById('custKpiTotalRevenueTag');
-    const elCustLogTag = document.getElementById('custKpiTotalLoginsTag');
-    const elOverCustTag = document.getElementById('kpiTotalCustomersTag');
-
-    if (elCustTotTag) elCustTotTag.innerHTML = `<span style="font-size:0.85em;">●</span> ${allCustomers.length} registered`;
-    if (elCustBuyersTag) elCustBuyersTag.innerHTML = `<span style="font-size:0.85em;">✓</span> ${activeBuyers} with orders`;
-    if (elCustRevTag) elCustRevTag.innerHTML = `<span style="font-size:0.85em;">★</span> Lifetime spent`;
-    if (elCustLogTag) elCustLogTag.innerHTML = `<span style="font-size:0.85em;">●</span> ${totalLogins} OTP sessions`;
-    if (elOverCustTag) elOverCustTag.innerHTML = `<span style="font-size:0.85em;">●</span> ${activeBuyers} active buyers`;
-
-    renderCustomersTable(allCustomers);
   } catch (err) {
-    console.error('Failed to load customers:', err);
+    console.warn('apiFetch /api/admin/customers warning, using in-memory data:', err.message);
+    if (allCustomers.length === 0 && Array.isArray(allInquiries) && allInquiries.length > 0) {
+      allCustomers = deriveCustomersFromInquiries(allInquiries);
+    }
   }
+
+  // 2. ALWAYS update KPIs & render table - never leave "Loading registered customers..."
+  updateCustomerKpis(allCustomers);
+  renderCustomersTable(allCustomers);
 }
 
 let currentCustomerFilter = 'all';
@@ -6925,8 +7007,9 @@ function renderCustomersTable(customers) {
   if (customers.length === 0) {
     tbody.innerHTML = `
       <tr>
-        <td colspan="7" style="text-align: center; color: var(--text-muted); padding: 36px;">
-          No customer accounts found matching your query.
+        <td colspan="8" style="text-align: center; color: var(--text-muted); padding: 36px;">
+          <div style="font-size: 1.05rem; font-weight: 600; margin-bottom: 6px; color: var(--text-main);">No Customer Accounts Found</div>
+          <div style="font-size: 0.85rem;">Customer accounts will appear here automatically when orders are placed or users log in.</div>
         </td>
       </tr>
     `;
@@ -6970,7 +7053,7 @@ function renderCustomersTable(customers) {
             </div>
             <div class="lead-cust-info">
               <span class="lead-cust-name">${escapeHtml(cust.name || 'Registered Customer')}</span>
-              <span class="lead-cust-email">${escapeHtml(cust.email)}</span>
+              <span class="lead-cust-email">${escapeHtml((cust.email && !cust.email.startsWith('phone:')) ? cust.email : (cust.phone || 'Walk-in Customer'))}</span>
             </div>
           </div>
         </td>

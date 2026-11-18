@@ -2086,11 +2086,11 @@ app.post('/api/customer/auth/logout', (req, res) => {
  */
 app.get('/api/admin/dashboard-stats', requireAuth, async (req, res) => {
   const [inquiries, products, messages, orders, customers] = await Promise.all([
-    db.getInquiries(),
-    db.getProducts(),
-    db.getMessages(),
-    db.getOrders(),
-    db.getCustomers()
+    db.getInquiries().catch(() => []),
+    db.getProducts().catch(() => []),
+    db.getMessages().catch(() => []),
+    db.getOrders().catch(() => []),
+    db.getCustomers().catch(() => [])
   ]);
 
   const allOrdersList = Array.isArray(orders) ? orders : [];
@@ -2143,6 +2143,24 @@ app.get('/api/admin/dashboard-stats', requireAuth, async (req, res) => {
 
   const unreadMessages = (Array.isArray(messages) ? messages : []).filter(m => m.status === 'Unread').length;
 
+  const uniqueCustomerSet = new Set();
+  (Array.isArray(customers) ? customers : []).forEach(c => {
+    if (c && (c.email || c.phone || c.id)) uniqueCustomerSet.add(String(c.email || c.phone || c.id).toLowerCase().trim());
+  });
+  allOrdersList.forEach(o => {
+    const email = ((o.customer && o.customer.email) || o.email || '').toLowerCase().trim();
+    const phone = ((o.customer && o.customer.phone) || o.phone || '').trim();
+    if (email) uniqueCustomerSet.add(email);
+    else if (phone) uniqueCustomerSet.add(phone);
+  });
+  allInqsList.forEach(i => {
+    const email = (i.email || '').toLowerCase().trim();
+    const phone = (i.phone || '').trim();
+    if (email) uniqueCustomerSet.add(email);
+    else if (phone) uniqueCustomerSet.add(phone);
+  });
+  const liveTotalCustomers = Math.max(uniqueCustomerSet.size, (Array.isArray(customers) ? customers : []).length);
+
   res.json({
     success: true,
     stats: {
@@ -2157,7 +2175,7 @@ app.get('/api/admin/dashboard-stats', requireAuth, async (req, res) => {
       totalPipelineValue,
       totalProducts: (Array.isArray(products) ? products : []).length,
       unreadMessages,
-      totalCustomers: (Array.isArray(customers) ? customers : []).length,
+      totalCustomers: liveTotalCustomers,
       recentInquiries: inquiries.slice(0, 5),
       supabaseHealth: db.getSupabaseHealth ? db.getSupabaseHealth() : null
     }
@@ -4873,19 +4891,28 @@ app.get('/api/admin/messages', requireAuth, async (req, res) => {
  * Admin Endpoint: Get All Registered Customers with live order metrics (GET)
  */
 app.get('/api/admin/customers', requireAuth, async (req, res) => {
+  res.set("Cache-Control", "no-store, no-cache, must-revalidate, private");
+  res.set("Pragma", "no-cache");
   try {
-    const rawCustomers = await db.getCustomers();
-    const orders = await db.getOrders();
-    const inquiries = await db.getInquiries();
+    const [rawCustomers, orders, inquiries, deletedIds] = await Promise.all([
+      db.getCustomers().catch(err => { console.warn('getCustomers error:', err.message); return []; }),
+      db.getOrders().catch(err => { console.warn('getOrders error:', err.message); return []; }),
+      db.getInquiries().catch(err => { console.warn('getInquiries error:', err.message); return []; }),
+      db.getDeletedOrderIds().catch(() => [])
+    ]);
 
-    // Map to keep track of unique customers by lowercase email
+    // Map to keep track of unique customers by lowercase email or phone
     const customerMap = new Map();
 
     // 1. Seed with known customers from DB
     if (Array.isArray(rawCustomers)) {
       rawCustomers.forEach(c => {
-        if (c && c.email) {
-          customerMap.set(c.email.toLowerCase().trim(), { ...c });
+        if (!c) return;
+        const cEmail = (c.email || '').toLowerCase().trim();
+        const cPhone = (c.phone || '').replace(/\D/g, '');
+        const key = cEmail || (cPhone ? `phone:${cPhone}` : (c.id || ''));
+        if (key) {
+          customerMap.set(key, { ...c });
         }
       });
     }
@@ -4893,9 +4920,13 @@ app.get('/api/admin/customers', requireAuth, async (req, res) => {
     // 2. Aggregate active customer sessions (live logged-in users on website)
     const now = Date.now();
     for (const [sToken, session] of customerSessions.entries()) {
-      if (session && session.email && session.expiresAt > now) {
-        const sEmail = session.email.toLowerCase().trim();
-        const existing = customerMap.get(sEmail);
+      if (session && (session.email || session.phone) && session.expiresAt > now) {
+        const sEmail = (session.email || '').toLowerCase().trim();
+        const sPhone = (session.phone || '').replace(/\D/g, '');
+        const key = sEmail || (sPhone ? `phone:${sPhone}` : '');
+        if (!key) continue;
+
+        const existing = customerMap.get(key);
         if (existing) {
           existing.isOnline = true;
           existing.status = 'Active (Online)';
@@ -4904,10 +4935,10 @@ app.get('/api/admin/customers', requireAuth, async (req, res) => {
             session.createdAt || now
           )).toISOString();
         } else {
-          customerMap.set(sEmail, {
+          customerMap.set(key, {
             id: `CUST-${String(customerMap.size + 1).padStart(4, '0')}`,
-            name: session.name || sEmail.split('@')[0],
-            email: sEmail,
+            name: session.name || (sEmail ? sEmail.split('@')[0] : 'Customer'),
+            email: sEmail || (session.phone ? session.phone : 'No email'),
             phone: session.phone || '',
             registeredAt: new Date(session.createdAt || now).toISOString(),
             lastLoginAt: new Date(session.createdAt || now).toISOString(),
@@ -4924,15 +4955,22 @@ app.get('/api/admin/customers', requireAuth, async (req, res) => {
     // 3. Aggregate any customer who placed an order
     if (Array.isArray(orders)) {
       orders.forEach(o => {
+        if (!o) return;
         const oEmail = ((o.customer && o.customer.email) || o.email || '').toLowerCase().trim();
-        if (oEmail && !customerMap.has(oEmail)) {
-          const oName = (o.customer && o.customer.name) || o.name || oEmail.split('@')[0];
-          const oPhone = (o.customer && o.customer.phone) || o.phone || '';
-          customerMap.set(oEmail, {
+        const oPhone = ((o.customer && o.customer.phone) || o.phone || '').replace(/\D/g, '');
+        const oKey = oEmail || (oPhone ? `phone:${oPhone}` : '');
+        if (!oKey) return;
+
+        const existing = customerMap.get(oKey);
+        const oName = (o.customer && o.customer.name) || o.name || (oEmail ? oEmail.split('@')[0] : 'Customer');
+        const displayPhone = (o.customer && o.customer.phone) || o.phone || '';
+
+        if (!existing) {
+          customerMap.set(oKey, {
             id: `CUST-${String(customerMap.size + 1).padStart(4, '0')}`,
             name: oName,
-            email: oEmail,
-            phone: oPhone,
+            email: oEmail || (displayPhone ? displayPhone : 'No email'),
+            phone: displayPhone,
             registeredAt: o.createdAt || new Date().toISOString(),
             lastLoginAt: o.createdAt || null,
             loginCount: 1,
@@ -4940,26 +4978,38 @@ app.get('/api/admin/customers', requireAuth, async (req, res) => {
             totalSpent: 0,
             status: 'Active'
           });
+        } else {
+          if (!existing.phone && displayPhone) existing.phone = displayPhone;
+          if ((!existing.name || existing.name === 'Customer') && oName && oName !== 'Customer') existing.name = oName;
         }
       });
     }
 
     // 4. Aggregate any customer who submitted a real custom frame quote (skip contact messages & deleted inquiries)
     if (Array.isArray(inquiries)) {
-      const deletedSet = new Set((await db.getDeletedOrderIds().catch(() => [])).map(x => String(x).toLowerCase().replace(/^#/, '')));
+      const deletedSet = new Set((deletedIds || []).map(x => String(x).toLowerCase().replace(/^#/, '')));
       inquiries.forEach(inq => {
         if (!inq) return;
         const cleanInqId = (inq.id || '').toLowerCase().replace(/^#/, '');
         if (deletedSet.has(cleanInqId)) return;
         if (inq.specs && String(inq.specs).toLowerCase().includes('contact')) return;
         if (inq.product && String(inq.product).toLowerCase().includes('general inquiry')) return;
+
         const inqEmail = (inq.email || '').toLowerCase().trim();
-        if (inqEmail && !customerMap.has(inqEmail)) {
-          customerMap.set(inqEmail, {
+        const inqPhone = (inq.phone || '').replace(/\D/g, '');
+        const inqKey = inqEmail || (inqPhone ? `phone:${inqPhone}` : '');
+        if (!inqKey) return;
+
+        const existing = customerMap.get(inqKey);
+        const inqName = inq.name || (inqEmail ? inqEmail.split('@')[0] : 'Customer');
+        const displayPhone = inq.phone || '';
+
+        if (!existing) {
+          customerMap.set(inqKey, {
             id: `CUST-${String(customerMap.size + 1).padStart(4, '0')}`,
-            name: inq.name || inqEmail.split('@')[0],
-            email: inqEmail,
-            phone: inq.phone || '',
+            name: inqName,
+            email: inqEmail || (displayPhone ? displayPhone : 'No email'),
+            phone: displayPhone,
             registeredAt: inq.createdAt || new Date().toISOString(),
             lastLoginAt: null,
             loginCount: 0,
@@ -4967,6 +5017,9 @@ app.get('/api/admin/customers', requireAuth, async (req, res) => {
             totalSpent: 0,
             status: 'Lead'
           });
+        } else {
+          if (!existing.phone && displayPhone) existing.phone = displayPhone;
+          if ((!existing.name || existing.name === 'Customer') && inqName && inqName !== 'Customer') existing.name = inqName;
         }
       });
     }
@@ -4974,9 +5027,15 @@ app.get('/api/admin/customers', requireAuth, async (req, res) => {
     // 5. Cross-reference live orders for 100% data integrity & spending
     const enrichedCustomers = Array.from(customerMap.values()).map(cust => {
       const email = (cust.email || '').toLowerCase().trim();
+      const phone = (cust.phone || '').replace(/\D/g, '');
+
       const customerOrders = Array.isArray(orders) ? orders.filter(o => {
+        if (!o) return false;
         const oEmail = ((o.customer && o.customer.email) || o.email || '').toLowerCase().trim();
-        return oEmail === email;
+        const oPhone = ((o.customer && o.customer.phone) || o.phone || '').replace(/\D/g, '');
+        if (email && oEmail && email === oEmail) return true;
+        if (phone && oPhone && phone === oPhone) return true;
+        return false;
       }) : [];
 
       const liveTotalOrders = customerOrders.length;
@@ -4987,7 +5046,7 @@ app.get('/api/admin/customers', requireAuth, async (req, res) => {
         ...cust,
         totalOrders: Math.max(cust.totalOrders || 0, liveTotalOrders),
         totalSpent: Math.max(cust.totalSpent || 0, liveTotalSpent),
-        lastOrderDate: lastOrder ? (lastOrder.createdAt || lastOrder.date) : cust.lastOrderAt || null
+        lastOrderDate: lastOrder ? (lastOrder.createdAt || lastOrder.date) : (cust.lastOrderAt || null)
       };
     });
 

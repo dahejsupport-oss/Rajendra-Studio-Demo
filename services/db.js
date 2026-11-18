@@ -2028,10 +2028,24 @@ module.exports = {
   // --- CUSTOMER ACCOUNTS ---
   async getCustomers() {
     if (supabase && isSupabaseOperational()) {
-      const { data, error } = await supabase.from('customers').select('*').order('registered_at', { ascending: false });
-      if (!error && data) return data;
+      try {
+        const queryPromise = supabase.from('customers').select('*');
+        const { data, error } = await withTimeout(queryPromise, 3500, 'Supabase getCustomers');
+        if (!error && Array.isArray(data)) {
+          recordSupabaseSuccess();
+          return data.sort((a, b) => {
+            const timeA = new Date(a.registered_at || a.registeredAt || a.created_at || 0).getTime();
+            const timeB = new Date(b.registered_at || b.registeredAt || b.created_at || 0).getTime();
+            return timeB - timeA;
+          });
+        }
+      } catch (err) {
+        console.warn('⚠️ [DATABASE] Supabase getCustomers error:', err.message);
+      }
     }
-    return readJson(CUSTOMERS_FILE, []);
+    const local = readJson(CUSTOMERS_FILE, []);
+    if (Array.isArray(local) && local.length) return local;
+    return (global._rfMemoryStore && Array.isArray(global._rfMemoryStore['customers'])) ? global._rfMemoryStore['customers'] : [];
   },
 
   async deleteCustomer(emailOrId) {
