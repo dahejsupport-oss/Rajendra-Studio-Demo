@@ -20,31 +20,121 @@ const CATEGORY_MAP = {
   'gifts': 'Photo Gifts & Keepsakes'
 };
 
+function slugifyCategory(val) {
+  if (!val) return '';
+  return String(val).toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+}
+
+function getAvailableCategories() {
+  if (typeof window.CATEGORIES_DATA !== 'undefined' && Array.isArray(window.CATEGORIES_DATA) && window.CATEGORIES_DATA.length) {
+    return window.CATEGORIES_DATA;
+  }
+  if (typeof CATEGORIES_DATA !== 'undefined' && Array.isArray(CATEGORIES_DATA) && CATEGORIES_DATA.length) {
+    return CATEGORIES_DATA;
+  }
+  return [];
+}
+
+function findCategoryMatch(rawKey, categoriesList) {
+  if (!rawKey) return null;
+  const raw = String(rawKey).trim().toLowerCase();
+  if (raw === 'all') return null;
+
+  const rawSlug = slugifyCategory(raw);
+  const rawNoS = rawSlug.replace(/s$/, '');
+
+  const cats = Array.isArray(categoriesList) && categoriesList.length ? categoriesList : getAvailableCategories();
+
+  // 1. Direct ID match
+  let found = cats.find(c => c && (c.id || '').toLowerCase() === raw);
+  if (found) return found;
+
+  // 2. Direct Name match
+  found = cats.find(c => c && (c.name || '').toLowerCase() === raw);
+  if (found) return found;
+
+  // 3. Slug match (handles "personalised-mugs" vs "personalised mugs")
+  found = cats.find(c => {
+    if (!c) return false;
+    const cIdSlug = slugifyCategory(c.id);
+    const cNameSlug = slugifyCategory(c.name);
+    return cIdSlug === rawSlug || cNameSlug === rawSlug;
+  });
+  if (found) return found;
+
+  // 4. Singular / Plural match (handles "frame" vs "frames")
+  found = cats.find(c => {
+    if (!c) return false;
+    const cIdSlugNoS = slugifyCategory(c.id).replace(/s$/, '');
+    const cNameSlugNoS = slugifyCategory(c.name).replace(/s$/, '');
+    return Boolean(rawNoS && (cIdSlugNoS === rawNoS || cNameSlugNoS === rawNoS));
+  });
+  if (found) return found;
+
+  return null;
+}
+
 function refreshCategoryMap(categories) {
   if (Array.isArray(categories)) {
     categories.forEach(cat => {
       if (cat && cat.id) {
-        CATEGORY_MAP[(cat.id || '').toLowerCase()] = cat.name || cat.id;
+        const idLower = (cat.id || '').toLowerCase();
+        const name = cat.name || cat.id;
+        CATEGORY_MAP[idLower] = name;
+        const slug = slugifyCategory(cat.id);
+        if (slug) CATEGORY_MAP[slug] = name;
+        const nameSlug = slugifyCategory(cat.name);
+        if (nameSlug) CATEGORY_MAP[nameSlug] = name;
       }
     });
   }
+}
+
+function isProductInCategory(item, selectedCatKey) {
+  if (!selectedCatKey || String(selectedCatKey).trim().toLowerCase() === 'all') return true;
+  if (!item) return false;
+
+  const cats = getAvailableCategories();
+  const matchedCat = findCategoryMatch(selectedCatKey, cats);
+
+  const targetId = matchedCat ? (matchedCat.id || '').toLowerCase() : String(selectedCatKey).trim().toLowerCase();
+  const targetName = matchedCat ? (matchedCat.name || '').toLowerCase() : (CATEGORY_MAP[targetId] || '').toLowerCase();
+  const targetSlug = slugifyCategory(targetId);
+  const targetSlugNoS = targetSlug.replace(/s$/, '');
+
+  const itemCat = (item.category || '').toLowerCase();
+  const itemLabel = (item.categoryLabel || '').toLowerCase();
+  const itemCatSlug = slugifyCategory(itemCat);
+  const itemLabelSlug = slugifyCategory(itemLabel);
+  const itemCatNoS = itemCatSlug.replace(/s$/, '');
+  const itemLabelNoS = itemLabelSlug.replace(/s$/, '');
+
+  // Exact ID / label match
+  if (itemCat === targetId || itemLabel === targetId) return true;
+  if (targetName && (itemCat === targetName || itemLabel === targetName)) return true;
+
+  // Slug match (handles "personalised-mugs" vs "personalised mugs")
+  if (targetSlug && (itemCatSlug === targetSlug || itemLabelSlug === targetSlug)) return true;
+
+  // Singular / Plural match (handles "frame" vs "frames")
+  if (targetSlugNoS && (itemCatNoS === targetSlugNoS || itemLabelNoS === targetSlugNoS)) return true;
+
+  return false;
 }
 
 function renderCategorySelectors() {
   const dropdownMenu = document.getElementById('categoryDropdownMenu');
   const drawerPills = document.querySelector('.drawer-category-pills');
 
-  const categories = (typeof window.CATEGORIES_DATA !== 'undefined' && Array.isArray(window.CATEGORIES_DATA))
-    ? window.CATEGORIES_DATA
-    : ((typeof CATEGORIES_DATA !== 'undefined' && Array.isArray(CATEGORIES_DATA))
-        ? CATEGORIES_DATA
-        : []);
-
+  const categories = getAvailableCategories();
   const normCurrent = (currentCategory || 'all').toLowerCase();
+  const matchedCurrent = findCategoryMatch(normCurrent, categories);
+  const activeCanonicalId = matchedCurrent ? (matchedCurrent.id || '').toLowerCase() : normCurrent;
 
   if (dropdownMenu) {
     let ddHtml = `
-      <button type="button" class="dropdown-item ${normCurrent === 'all' ? 'active' : ''}" data-filter="all" onclick="selectCatalogCategory('all', 'All Products')">
+      <div class="dropdown-title">Select Category</div>
+      <button type="button" class="dropdown-item ${activeCanonicalId === 'all' ? 'active' : ''}" data-filter="all" onclick="selectCatalogCategory('all', 'All Products')">
         <span>All Products</span>
       </button>
     `;
@@ -52,8 +142,9 @@ function renderCategorySelectors() {
       const id = (cat.id || '').toLowerCase();
       const name = cat.name || id;
       const safeName = name.replace(/'/g, "\\'");
+      const isActive = (activeCanonicalId !== 'all' && (activeCanonicalId === id || (matchedCurrent && (matchedCurrent.id || '').toLowerCase() === id)));
       ddHtml += `
-        <button type="button" class="dropdown-item ${normCurrent === id ? 'active' : ''}" data-filter="${id}" onclick="selectCatalogCategory('${id}', '${safeName}')">
+        <button type="button" class="dropdown-item ${isActive ? 'active' : ''}" data-filter="${id}" onclick="selectCatalogCategory('${id}', '${safeName}')">
           <span>${name}</span>
         </button>
       `;
@@ -63,7 +154,7 @@ function renderCategorySelectors() {
 
   if (drawerPills) {
     let pillsHtml = `
-      <button type="button" class="drawer-pill-btn ${normCurrent === 'all' ? 'active' : ''}" data-filter="all" onclick="selectCatalogCategory('all', 'All Products'); toggleFilterDrawer(false);">
+      <button type="button" class="drawer-pill-btn ${activeCanonicalId === 'all' ? 'active' : ''}" data-filter="all" onclick="selectCatalogCategory('all', 'All Products'); toggleFilterDrawer(false);">
         <span>All Products</span>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
       </button>
@@ -72,8 +163,9 @@ function renderCategorySelectors() {
       const id = (cat.id || '').toLowerCase();
       const name = cat.name || id;
       const safeName = name.replace(/'/g, "\\'");
+      const isActive = (activeCanonicalId !== 'all' && (activeCanonicalId === id || (matchedCurrent && (matchedCurrent.id || '').toLowerCase() === id)));
       pillsHtml += `
-        <button type="button" class="drawer-pill-btn ${normCurrent === id ? 'active' : ''}" data-filter="${id}" onclick="selectCatalogCategory('${id}', '${safeName}'); toggleFilterDrawer(false);">
+        <button type="button" class="drawer-pill-btn ${isActive ? 'active' : ''}" data-filter="${id}" onclick="selectCatalogCategory('${id}', '${safeName}'); toggleFilterDrawer(false);">
           <span>${name}</span>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
         </button>
@@ -107,6 +199,21 @@ async function fetchLiveCatalogData(forceRefresh = false) {
       if (catData && catData.success && Array.isArray(catData.categories)) {
         window.CATEGORIES_DATA = catData.categories;
         refreshCategoryMap(catData.categories);
+
+        // Re-resolve active category against live fresh categories from database
+        const urlParams = new URLSearchParams(window.location.search);
+        const paramCategory = (urlParams.get('category') || '').trim();
+        const activeToMatch = paramCategory || currentCategory;
+
+        if (activeToMatch && activeToMatch.toLowerCase() !== 'all') {
+          const match = findCategoryMatch(activeToMatch, catData.categories);
+          if (match) {
+            currentCategory = (match.id || '').toLowerCase();
+          } else {
+            currentCategory = activeToMatch.toLowerCase();
+          }
+        }
+
         renderCategorySelectors();
       }
     }
@@ -140,9 +247,14 @@ async function initCatalog() {
 
   // Check URL query params for initial category filter
   const urlParams = new URLSearchParams(window.location.search);
-  const paramCategory = (urlParams.get('category') || '').toLowerCase();
-  if (paramCategory && (paramCategory === 'all' || CATEGORY_MAP[paramCategory])) {
-    currentCategory = paramCategory;
+  const paramCategory = (urlParams.get('category') || '').trim();
+  if (paramCategory) {
+    if (paramCategory.toLowerCase() === 'all') {
+      currentCategory = 'all';
+    } else {
+      const match = findCategoryMatch(paramCategory, getAvailableCategories());
+      currentCategory = match ? (match.id || '').toLowerCase() : paramCategory.toLowerCase();
+    }
   }
 
   renderCategorySelectors();
@@ -191,18 +303,40 @@ async function initCatalog() {
 
 function updateCategoryUI() {
   const normCat = (currentCategory || 'all').toLowerCase();
-  const label = CATEGORY_MAP[normCat] || 'All Products';
+  const categories = getAvailableCategories();
+  const matched = findCategoryMatch(normCat, categories);
+  const label = normCat === 'all'
+    ? 'All Products'
+    : (matched ? (matched.name || matched.id) : (CATEGORY_MAP[normCat] || normCat));
+
   const labelEl = document.getElementById('currentCategoryText');
   if (labelEl) labelEl.textContent = label;
 
+  const activeCanonicalId = matched ? (matched.id || '').toLowerCase() : normCat;
+
   // Sync all category buttons and dropdown items
   document.querySelectorAll('[data-filter]').forEach(btn => {
-    btn.classList.toggle('active', (btn.getAttribute('data-filter') || '').toLowerCase() === normCat);
+    const filterVal = (btn.getAttribute('data-filter') || '').toLowerCase();
+    const isAct = (activeCanonicalId === 'all' && filterVal === 'all') ||
+                  (activeCanonicalId !== 'all' && (filterVal === activeCanonicalId || (matched && (matched.id || '').toLowerCase() === filterVal)));
+    btn.classList.toggle('active', isAct);
   });
 }
 
 function selectCatalogCategory(catKey, catLabel) {
   currentCategory = catKey;
+
+  // Update browser URL query string without reloading page
+  try {
+    const newUrl = new URL(window.location.href);
+    if (!catKey || catKey.toLowerCase() === 'all') {
+      newUrl.searchParams.delete('category');
+    } else {
+      newUrl.searchParams.set('category', catKey);
+    }
+    window.history.replaceState({}, '', newUrl.toString());
+  } catch (_) {}
+
   updateCategoryUI();
 
   // Close dropdown if open
@@ -282,15 +416,7 @@ function setupFilterButtons() {
   filterButtons.forEach(btn => {
     btn.addEventListener('click', () => {
       const filterVal = btn.getAttribute('data-filter');
-      currentCategory = filterVal;
-      updateCategoryUI();
-
-      const menu = document.getElementById('categoryDropdownMenu');
-      const trigger = document.getElementById('categoryDropdownTrigger');
-      if (menu) menu.classList.remove('show');
-      if (trigger) trigger.classList.remove('open');
-
-      renderCatalog();
+      selectCatalogCategory(filterVal);
     });
   });
 }
@@ -329,13 +455,7 @@ function renderCatalog() {
 
   // Filter products
   let filtered = getCatalogProducts().filter(item => {
-    const itemCat = (item.category || '').toLowerCase();
-    const itemCatLabel = (item.categoryLabel || '').toLowerCase();
-    const curCat = (currentCategory || 'all').toLowerCase();
-    const curCatName = (CATEGORY_MAP[curCat] || '').toLowerCase();
-    const matchesCategory = (curCat === 'all') || 
-                            (itemCat === curCat) || 
-                            (curCatName && (itemCat === curCatName || itemCatLabel === curCatName));
+    const matchesCategory = isProductInCategory(item, currentCategory);
 
     const nameText = (item.name || '').toLowerCase();
     const descText = (item.shortDescription || item.description || '').toLowerCase();
@@ -548,6 +668,12 @@ function resetFilters() {
   searchQuery = '';
   currentSort = 'featured';
 
+  try {
+    const newUrl = new URL(window.location.href);
+    newUrl.searchParams.delete('category');
+    window.history.replaceState({}, '', newUrl.toString());
+  } catch (_) {}
+
   const searchInput = document.getElementById('catalogSearchInput');
   if (searchInput) searchInput.value = '';
   const drawerSearch = document.getElementById('drawerSearchInput');
@@ -560,14 +686,8 @@ function resetFilters() {
     btn.classList.toggle('active', btn.getAttribute('data-sort') === 'featured');
   });
 
-  const filterButtons = document.querySelectorAll('[data-filter]');
-  filterButtons.forEach(btn => {
-    btn.classList.toggle('active', btn.getAttribute('data-filter') === 'all');
-  });
-
-  const catText = document.getElementById('currentCategoryText');
-  if (catText) catText.textContent = 'All Products';
-
+  updateCategoryUI();
+  renderCategorySelectors();
   renderCatalog();
 }
 

@@ -619,7 +619,14 @@
 
       grid.innerHTML = categories.map((cat, idx) => {
         const catId = (cat.id || '').toLowerCase();
-        const catProducts = products.filter(p => (p.category || '').toLowerCase() === catId);
+        const catProducts = products.filter(p => {
+          const pCat = (p.category || '').toLowerCase();
+          const pLabel = (p.categoryLabel || '').toLowerCase();
+          const pCatSlug = pCat.replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+          const catIdSlug = catId.replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+          const catNameSlug = (cat.name || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+          return pCat === catId || pLabel === catId || (catIdSlug && pCatSlug === catIdSlug) || (catNameSlug && pCatSlug === catNameSlug) || Boolean(catIdSlug.replace(/s$/, '') && pCatSlug.replace(/s$/, '') === catIdSlug.replace(/s$/, ''));
+        });
         const count = catProducts.length;
 
         // Strictly preserve category's own uploaded/registered image (never overwrite with product images)
