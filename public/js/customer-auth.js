@@ -214,28 +214,8 @@
       return data;
     },
 
-    async directLogin(email, name = '', phone = '') {
-      const res = await requestApi('/api/customer/auth/direct-login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, name, phone })
-      });
-      const data = await parseResponseJson(res);
-      if (res && res.ok && data && data.success && data.token) {
-        localStorage.setItem(TOKEN_KEY, data.token);
-        const customerObj = {
-          ...(data.customer || {}),
-          email,
-          name: (data.customer?.name && data.customer.name !== 'Valued Customer') ? data.customer.name : (name || email.split('@')[0]),
-          phone: (data.customer?.phone && data.customer.phone.trim()) ? data.customer.phone.trim() : (phone || '')
-        };
-        localStorage.setItem(USER_KEY, JSON.stringify(customerObj));
-        if (customerObj.phone) {
-          localStorage.setItem('rf_customer_phone', customerObj.phone);
-        }
-        this.notifyStateChange(true, customerObj);
-      }
-      return data;
+    async directLogin() {
+      return { success: false, message: 'Direct login is disabled. Please verify with OTP.' };
     },
 
     async resendOtp(email) {
@@ -557,9 +537,7 @@
               <span id="custAuthSendSpinner" class="auth-spinner" style="display: none;"></span>
             </button>
 
-            <button type="button" id="custAuthDirectFastBtn" class="btn btn-outline" style="width: 100%; justify-content: center; padding: 10px; font-weight: 700; margin-top: 8px; border-radius: 12px; font-size: 0.82rem; border-color: #D1D5DB; color: #374151; display: flex; align-items: center; gap: 6px;">
-              <span>⚡ Instant 1-Click Sign In (Fast Checkout)</span>
-            </button>
+
 
             
             <div style="font-size: 0.72rem; color: #6B7280; text-align: center; margin-top: 12px; line-height: 1.4;">
@@ -597,11 +575,7 @@
               </button>
             </div>
 
-            <div style="margin-top: 14px; text-align: center; border-top: 1px dashed #E5E7EB; padding-top: 12px;">
-              <button type="button" id="custAuthDirectFromOtpBtn" style="background: none; border: none; color: #B45309; font-weight: 700; font-size: 0.8125rem; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
-                ⚡ Didn't receive email? Sign In Instantly &rarr;
-              </button>
-            </div>
+
           </form>
 
           <!-- Phase 3: Already Logged In Profile Card -->
@@ -1081,89 +1055,6 @@
     if (backBtn) {
       backBtn.addEventListener('click', () => {
         resetModalState();
-      });
-    }
-
-    // 5b. Direct 1-Click Login Fast Button on Email Form
-    const fastDirectBtn = document.getElementById('custAuthDirectFastBtn');
-    if (fastDirectBtn) {
-      fastDirectBtn.addEventListener('click', async (e) => {
-        e.preventDefault();
-        const emailInput = document.getElementById('custAuthEmail');
-        const nameInput = document.getElementById('custAuthName');
-        const phoneInput = document.getElementById('custAuthPhone');
-
-        const email = emailInput ? emailInput.value.trim() : '';
-        const name = nameInput ? nameInput.value.trim() : '';
-        const phone = phoneInput ? phoneInput.value.trim() : '';
-
-        if (!email) {
-          showModalAlert('danger', 'Please enter your email address to sign in.');
-          if (emailInput) emailInput.focus();
-          return;
-        }
-
-        fastDirectBtn.disabled = true;
-        fastDirectBtn.textContent = 'Signing in...';
-
-        try {
-          const res = await window.CustomerAuth.directLogin(email, name, phone);
-          if (res && res.success) {
-            showModalAlert('success', 'Logged in successfully!');
-            setTimeout(() => {
-              window.CustomerAuth.closeAuthModal();
-              if (typeof window.CustomerAuth._onAuthSuccessCallback === 'function') {
-                const cb = window.CustomerAuth._onAuthSuccessCallback;
-                window.CustomerAuth._onAuthSuccessCallback = null;
-                cb(res.customer);
-              }
-            }, 500);
-          } else {
-            showModalAlert('danger', res.message || 'Direct login failed. Please send passcode.');
-          }
-        } catch (err) {
-          console.error('Fast login error:', err);
-          showModalAlert('danger', 'Could not complete login. Please try again.');
-        } finally {
-          fastDirectBtn.disabled = false;
-          fastDirectBtn.textContent = '⚡ Instant 1-Click Sign In (Fast Checkout)';
-        }
-      });
-    }
-
-    // 5c. Direct 1-Click Login from OTP Form
-    const directOtpBtn = document.getElementById('custAuthDirectFromOtpBtn');
-    if (directOtpBtn) {
-      directOtpBtn.addEventListener('click', async () => {
-        if (!activeEmailForVerification) return;
-        directOtpBtn.disabled = true;
-        directOtpBtn.textContent = 'Signing in...';
-
-        try {
-          const res = await window.CustomerAuth.directLogin(
-            activeEmailForVerification,
-            activeNameForVerification,
-            activePhoneForVerification
-          );
-          if (res && res.success) {
-            showModalAlert('success', 'Signed in successfully!');
-            setTimeout(() => {
-              window.CustomerAuth.closeAuthModal();
-              if (typeof window.CustomerAuth._onAuthSuccessCallback === 'function') {
-                const cb = window.CustomerAuth._onAuthSuccessCallback;
-                window.CustomerAuth._onAuthSuccessCallback = null;
-                cb(res.customer);
-              }
-            }, 500);
-          } else {
-            showModalAlert('danger', res.message || 'Direct sign-in failed.');
-          }
-        } catch (err) {
-          showModalAlert('danger', 'Could not complete sign in.');
-        } finally {
-          directOtpBtn.disabled = false;
-          directOtpBtn.textContent = '⚡ Didn\'t receive email? Sign In Instantly →';
-        }
       });
     }
 

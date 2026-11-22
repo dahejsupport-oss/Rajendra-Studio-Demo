@@ -1663,56 +1663,13 @@ app.post('/api/customer/auth/send-otp', async (req, res) => {
 
 /**
 /**
- * Direct Instant Customer Login (1-Click Login without waiting for email)
+ * Direct Instant Customer Login (Disabled - OTP verification compulsory)
  */
 app.post('/api/customer/auth/direct-login', async (req, res) => {
-  try {
-    const { email, name, phone } = req.body;
-    if (!email) {
-      return res.status(400).json({ success: false, message: 'Email address is required.' });
-    }
-    const cleanEmail = email.trim().toLowerCase();
-    const customerName = (name && name.trim()) || cleanEmail.split('@')[0];
-    const customerPhone = (phone && phone.trim()) || '';
-
-    const token = generateCustomerToken(cleanEmail, customerName, customerPhone);
-    const sessionExpiresAt = Date.now() + 60 * 24 * 60 * 60 * 1000;
-
-    customerSessions.set(token, {
-      email: cleanEmail,
-      name: customerName,
-      phone: customerPhone,
-      createdAt: Date.now(),
-      expiresAt: sessionExpiresAt
-    });
-    saveCustomerSessions();
-
-    const customerProfile = await db.recordCustomerLogin(cleanEmail, customerName, customerPhone, true);
-
-    console.log(`🎉 [CUSTOMER DIRECT LOGIN] Customer ${cleanEmail} logged in directly!`);
-
-    // Dispatch Login Notifications (to shop@rajendrastudioandgifts.in AND customer)
-    emailService.notifyCustomerLogin({
-      customerEmail: cleanEmail,
-      customerName,
-      customerPhone,
-      req
-    }).catch(loginMailErr => console.warn('Customer direct-login email warning:', loginMailErr.message));
-
-    return res.json({
-      success: true,
-      message: 'Successfully logged in!',
-      token,
-      customer: customerProfile || {
-        email: cleanEmail,
-        name: customerName,
-        phone: customerPhone
-      }
-    });
-  } catch (err) {
-    console.error('Error in /api/customer/auth/direct-login:', err);
-    return res.status(500).json({ success: false, message: 'Server error during customer login.' });
-  }
+  return res.status(403).json({
+    success: false,
+    message: 'Direct 1-click sign-in is disabled. Please enter the 6-digit OTP passcode sent to your email.'
+  });
 });
 
 /**
