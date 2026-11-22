@@ -293,7 +293,7 @@ function generateOtpEmailHtml(otp, recipientEmail) {
       <div class="content">
         <h2 class="headline">Your One-Time Passcode (OTP)</h2>
         <p class="subtext">
-          A login attempt was initiated for the Dahej Support Admin Dashboard with email: <strong>${recipientEmail}</strong>.<br>
+          A login attempt was initiated for the Rajendra Studio Admin Dashboard with email: <strong>${recipientEmail}</strong>.<br>
           Use the secure 6-digit passcode below to complete your authentication.
         </p>
         <div class="otp-box">
@@ -301,7 +301,7 @@ function generateOtpEmailHtml(otp, recipientEmail) {
           <div class="timer-note">Expires in <strong>5 minutes</strong></div>
         </div>
         <div class="security-warning">
-          <strong>Security Notice:</strong> Never share this OTP with anyone. Dahej Support staff will never ask for your authentication passcode. If you did not initiate this login request, please change your admin password immediately.
+          <strong>Security Notice:</strong> Never share this OTP with anyone. Rajendra Studio and Gifts staff will never ask for your authentication passcode. If you did not initiate this login request, please change your admin password immediately.
         </div>
       </div>
       <div class="footer">
@@ -347,7 +347,7 @@ function generateCustomerOtpEmailHtml(otp, recipientEmail) {
       <div class="content">
         <h2 class="headline">Your Customer Login Passcode</h2>
         <p class="subtext">
-          Use the secure 6-digit One-Time Passcode below to sign in to your Dahej Support account for <strong>${recipientEmail}</strong>.
+          Use the secure 6-digit One-Time Passcode below to sign in to your Rajendra Studio and Gifts account for <strong>${recipientEmail}</strong>.
         </p>
         <div class="otp-box">
           <div class="otp-code">${otp}</div>
@@ -375,7 +375,7 @@ function generateCustomerLoginEmailHtml({ customerName, customerEmail, loginTime
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Alert - Dahej Support</title>
+    <title>Login Alert - Rajendra Studio and Gifts</title>
   </head>
   <body style="margin: 0; padding: 0; background-color: #F8F6F0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #111111; -webkit-font-smoothing: antialiased;">
     <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #F8F6F0; padding: 30px 15px;">
@@ -416,7 +416,7 @@ function generateCustomerLoginEmailHtml({ customerName, customerEmail, loginTime
                   Hello <strong>${customerName || 'Valued Customer'}</strong>,
                 </p>
                 <p style="font-size: 15px; line-height: 1.6; color: #333333; margin: 0 0 20px;">
-                  This email confirms that you successfully signed in to your Dahej Support account. Your saved cart items, wishlist, and past orders are now synced and accessible.
+                  This email confirms that you successfully signed in to your Rajendra Studio and Gifts account. Your saved cart items, wishlist, and past orders are now synced and accessible.
                 </p>
 
                 <!-- Activity Details Box -->
@@ -468,7 +468,7 @@ function generateCustomerLoginEmailHtml({ customerName, customerEmail, loginTime
             <tr>
               <td style="background-color: #FAF8F5; padding: 24px 32px; text-align: center; border-top: 1px solid #EAE5DB;">
                 <div style="font-size: 13px; font-weight: 700; color: #111111; margin-bottom: 6px;">
-                  Rajesh Framing Studio &bull; Dahej Support
+                  Rajendra Studio and Gifts
                 </div>
                 <div style="font-size: 12px; color: #78716C; margin-bottom: 12px;">
                   A/23 Chitrakut, Tulsidham chokdi, opp. ICICI Bank, Bharuch, Gujarat 392001 &bull; Phone: +91 95107 57513<br><a href="https://maps.app.goo.gl/cNKG3Da6yA8E8L5j8" target="_blank" style="color: #C99A3D; text-decoration: underline; font-size: 11px;">📍 View on Google Maps</a>
@@ -533,7 +533,7 @@ async function sendCustomerLoginNotification(customerEmail, customerName, req) {
 
     const plainText = `Hello ${cleanName},
 
-You have successfully logged in to your Dahej Support account (${cleanEmail}) at ${loginTime}.
+You have successfully logged in to your Rajendra Studio and Gifts account (${cleanEmail}) at ${loginTime}.
 
 Device: ${userAgent}
 IP Address: ${ipAddress}
@@ -553,7 +553,7 @@ Google Maps: https://maps.app.goo.gl/cNKG3Da6yA8E8L5j8
     await transporter.sendMail({
       from: fromAddress,
       to: cleanEmail,
-      subject: `🔐 Successful Login to Your Dahej Support Account`,
+      subject: `🔐 Successful Login to Your Rajendra Studio and Gifts Account`,
       text: plainText,
       html: generateCustomerLoginEmailHtml({
         customerName: cleanName,
@@ -608,7 +608,7 @@ function generateCustomerOrderEmailHtml({ orderId, customerName, newStatus, note
     badgeColor = '#991B1B';
     badgeBorder = '#FECACA';
     headline = 'Important Notice: Order Cancelled';
-    primaryMessage = 'We are writing to inform you that your order has been cancelled by Rajendra Studio &amp; Framing. If this cancellation was requested by you, no further action is needed.';
+    primaryMessage = 'We are writing to inform you that your order has been cancelled by Rajendra Studio and Gifts. If this cancellation was requested by you, no further action is needed.';
   } else if (isShipped) {
     badgeText = '🚚 DISPATCHED & OUT FOR DELIVERY';
     badgeBg = '#F0FDF4';
@@ -663,7 +663,7 @@ function generateCustomerOrderEmailHtml({ orderId, customerName, newStatus, note
                   RAJENDRA <span style="color: #F59E0B;">STUDIO &amp; FRAMING</span>
                 </div>
                 <div style="font-size: 11px; letter-spacing: 1.5px; color: #94A3B8; text-transform: uppercase; margin-top: 5px; font-weight: 600;">
-                  ONLINE ORDER DESK &bull; DAHEJ SUPPORT
+                  ONLINE ORDER DESK &bull; RAJENDRA STUDIO AND GIFTS
                 </div>
               </td>
             </tr>
@@ -779,7 +779,7 @@ function generateCustomerOrderEmailHtml({ orderId, customerName, newStatus, note
                   Our studio team is available Mon–Sat (9:00 AM – 9:00 PM).
                 </div>
                 <div>
-                  <a href="https://wa.me/919510757513?text=${encodeURIComponent('Hello Rajesh Framing, I am inquiring about my Order #' + orderId)}" target="_blank" style="display: inline-block; background-color: #25D366; color: #FFFFFF; font-size: 12px; font-weight: 700; text-decoration: none; padding: 9px 20px; border-radius: 9999px; margin: 0 4px; box-shadow: 0 2px 6px rgba(37, 211, 102, 0.3);">
+                  <a href="https://wa.me/919510757513?text=${encodeURIComponent('Hello Rajendra Studio and Gifts, I am inquiring about my Order #' + orderId)}" target="_blank" style="display: inline-block; background-color: #25D366; color: #FFFFFF; font-size: 12px; font-weight: 700; text-decoration: none; padding: 9px 20px; border-radius: 9999px; margin: 0 4px; box-shadow: 0 2px 6px rgba(37, 211, 102, 0.3);">
                     💬 Chat on WhatsApp
                   </a>
                   <a href="tel:+919510757513" style="display: inline-block; background-color: #111111; color: #FFFFFF; border: 1px solid #C99A3D; font-size: 12px; font-weight: 700; text-decoration: none; padding: 9px 20px; border-radius: 9999px; margin: 0 4px;">
@@ -788,7 +788,7 @@ function generateCustomerOrderEmailHtml({ orderId, customerName, newStatus, note
                 </div>
                 <div style="margin-top: 20px; font-size: 11px; color: #A8A29E; line-height: 1.6;">
                   Rajendra Studio &amp; Framing &bull; A/23 Chitrakut, Tulsidham chokdi, opp. ICICI Bank, Bharuch, Gujarat 392001<br><a href="https://maps.app.goo.gl/cNKG3Da6yA8E8L5j8" target="_blank" style="color: #C99A3D; text-decoration: underline; font-size: 11px;">📍 View Location on Google Maps</a><br>
-                  This is an automated operational notification regarding your order with Dahej Support.
+                  This is an automated operational notification regarding your order with Rajendra Studio and Gifts.
                 </div>
               </td>
             </tr>
@@ -904,17 +904,17 @@ async function sendCustomerOrderNotification(orderOrInquiry, newStatus, notes, r
     const address = (orderOrInquiry.customer && orderOrInquiry.customer.address) || orderOrInquiry.specs || '';
 
     // Clean subject lines
-    let subject = `Order #${orderId} Status Update: ${newStatus} - Dahej Support`;
+    let subject = `Order #${orderId} Status Update: ${newStatus} - Rajendra Studio and Gifts`;
     if (newStatus === 'Placed' || newStatus === 'New' || newStatus === 'Order Placed') {
       subject = 'Your Order Has Been Placed Successfully!';
     } else if (newStatus && (newStatus.toLowerCase() === 'confirmed' || newStatus === 'Accepted')) {
       subject = 'Your Order Has Been Confirmed!';
     } else if (newStatus === 'Cancelled') {
-      subject = `Order #${orderId} Cancellation Notice - Dahej Support Studio`;
+      subject = `Order #${orderId} Cancellation Notice - Rajendra Studio and Gifts`;
     } else if (newStatus === 'Shipped' || newStatus === 'Dispatched') {
-      subject = `Order #${orderId} Dispatched for Delivery - Dahej Support`;
+      subject = `Order #${orderId} Dispatched for Delivery - Rajendra Studio and Gifts`;
     } else if (newStatus === 'Completed' || newStatus === 'Delivered') {
-      subject = `Order #${orderId} Delivered - Thank You - Dahej Support`;
+      subject = `Order #${orderId} Delivered - Thank You - Rajendra Studio and Gifts`;
     }
 
     const config = await db.getAdminConfig();
@@ -926,7 +926,7 @@ async function sendCustomerOrderNotification(orderOrInquiry, newStatus, notes, r
     } else if (newStatus && (newStatus.toLowerCase() === 'confirmed' || newStatus === 'Accepted')) {
       introText = `Your order #${orderId} has been confirmed by our team.`;
     } else if (newStatus === 'Cancelled') {
-      introText = `Your order #${orderId} has been cancelled by Dahej Support Studio.`;
+      introText = `Your order #${orderId} has been cancelled by Rajendra Studio and Gifts.`;
     } else if (newStatus === 'Shipped' || newStatus === 'Dispatched') {
       introText = `Your order #${orderId} has been dispatched and is on its way to you!`;
     } else if (newStatus === 'Completed' || newStatus === 'Delivered') {
@@ -1637,7 +1637,7 @@ app.post('/api/customer/auth/send-otp', async (req, res) => {
           from: fromAddress,
           to: cleanEmail,
           subject: `🔐 Your Rajesh Framing Login Passcode: ${otp}`,
-          text: `Hello,\n\nYour One-Time Passcode (OTP) to sign in to Rajesh Framing Studio is: ${otp}\n\nThis code will expire in 5 minutes. Please do not share it with anyone.\n\nThank you,\nRajesh Framing Studio`,
+          text: `Hello,\n\nYour One-Time Passcode (OTP) to sign in to Rajendra Studio and Gifts is: ${otp}\n\nThis code will expire in 5 minutes. Please do not share it with anyone.\n\nThank you,\nRajendra Studio and Gifts`,
           html: generateCustomerOtpEmailHtml(otp, cleanEmail)
         });
         emailDelivered = true;
@@ -1884,7 +1884,7 @@ app.post('/api/customer/auth/resend-otp', async (req, res) => {
           from: fromAddress,
           to: cleanEmail,
           subject: `🔐 Your Rajesh Framing Login Passcode: ${otp}`,
-          text: `Hello,\n\nYour new One-Time Passcode (OTP) is: ${otp}\n\nValid for 5 minutes. Do not share with anyone.\n\nRajesh Framing Studio`,
+          text: `Hello,\n\nYour new One-Time Passcode (OTP) is: ${otp}\n\nValid for 5 minutes. Do not share with anyone.\n\nRajendra Studio and Gifts`,
           html: generateCustomerOtpEmailHtml(otp, cleanEmail)
         });
         emailDelivered = true;
@@ -5170,7 +5170,7 @@ app.post('/api/contact', async (req, res) => {
           html: `
             <div style="font-family: Arial, sans-serif; padding: 24px; background: #FAF8F5; border-radius: 12px; border: 1px solid #E5E0D5;">
               <h2 style="color: #1A1A18; margin-top: 0;">🔔 New Customer Enquiry Received</h2>
-              <p style="color: #555555; font-size: 15px;">A new customer enquiry was submitted on the Rajesh Framing website:</p>
+              <p style="color: #555555; font-size: 15px;">A new customer enquiry was submitted on the Rajendra Studio and Gifts website:</p>
               <table style="width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px;">
                 <tr><td style="padding: 8px 0; color: #888888; width: 130px;">Customer Name:</td><td style="font-weight: 700; color: #111111;">${cleanName}</td></tr>
                 <tr><td style="padding: 8px 0; color: #888888;">Phone Number:</td><td style="font-weight: 700; color: #111111;">${cleanPhone}</td></tr>

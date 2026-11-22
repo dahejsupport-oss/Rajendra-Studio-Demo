@@ -132,7 +132,7 @@ function generateCategoriesPage() {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Our Categories | Dahej Support - Custom Frames &amp; Personalized Printing</title>
+  <title>Our Categories | Rajendra Studio and Gifts - Custom Frames &amp; Personalized Printing</title>
   <link rel="icon" type="image/png" href="assets/images/favicon.png" />
   <link rel="shortcut icon" href="favicon.ico" />
   <link rel="apple-touch-icon" href="assets/images/favicon.png" />
@@ -141,7 +141,7 @@ function generateCategoriesPage() {
   <meta name="theme-color" content="#111111" />
 
   <!-- Open Graph -->
-  <meta property="og:title" content="Our Categories | Dahej Support" />
+  <meta property="og:title" content="Our Categories | Rajendra Studio and Gifts" />
   <meta property="og:description" content="Explore our 5 signature handcrafted categories: Framing, Personalized Printing, Office Stationery, Canvas Art &amp; Keepsake Gifts." />
   <meta property="og:image" content="assets/images/hero_showcase.jpg" />
   <meta property="og:type" content="website" />

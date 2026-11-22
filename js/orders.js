@@ -1,5 +1,5 @@
 /**
- * DAHEJ SUPPORT / RAJENDRA STUDIO - ORDERS CONTROLLER
+ * RAJENDRA STUDIO AND GIFTS - ORDERS CONTROLLER
  * Full order history management, craftsmanship tracking, printable invoices, and guest lookup
  */
 
@@ -335,7 +335,7 @@ function createOrderCardHtml(order) {
   const customer = order.customer || {};
 
   // Craft WhatsApp Pre-filled message
-  const waMsg = encodeURIComponent(`Hello Dahej Support Studio! I have a question regarding my Order #${orderId} (${rawStatus}). Please share an update.`);
+  const waMsg = encodeURIComponent(`Hello Rajendra Studio and Gifts! I have a question regarding my Order #${orderId} (${rawStatus}). Please share an update.`);
 
   return `
     <article class="order-card" id="orderCard_${escapeHtml(orderId)}">

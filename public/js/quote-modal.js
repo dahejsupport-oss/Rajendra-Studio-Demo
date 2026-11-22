@@ -149,11 +149,11 @@ function injectQuoteModalMarkup() {
             </div>
             <h3 class="success-title">Enquiry Received!</h3>
             <p class="success-desc">
-              Thank you, <strong id="successCustomerName">Customer</strong>. Our framing and printing specialists at <strong>Dahej Support</strong> will review your specifications and contact you shortly with accurate pricing and a digital mock-up.
+              Thank you, <strong id="successCustomerName">Customer</strong>. Our framing and printing specialists at <strong>Rajendra Studio and Gifts</strong> will review your specifications and contact you shortly with accurate pricing and a digital mock-up.
             </p>
             <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
               <button type="button" class="btn btn-primary" id="successDoneBtn">Done</button>
-              <a href="https://wa.me/919510757513?text=Hello%20Rajesh%20Framing,%20following%20up%20on%20my%20enquiry" target="_blank" class="btn btn-whatsapp">
+              <a href="https://wa.me/919510757513?text=Hello%20Rajendra%20Studio%20and%20Gifts,%20following%20up%20on%20my%20enquiry" target="_blank" class="btn btn-whatsapp">
                 <span>Direct WhatsApp Follow-up</span>
               </a>
             </div>
@@ -457,7 +457,7 @@ function bindQuoteFormSubmit() {
       const dimensions = document.getElementById('quoteDimensions').value.trim() || 'Standard';
       const req = document.getElementById('quoteRequirements').value.trim() || 'Please share pricing details.';
 
-      const msg = `Hello Dahej Support!\n\nI would like to make an enquiry:\n• Name: ${name}\n• Phone: ${phone}${email ? `\n• Email: ${email}` : ''}\n• Product/Service: ${product}\n• Quantity: ${qty}\n• Preferred Size: ${dimensions}\n• Requirements: ${req}\n\nLooking forward to hearing from you!`;
+      const msg = `Hello Rajendra Studio and Gifts!\n\nI would like to make an enquiry:\n• Name: ${name}\n• Phone: ${phone}${email ? `\n• Email: ${email}` : ''}\n• Product/Service: ${product}\n• Quantity: ${qty}\n• Preferred Size: ${dimensions}\n• Requirements: ${req}\n\nLooking forward to hearing from you!`;
 
       const whatsappUrl = `https://wa.me/919510757513?text=${encodeURIComponent(msg)}`;
       window.open(whatsappUrl, '_blank');

@@ -25,7 +25,7 @@ const ORDER_ALERT_EMAIL = process.env.ORDER_NOTIFICATION_EMAIL || 'order@rajendr
 
 const STUDIO_INFO = {
   name: 'Rajendra Studio & Framing',
-  tagline: 'Custom Framing & Gifts Studio • Dahej Support',
+  tagline: 'Custom Framing & Gifts Studio • Rajendra Studio and Gifts',
   address: 'A/23 Chitrakut, Tulsidham chokdi, opp. ICICI Bank, Bharuch, Gujarat 392001',
   mapsUrl: 'https://maps.app.goo.gl/cNKG3Da6yA8E8L5j8',
   phone: process.env.STUDIO_PHONE || '+91 95107 57513',
@@ -237,7 +237,7 @@ async function notifyCustomerLogin({ customerEmail, customerName = '', customerP
           <h2 style="color: #fff; margin:0; font-size: 20px; letter-spacing: 1px; text-transform: uppercase;">
             RAJENDRA <span style="color: #C99A3D;">STUDIO &amp; FRAMING</span>
           </h2>
-          <div style="color: #C5A880; font-size: 11px; margin-top: 4px; text-transform: uppercase;">Custom Framing Studio • Dahej Support</div>
+          <div style="color: #C5A880; font-size: 11px; margin-top: 4px; text-transform: uppercase;">Custom Framing Studio • Rajendra Studio and Gifts</div>
         </div>
         <div style="padding: 28px;">
           <div style="background: #ECFDF5; border: 1px solid #A7F3D0; color: #065F46; padding: 8px 14px; border-radius: 8px; font-weight: 700; font-size: 12px; display: inline-block; margin-bottom: 16px;">
@@ -442,7 +442,7 @@ async function notifyOrderPickupReady({ order, pickupDate = null, notes = '', re
             RAJENDRA <span style="color: #C99A3D;">STUDIO &amp; FRAMING</span>
           </h2>
           <div style="color: #C5A880; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; margin-top: 5px;">
-            Premium Framing Studio &bull; Dahej Support
+            Premium Framing Studio &bull; Rajendra Studio and Gifts
           </div>
         </div>
 
@@ -667,7 +667,7 @@ async function notifyOrderCancelledByAdmin({ order, notes = '', req = null }) {
             RAJENDRA <span style="color: #C99A3D;">STUDIO &amp; FRAMING</span>
           </h2>
           <div style="color: #C5A880; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; margin-top: 5px;">
-            Order Desk &bull; Dahej Support
+            Order Desk &bull; Rajendra Studio and Gifts
           </div>
         </div>
 
@@ -701,7 +701,7 @@ async function notifyOrderCancelledByAdmin({ order, notes = '', req = null }) {
 
           <!-- Support Contact -->
           <div style="margin-top: 24px; text-align: center;">
-            <a href="${STUDIO_INFO.whatsapp}?text=${encodeURIComponent('Hello Rajendra Studio, I have a question regarding my cancelled order #' + cleanId)}." target="_blank" style="display: inline-block; background-color: #25D366; color: #FFFFFF; font-size: 13px; font-weight: 700; text-decoration: none; padding: 10px 20px; border-radius: 999px; margin: 4px; box-shadow: 0 2px 6px rgba(37, 211, 102, 0.25);">
+            <a href="${STUDIO_INFO.whatsapp}?text=${encodeURIComponent('Hello Rajendra Studio and Gifts, I have a question regarding my cancelled order #' + cleanId)}." target="_blank" style="display: inline-block; background-color: #25D366; color: #FFFFFF; font-size: 13px; font-weight: 700; text-decoration: none; padding: 10px 20px; border-radius: 999px; margin: 4px; box-shadow: 0 2px 6px rgba(37, 211, 102, 0.25);">
               💬 WhatsApp Support
             </a>
             <a href="tel:${STUDIO_INFO.phone.replace(/[^0-9+]/g, '')}" style="display: inline-block; background-color: #111827; color: #FFFFFF; font-size: 13px; font-weight: 700; text-decoration: none; padding: 10px 20px; border-radius: 999px; margin: 4px;">
@@ -1017,7 +1017,7 @@ async function notifyOrderConfirmation({ order, req = null }) {
                     RAJENDRA <span style="color: #F59E0B;">STUDIO &amp; FRAMING</span>
                   </div>
                   <div style="font-size: 11px; letter-spacing: 1.5px; color: #94A3B8; text-transform: uppercase; margin-top: 6px; font-weight: 600;">
-                    ONLINE ORDER DESK &bull; DAHEJ SUPPORT
+                    ONLINE ORDER DESK &bull; RAJENDRA STUDIO AND GIFTS
                   </div>
                 </td>
               </tr>
@@ -1178,7 +1178,7 @@ async function notifyOrderConfirmation({ order, req = null }) {
                     </tr>
                   </table>
                   <div style="margin-top: 16px;">
-                    <a href="${STUDIO_INFO.whatsapp}?text=${encodeURIComponent('Hello Rajendra Studio, I placed order #' + cleanId + ' and want to check details.')}" target="_blank" style="display: inline-block; background-color: #25D366; color: #FFFFFF; font-size: 12px; font-weight: 700; text-decoration: none; padding: 8px 16px; border-radius: 999px; margin: 0 4px; box-shadow: 0 2px 6px rgba(37, 211, 102, 0.25);">
+                    <a href="${STUDIO_INFO.whatsapp}?text=${encodeURIComponent('Hello Rajendra Studio and Gifts, I placed order #' + cleanId + ' and want to check details.')}" target="_blank" style="display: inline-block; background-color: #25D366; color: #FFFFFF; font-size: 12px; font-weight: 700; text-decoration: none; padding: 8px 16px; border-radius: 999px; margin: 0 4px; box-shadow: 0 2px 6px rgba(37, 211, 102, 0.25);">
                       💬 WhatsApp Support
                     </a>
                     <a href="tel:${STUDIO_INFO.phone.replace(/[^0-9+]/g, '')}" style="display: inline-block; background-color: #FFFFFF; color: #1F2937; border: 1px solid #D1D5DB; font-size: 12px; font-weight: 700; text-decoration: none; padding: 8px 16px; border-radius: 999px; margin: 0 4px;">
@@ -1192,7 +1192,7 @@ async function notifyOrderConfirmation({ order, req = null }) {
               <tr>
                 <td style="background-color: #F9FAFB; padding: 22px 28px; text-align: center; border-top: 1px solid #E5E7EB; font-size: 12px; color: #6B7280; line-height: 1.5;">
                   <div style="font-weight: 700; color: #111827; margin-bottom: 4px;">
-                    ${STUDIO_INFO.name} &bull; Dahej Support
+                    ${STUDIO_INFO.name} &bull; Rajendra Studio and Gifts
                   </div>
                   <div>${STUDIO_INFO.address}</div><div style="margin-top: 4px;"><a href="https://maps.app.goo.gl/cNKG3Da6yA8E8L5j8" target="_blank" style="color: #8C6A1E; text-decoration: underline; font-size: 11px; font-weight: 600;">📍 Open Location on Google Maps</a></div>
                   <div style="margin-top: 4px;">Studio Hours: ${STUDIO_INFO.hours} &bull; Direct Order Desk: ${ORDER_SENDER_EMAIL}</div>
@@ -1384,7 +1384,7 @@ async function notifyOrderAcceptedByAdmin({ order, pickupDate = null, confirmati
                     RAJENDRA <span style="color: #F59E0B;">STUDIO &amp; FRAMING</span>
                   </div>
                   <div style="font-size: 11px; letter-spacing: 1.5px; color: #94A3B8; text-transform: uppercase; margin-top: 6px; font-weight: 600;">
-                    CUSTOMER ORDER DESK &bull; DAHEJ SUPPORT
+                    CUSTOMER ORDER DESK &bull; RAJENDRA STUDIO AND GIFTS
                   </div>
                 </td>
               </tr>
@@ -1556,7 +1556,7 @@ async function notifyOrderAcceptedByAdmin({ order, pickupDate = null, confirmati
                     </tr>
                   </table>
                   <div style="margin-top: 16px;">
-                    <a href="${STUDIO_INFO.whatsapp}?text=${encodeURIComponent('Hello Rajendra Studio, I am following up on my confirmed order #' + cleanId)}." target="_blank" style="display: inline-block; background-color: #25D366; color: #FFFFFF; font-size: 12px; font-weight: 700; text-decoration: none; padding: 8px 16px; border-radius: 999px; margin: 0 4px; box-shadow: 0 2px 6px rgba(37, 211, 102, 0.25);">
+                    <a href="${STUDIO_INFO.whatsapp}?text=${encodeURIComponent('Hello Rajendra Studio and Gifts, I am following up on my confirmed order #' + cleanId)}." target="_blank" style="display: inline-block; background-color: #25D366; color: #FFFFFF; font-size: 12px; font-weight: 700; text-decoration: none; padding: 8px 16px; border-radius: 999px; margin: 0 4px; box-shadow: 0 2px 6px rgba(37, 211, 102, 0.25);">
                       💬 WhatsApp Support
                     </a>
                     <a href="tel:${STUDIO_INFO.phone.replace(/[^0-9+]/g, '')}" style="display: inline-block; background-color: #FFFFFF; color: #1F2937; border: 1px solid #D1D5DB; font-size: 12px; font-weight: 700; text-decoration: none; padding: 8px 16px; border-radius: 999px; margin: 0 4px;">
@@ -1570,7 +1570,7 @@ async function notifyOrderAcceptedByAdmin({ order, pickupDate = null, confirmati
               <tr>
                 <td style="background-color: #F9FAFB; padding: 22px 28px; text-align: center; border-top: 1px solid #E5E7EB; font-size: 12px; color: #6B7280; line-height: 1.5;">
                   <div style="font-weight: 700; color: #111827; margin-bottom: 4px;">
-                    ${STUDIO_INFO.name} &bull; Dahej Support
+                    ${STUDIO_INFO.name} &bull; Rajendra Studio and Gifts
                   </div>
                   <div>${STUDIO_INFO.address}</div><div style="margin-top: 4px;"><a href="https://maps.app.goo.gl/cNKG3Da6yA8E8L5j8" target="_blank" style="color: #8C6A1E; text-decoration: underline; font-size: 11px; font-weight: 600;">📍 Open Location on Google Maps</a></div>
                   <div style="margin-top: 4px;">Studio Hours: ${STUDIO_INFO.hours} &bull; Direct Order Desk: ${ORDER_SENDER_EMAIL}</div>

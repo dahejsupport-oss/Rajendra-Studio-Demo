@@ -724,7 +724,7 @@ function initGlobalWhatsAppButton() {
   let waBtn = wrap.querySelector('.floating-whatsapp-btn');
   if (!waBtn) {
     waBtn = document.createElement('a');
-    waBtn.href = 'https://wa.me/919510757513?text=Hello%20Rajendra%20Studio%20%26%20Framing,%20I%20have%20an%20enquiry.';
+    waBtn.href = 'https://wa.me/919510757513?text=Hello%20Rajendra%20Studio%20and%20Gifts,%20I%20have%20an%20enquiry.';
     waBtn.target = '_blank';
     waBtn.rel = 'noopener noreferrer';
     waBtn.className = 'floating-whatsapp-btn pulse-ring';

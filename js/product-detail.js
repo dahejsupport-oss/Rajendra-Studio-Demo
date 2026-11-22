@@ -161,7 +161,7 @@ async function initProductDetailPage() {
 }
 
 function renderProductNotFound(productId) {
-  document.title = 'Product Not Found | Dahej Support';
+  document.title = 'Product Not Found | Rajendra Studio and Gifts';
   const mainEl = document.getElementById('mainContent');
   if (mainEl) {
     mainEl.innerHTML = `
@@ -193,7 +193,7 @@ function populateProductData() {
   const p = currentProduct;
 
   // Title & Breadcrumb
-  document.title = `${p.name} | Dahej Support`;
+  document.title = `${p.name} | Rajendra Studio and Gifts`;
   const breadcrumbEl = document.getElementById('productBreadcrumbCurrent');
   if (breadcrumbEl) breadcrumbEl.textContent = p.name;
 
@@ -1273,7 +1273,7 @@ function setupPhotoUpload() {
       const finishStr = selectedFinish ? selectedFinish.name : '';
       const currentPrice = selectedSize ? selectedSize.price : currentProduct.price;
 
-      let message = `Hello Dahej Support!\n\nI am interested in ordering:\n• Product: ${currentProduct.name}\n• Category: ${currentProduct.categoryLabel || currentProduct.category}\n• ${optLabel}: ${optStr}`;
+      let message = `Hello Rajendra Studio and Gifts!\n\nI am interested in ordering:\n• Product: ${currentProduct.name}\n• Category: ${currentProduct.categoryLabel || currentProduct.category}\n• ${optLabel}: ${optStr}`;
       if (finishStr && finishStr !== 'Standard' && vType !== 'color') {
         message += `\n• Finish: ${finishStr}`;
       }
