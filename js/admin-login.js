@@ -141,27 +141,6 @@ function initPasswordToggle() {
   });
 }
 
-function fillOtpDigits(code) {
-  const boxes = [
-    document.getElementById('otp-1'),
-    document.getElementById('otp-2'),
-    document.getElementById('otp-3'),
-    document.getElementById('otp-4'),
-    document.getElementById('otp-5'),
-    document.getElementById('otp-6')
-  ];
-  const digits = (code || '999999').replace(/\D/g, '').slice(0, 6);
-  digits.split('').forEach((d, i) => {
-    if (boxes[i]) boxes[i].value = d;
-  });
-  if (boxes[5]) boxes[5].focus();
-
-  setTimeout(() => {
-    const verifyBtn = document.getElementById('verifyOtpBtn');
-    if (verifyBtn) verifyBtn.click();
-  }, 200);
-}
-
 /* --- Phase 1: Submit Credentials & Request OTP --- */
 function initLoginCredentialsForm() {
   const form = document.getElementById('loginCredentialsForm');
@@ -170,131 +149,16 @@ function initLoginCredentialsForm() {
   const sendOtpBtn = document.getElementById('sendOtpBtn');
   const btnText = document.getElementById('sendOtpBtnText');
   const spinner = document.getElementById('sendOtpSpinner');
-  const directLoginBtn = document.getElementById('directLoginBtn');
-  const directBtnText = document.getElementById('directLoginBtnText');
-  const directSpinner = document.getElementById('directLoginSpinner');
-  const autoFillBtn = document.getElementById('autoFillBtn') || document.getElementById('quickFillBtn');
-  const autoFillAndSubmitBtn = document.getElementById('autoFillAndSubmitBtn');
-  const autoFillCard = document.getElementById('autoFillCard');
-  const useMasterPinBtn = document.getElementById('useMasterPinBtn');
-
-  const fillCredentials = (e) => {
-    if (e && e.preventDefault) e.preventDefault();
-    if (emailInput) emailInput.value = 'rajendrastudioframing@gmail.com';
-    if (passwordInput) passwordInput.value = 'Admin@Rajesh2026';
-    showAlert('info', 'Credentials filled! Click "⚡ Instant Sign In" or "📩 Sign In via Email OTP".');
-    if (emailInput) emailInput.focus();
-  };
-
-  if (autoFillBtn) {
-    autoFillBtn.addEventListener('click', fillCredentials);
-  }
-  if (autoFillCard) {
-    autoFillCard.style.cursor = 'pointer';
-    autoFillCard.addEventListener('click', (e) => {
-      if (e.target.closest('#autoFillBtn') || e.target.closest('#autoFillAndSubmitBtn')) return;
-      fillCredentials(e);
-    });
-  }
-
-  // Direct login execution function
-  const executeDirectLogin = async () => {
-    hideAlert();
-    const email = (emailInput ? emailInput.value : '').trim();
-    const password = passwordInput ? passwordInput.value : '';
-
-    if (!email || !password) {
-      showAlert('danger', 'Please provide both admin email and password.');
-      return;
-    }
-
-    if (directLoginBtn) directLoginBtn.disabled = true;
-    if (directBtnText) directBtnText.textContent = 'Signing In...';
-    if (directSpinner) directSpinner.style.display = 'inline-block';
-
-    try {
-      const response = await requestApi('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
-      });
-
-      const result = await parseResponseJson(response);
-
-      if (response && response.ok && result && result.success) {
-        showAlert('success', 'Authentication successful! Redirecting to Dashboard...');
-        
-        // Save session in BOTH sessionStorage and localStorage
-        sessionStorage.setItem('rf_admin_token', result.token);
-        sessionStorage.setItem('rf_admin_user', JSON.stringify(result.admin));
-        localStorage.setItem('rf_admin_token', result.token);
-        localStorage.setItem('rf_admin_user', JSON.stringify(result.admin));
-
-        const hasHtml = window.location.pathname.endsWith('.html') || window.location.protocol === 'file:';
-        setTimeout(() => {
-          window.location.href = hasHtml ? 'admin.html' : 'admin';
-        }, 500);
-
-      } else {
-        showAlert('danger', (result && result.message) ? result.message : 'Invalid admin email or password.');
-      }
-    } catch (err) {
-      console.error('Direct login failed:', err);
-      showAlert('danger', 'Unable to reach the authentication service. Please check your network connection.');
-    } finally {
-      if (directLoginBtn) directLoginBtn.disabled = false;
-      if (directBtnText) directBtnText.textContent = '⚡ Instant Sign In';
-      if (directSpinner) directSpinner.style.display = 'none';
-    }
-  };
-
-  // 1-Click Auto Fill and Immediately Login
-  if (autoFillAndSubmitBtn) {
-    autoFillAndSubmitBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      if (emailInput) emailInput.value = 'rajendrastudioframing@gmail.com';
-      if (passwordInput) passwordInput.value = 'Admin@Rajesh2026';
-      executeDirectLogin();
-    });
-  }
-
-  // Instant direct sign-in button
-  if (directLoginBtn) {
-    directLoginBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      executeDirectLogin();
-    });
-  }
-
-  // Click on OTP banner to auto fill 6 digits
-  const testOtpBanner = document.getElementById('testOtpBanner');
-  const testOtpCode = document.getElementById('testOtpCode');
-  const autoFillOtpRow = document.getElementById('autoFillOtpRow');
-  if (autoFillOtpRow && testOtpCode) {
-    autoFillOtpRow.addEventListener('click', () => {
-      const code = testOtpCode.textContent.trim();
-      const digits = (code && code !== '------') ? code : '999999';
-      fillOtpDigits(digits);
-    });
-  }
-
-  if (useMasterPinBtn) {
-    useMasterPinBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      fillOtpDigits('999999');
-    });
-  }
 
   if (!form) return;
 
-  // Form submission (Email OTP Flow)
+  // Form submission (Strict Email OTP Flow)
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     hideAlert();
 
-    const email = emailInput.value.trim();
-    const password = passwordInput.value;
+    const email = (emailInput ? emailInput.value : '').trim();
+    const password = passwordInput ? passwordInput.value : '';
 
     if (!email || !password) {
       showAlert('danger', 'Please provide both admin email and password.');
@@ -327,15 +191,18 @@ function initLoginCredentialsForm() {
         document.getElementById('formHeaderSubtitle').textContent = 'A secure 6-digit OTP code has been generated and sent to your email.';
         document.getElementById('targetEmailLabel').textContent = email;
 
-        // If testOtp is available (or in local dev), show the preview banner for instant access
-        if (result.testOtp) {
-          const testBanner = document.getElementById('testOtpBanner');
-          const testCodeEl = document.getElementById('testOtpCode');
-          testCodeEl.textContent = result.testOtp;
-          testBanner.style.display = 'flex';
-        }
+        // Ensure all 6 OTP boxes are blank for manual entry
+        const boxes = [
+          document.getElementById('otp-1'),
+          document.getElementById('otp-2'),
+          document.getElementById('otp-3'),
+          document.getElementById('otp-4'),
+          document.getElementById('otp-5'),
+          document.getElementById('otp-6')
+        ];
+        boxes.forEach(b => { if (b) b.value = ''; });
 
-        showAlert('success', result.message || 'OTP sent successfully!');
+        showAlert('success', result.message || 'OTP sent successfully! Please check your email inbox.');
         startOtpCountdown();
 
         // Focus first OTP input
@@ -484,11 +351,10 @@ function initOtpVerificationForm() {
 
         const result = await parseResponseJson(response);
         if (response && response.ok && result && result.success) {
-          showAlert('success', result.message || 'New OTP sent to your email.');
-          if (result.testOtp) {
-            document.getElementById('testOtpCode').textContent = result.testOtp;
-          }
+          boxes.forEach(b => { if (b) b.value = ''; });
+          showAlert('success', result.message || 'New OTP sent to your email! Please check your inbox.');
           startOtpCountdown();
+          if (boxes[0]) boxes[0].focus();
         } else {
           showAlert('danger', (result && result.message) ? result.message : 'Could not resend OTP.');
           resendBtn.disabled = false;
@@ -508,7 +374,8 @@ function initOtpVerificationForm() {
       clearInterval(otpCountdownTimer);
       otpForm.style.display = 'none';
       document.getElementById('loginCredentialsForm').style.display = 'block';
-      document.getElementById('testOtpBanner').style.display = 'none';
+      const testBanner = document.getElementById('testOtpBanner');
+      if (testBanner) testBanner.style.display = 'none';
       document.getElementById('formHeaderTitle').textContent = 'Admin Login';
       document.getElementById('formHeaderSubtitle').textContent = 'Enter your authorized credentials to receive an authentication OTP on your email.';
       hideAlert();

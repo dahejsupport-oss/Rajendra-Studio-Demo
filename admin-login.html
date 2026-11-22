@@ -8,7 +8,7 @@
   <link rel="icon" type="image/png" href="assets/images/favicon.png?v=circle_v1" />
   <link rel="shortcut icon" href="favicon.ico?v=circle_v1" />
   <link rel="apple-touch-icon" href="assets/images/favicon.png?v=circle_v1" />
-<meta name="description" content="Administrative login and authentication for Rajesh Framing." />
+<meta name="description" content="Administrative login and authentication for Rajendra Studio &amp; Gifts." />
   <link rel="stylesheet" href="css/style.css" />
   <link rel="stylesheet" href="css/admin.css?v=luxury_gold_v5" />
   <link rel="stylesheet" href="css/admin-login.css?v=luxury_light_v7" />
@@ -36,7 +36,7 @@
         </span>
         <h1 class="login-title" id="formHeaderTitle">Admin Login</h1>
         <p class="login-subtitle" id="formHeaderSubtitle">
-          Enter your authorized credentials to sign in directly or verify with a secure OTP.
+          Enter your authorized credentials to receive an authentication OTP on your email.
         </p>
       </div>
 
@@ -44,57 +44,6 @@
       <div class="login-alert" id="loginAlert">
         <div id="alertIcon"></div>
         <div id="alertMessage"></div>
-      </div>
-
-      <!-- Test Mode OTP Preview Banner (Shown automatically when OTP is generated) -->
-      <div class="login-alert info" id="testOtpBanner" style="display: none; flex-direction: column; gap: 8px;" title="Click to auto-fill this OTP">
-        <div style="display: flex; align-items: center; justify-content: space-between;">
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="10"></circle>
-              <line x1="12" y1="8" x2="12" y2="12"></line>
-              <line x1="12" y1="16" x2="12.01" y2="16"></line>
-            </svg>
-            <strong>Authentication Passcode:</strong>
-          </div>
-          <button type="button" id="useMasterPinBtn" style="background: rgba(245, 158, 11, 0.2); border: 1px solid #F59E0B; color: #F59E0B; border-radius: 4px; padding: 2px 8px; font-size: 0.72rem; font-weight: 700; cursor: pointer;">
-            ⚡ Use Master PIN (999999)
-          </button>
-        </div>
-        <div style="font-size: 0.95rem; display: flex; align-items: center; gap: 8px; cursor: pointer;" id="autoFillOtpRow">
-          <span>6-Digit OTP:</span>
-          <code id="testOtpCode" style="font-size: 1.2rem; color: #111111; background: #C99A3D; padding: 3px 10px; border-radius: 5px; font-weight: 800; letter-spacing: 3px;">------</code>
-          <span style="font-size: 0.75rem; color: #555555;">(Click to Auto-Fill)</span>
-        </div>
-      </div>
-
-      <!-- Quick Auto-Fill Credentials Card (Rajendra Studio and Gifts) -->
-      <div class="login-autofill-card" id="autoFillCard">
-        <div class="autofill-card-header">
-          <span class="autofill-badge">
-            <span class="autofill-bolt">⚡</span> Quick Credentials
-          </span>
-          <div style="display: flex; gap: 6px;">
-            <button type="button" class="btn-autofill-trigger" id="autoFillBtn" title="Click to auto-fill credentials">
-              <span class="autofill-bolt">⚡</span> Fill
-            </button>
-            <button type="button" class="btn-autofill-trigger" id="autoFillAndSubmitBtn" style="background: #C99A3D; color: #111111; border-color: #C99A3D; font-weight: 700;" title="Fill credentials and sign in immediately">
-              <span>🚀 1-Click Login</span>
-            </button>
-          </div>
-        </div>
-        <div class="login-autofill-creds">
-          <div class="autofill-cred-row">
-            <span class="autofill-icon">📧</span>
-            <span class="autofill-label">Email:</span>
-            <strong class="autofill-val" id="autoCredEmail">rajendrastudioframing@gmail.com</strong>
-          </div>
-          <div class="autofill-cred-row">
-            <span class="autofill-icon">🔑</span>
-            <span class="autofill-label">Password:</span>
-            <strong class="autofill-val" id="autoCredPass">Admin@Rajesh2026</strong>
-          </div>
-        </div>
       </div>
 
       <!-- ==========================================
@@ -108,8 +57,7 @@
               type="email" 
               id="adminEmail" 
               class="login-input" 
-              value="rajendrastudioframing@gmail.com"
-              placeholder="e.g. rajendrastudioframing@gmail.com" 
+              placeholder="e.g. info@rajendrastudioandgifts.in" 
               required 
               autocomplete="username"
             />
@@ -127,7 +75,6 @@
               type="password" 
               id="adminPassword" 
               class="login-input" 
-              value="Admin@Rajesh2026"
               placeholder="Enter your password" 
               required 
               autocomplete="current-password"
@@ -145,12 +92,8 @@
           </div>
         </div>
 
-        <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 18px;">
-          <button type="button" class="btn-admin-gold" id="directLoginBtn" style="width: 100%;">
-            <span id="directLoginBtnText">⚡ Instant Sign In</span>
-            <div class="admin-spinner" id="directLoginSpinner" style="display: none;"></div>
-          </button>
-          <button type="submit" class="btn-admin-outline" id="sendOtpBtn" >
+        <div style="margin-top: 20px;">
+          <button type="submit" class="btn-admin-gold" id="sendOtpBtn" style="width: 100%;">
             <span id="sendOtpBtnText">📩 Sign In via Email OTP</span>
             <div class="admin-spinner" id="sendOtpSpinner" style="display: none;"></div>
           </button>
@@ -205,7 +148,7 @@
       <!-- Back to Main Website -->
       <div style="text-align: center; margin-top: 24px;">
         <a href="/" style="font-size: 0.8rem; color: #9CA3AF; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
-          <span>← Back to Rajendra Studio & Framing Website</span>
+          <span>← Back to Rajendra Studio &amp; Gifts Website</span>
         </a>
       </div>
 

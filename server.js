@@ -1210,9 +1210,7 @@ app.post('/api/auth/login-request', async (req, res) => {
       message: emailSent
         ? `Verification OTP sent to ${cleanEmail}. Please check your inbox.`
         : `OTP generated for ${cleanEmail}.${emailError ? ' (SMTP error: ' + emailError + ')' : ''}`,
-      emailSent,
-      // Provide testOtp so the user can easily see their OTP in the on-screen gold preview banner
-      testOtp: otp
+      emailSent
     });
 
   } catch (err) {
@@ -1222,73 +1220,18 @@ app.post('/api/auth/login-request', async (req, res) => {
 });
 
 /**
- * Direct Login: Instant Email & Password Authentication (No OTP required)
+ * Direct Login: Disabled - Strict Email OTP authentication compulsory
  */
 app.post('/api/auth/login', async (req, res) => {
-  try {
-    const { email, password } = req.body;
-
-    if (!email || !password) {
-      return res.status(400).json({ success: false, message: 'Email and password are required.' });
-    }
-
-    const config = await db.getAdminConfig();
-    const cleanEmail = email.trim().toLowerCase();
-    const allowedEmails = [
-      'shop@rajendrastudioandgifts.in',
-      'info@rajendrastudioandgifts.in',
-      'rajendrastudioframing@gmail.com',
-      'help@dahejsupport.com',
-      'rajeshframing0@gmail.com',
-      (config.adminEmail || '').toLowerCase(),
-      (config.secondaryAdminEmail || '').toLowerCase()
-    ].filter(Boolean);
-
-    const isEmailValid = allowedEmails.includes(cleanEmail);
-    const isPasswordValid = (password === config.adminPassword) || (password === 'Admin@Rajesh2026');
-
-    if (!isEmailValid || !isPasswordValid) {
-      return res.status(401).json({ success: false, message: 'Invalid admin email or password.' });
-    }
-
-    const token = generateAdminToken(cleanEmail);
-    const sessionExpiresAt = Date.now() + 12 * 60 * 60 * 1000; // 12 hours
-
-    activeSessions.set(token, {
-      email: cleanEmail,
-      createdAt: Date.now(),
-      expiresAt: sessionExpiresAt
-    });
-    saveSessions();
-
-    console.log(`🎉 [ADMIN DIRECT LOGIN] Admin ${cleanEmail} authenticated directly!`);
-
-    // Alert shop@rajendrastudioandgifts.in of Admin Login
-    emailService.notifyAdminLogin({
-      adminEmail: cleanEmail,
-      loginType: 'Direct Password Authentication',
-      req
-    }).catch(err => console.warn('Admin direct login email alert warning:', err.message));
-
-    return res.json({
-      success: true,
-      message: 'Authentication successful! Welcome to Rajesh Framing Admin Panel.',
-      token,
-      admin: {
-        email: cleanEmail,
-        name: config.adminName || 'Rajesh Kumar'
-      }
-    });
-
-  } catch (err) {
-    console.error('Error in /api/auth/login:', err);
-    return res.status(500).json({ success: false, message: 'Server error during direct login.' });
-  }
+  return res.status(403).json({
+    success: false,
+    message: 'Direct instant login is disabled. Administrative access strictly requires 2-factor email OTP verification.'
+  });
 });
 
 /**
  * Step 2: Verify OTP -> Issue Auth Token
- * Master Emergency PIN 999999 is supported across serverless instances for valid admin accounts
+ * Real email OTP verification compulsory
  */
 app.post('/api/auth/verify-otp', async (req, res) => {
   try {
@@ -1316,58 +1259,55 @@ app.post('/api/auth/verify-otp', async (req, res) => {
 
     const submittedOtp = otp.toString().trim();
     const stored = activeOtps.get(cleanEmail);
-    const isMasterPin = (submittedOtp === '999999');
 
-    if (!stored && !isMasterPin) {
+    if (!stored) {
       return res.status(400).json({
         success: false,
         message: 'No active OTP request found. Please request a new OTP.'
       });
     }
 
-    if (stored) {
-      // Check expiration
-      if (Date.now() > stored.expiresAt && !isMasterPin) {
-        activeOtps.delete(cleanEmail);
-        return res.status(400).json({
-          success: false,
-          message: 'OTP has expired (validity is 5 minutes). Please request a new one.'
-        });
-      }
+    // Check expiration
+    if (Date.now() > stored.expiresAt) {
+      activeOtps.delete(cleanEmail);
+      return res.status(400).json({
+        success: false,
+        message: 'OTP has expired (validity is 5 minutes). Please request a new one.'
+      });
+    }
 
-      // Check max attempts
-      if ((stored.attempts || 0) >= 3 && !isMasterPin) {
+    // Check max attempts
+    if ((stored.attempts || 0) >= 3) {
+      activeOtps.delete(cleanEmail);
+      return res.status(429).json({
+        success: false,
+        message: 'Too many incorrect attempts. Please request a new OTP.'
+      });
+    }
+
+    // Verify OTP code
+    if (stored.otp !== submittedOtp) {
+      stored.attempts = (stored.attempts || 0) + 1;
+      const maxAttempts = 3;
+      const remainingAttempts = maxAttempts - stored.attempts;
+
+      if (stored.attempts >= maxAttempts) {
         activeOtps.delete(cleanEmail);
         return res.status(429).json({
           success: false,
-          message: 'Too many incorrect attempts. Please request a new OTP.'
+          message: 'Too many incorrect attempts (3 of 3 used). Please request a new OTP.'
         });
       }
 
-      // Verify OTP code
-      if (stored.otp !== submittedOtp && !isMasterPin) {
-        stored.attempts = (stored.attempts || 0) + 1;
-        const maxAttempts = 3;
-        const remainingAttempts = maxAttempts - stored.attempts;
-
-        if (stored.attempts >= maxAttempts) {
-          activeOtps.delete(cleanEmail);
-          return res.status(429).json({
-            success: false,
-            message: 'Too many incorrect attempts (3 of 3 used). Please request a new OTP.'
-          });
-        }
-
-        return res.status(400).json({
-          success: false,
-          message: `Incorrect OTP. Please enter the valid 6-digit code (${remainingAttempts} ${remainingAttempts === 1 ? 'attempt' : 'attempts'} remaining).`
-        });
-      }
-
-      activeOtps.delete(cleanEmail);
+      return res.status(400).json({
+        success: false,
+        message: `Incorrect OTP. Please enter the valid 6-digit code (${remainingAttempts} ${remainingAttempts === 1 ? 'attempt' : 'attempts'} remaining).`
+      });
     }
 
-    // Correct OTP or Master PIN! Clear OTP and generate secure signed session token
+    activeOtps.delete(cleanEmail);
+
+    // Correct real OTP verified! Clear OTP and generate secure signed session token
     const token = generateAdminToken(cleanEmail);
     const sessionExpiresAt = Date.now() + 12 * 60 * 60 * 1000; // 12 hours
 
@@ -1383,13 +1323,13 @@ app.post('/api/auth/verify-otp', async (req, res) => {
     // Alert shop@rajendrastudioandgifts.in of Admin Login
     emailService.notifyAdminLogin({
       adminEmail: cleanEmail,
-      loginType: isMasterPin ? 'Master PIN Verification' : 'OTP Verification',
+      loginType: 'OTP Verification',
       req
     }).catch(err => console.warn('Admin OTP login email alert warning:', err.message));
 
     return res.json({
       success: true,
-      message: 'Authentication successful! Welcome to Rajesh Framing Admin Panel.',
+      message: 'Authentication successful! Welcome to Rajendra Studio & Gifts Admin Panel.',
       token,
       admin: {
         email: cleanEmail,
@@ -1485,8 +1425,7 @@ app.post('/api/auth/resend-otp', async (req, res) => {
       message: emailSent
         ? `A new verification OTP has been sent to ${cleanEmail}.`
         : `New OTP generated.`,
-      emailSent,
-      testOtp: otp
+      emailSent
     });
 
   } catch (err) {
