@@ -928,15 +928,11 @@
             document.getElementById('custAuthModalSubtitle').textContent = 'Enter the 6-digit verification code sent to your email inbox.';
             document.getElementById('custAuthTargetEmailLabel').textContent = email;
 
-            if (res.passcode) {
-              const digits = res.passcode.toString().split('');
-              boxes.forEach((b, i) => { if (b && digits[i]) b.value = digits[i]; });
-              showModalAlert('success', `Passcode ${res.passcode} auto-filled! (Also sent to ${email} - check Spam folder if delayed)`);
-            } else {
-              showModalAlert('success', res.message || 'Passcode sent! Please check your inbox and Spam folder.');
-            }
+            // Keep all 6 OTP boxes completely blank for customer manual entry
+            boxes.forEach(b => { if (b) b.value = ''; });
+            showModalAlert('success', res.message || 'Passcode sent! Please check your email inbox (and Spam folder).');
             const firstBox = document.getElementById('cust-otp-1');
-            if (firstBox && !res.passcode) firstBox.focus();
+            if (firstBox) firstBox.focus();
 
           } else {
             showModalAlert('danger', res.message || 'Failed to send OTP.');
@@ -1067,13 +1063,10 @@
         try {
           const res = await window.CustomerAuth.resendOtp(activeEmailForVerification);
           if (res.success) {
-            if (res.passcode) {
-              const digits = res.passcode.toString().split('');
-              boxes.forEach((b, i) => { if (b && digits[i]) b.value = digits[i]; });
-              showModalAlert('success', `New passcode ${res.passcode} auto-filled! (Also sent to ${activeEmailForVerification})`);
-            } else {
-              showModalAlert('success', res.message || 'New verification code sent! Check your Inbox and Spam folder.');
-            }
+            boxes.forEach(b => { if (b) b.value = ''; });
+            showModalAlert('success', res.message || 'New verification code sent! Check your Inbox and Spam folder.');
+            const firstBox = document.getElementById('cust-otp-1');
+            if (firstBox) firstBox.focus();
           } else {
             showModalAlert('danger', res.message || 'Could not resend code.');
           }

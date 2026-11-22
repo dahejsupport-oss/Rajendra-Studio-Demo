@@ -1191,8 +1191,8 @@ app.post('/api/auth/login-request', async (req, res) => {
         await transporter.sendMail({
           from: fromAddress,
           to: cleanEmail,
-          subject: `🔐 Your Rajesh Framing Admin OTP: ${otp}`,
-          text: `Your Rajesh Framing Admin Login Passcode is: ${otp}. Valid for 5 minutes. Do not share with anyone.`,
+          subject: `🔐 Your Rajendra Studio Admin OTP: ${otp}`,
+          text: `Your Rajendra Studio Admin Login Passcode is: ${otp}. Valid for 5 minutes. Do not share with anyone.`,
           html: generateOtpEmailHtml(otp, cleanEmail)
         });
         emailSent = true;
@@ -1470,8 +1470,8 @@ app.post('/api/auth/resend-otp', async (req, res) => {
         await transporter.sendMail({
           from: fromAddress,
           to: cleanEmail,
-          subject: `🔐 [New OTP] Rajesh Framing Admin Login: ${otp}`,
-          text: `Your new Rajesh Framing Admin Login Passcode is: ${otp}. Valid for 5 minutes.`,
+          subject: `🔐 [New OTP] Rajendra Studio Admin Login: ${otp}`,
+          text: `Your new Rajendra Studio Admin Login Passcode is: ${otp}. Valid for 5 minutes.`,
           html: generateOtpEmailHtml(otp, cleanEmail)
         });
         emailSent = true;
@@ -1636,7 +1636,7 @@ app.post('/api/customer/auth/send-otp', async (req, res) => {
         await transporter.sendMail({
           from: fromAddress,
           to: cleanEmail,
-          subject: `🔐 Your Rajesh Framing Login Passcode: ${otp}`,
+          subject: `🔐 Your Rajendra Studio Login Passcode: ${otp}`,
           text: `Hello,\n\nYour One-Time Passcode (OTP) to sign in to Rajendra Studio and Gifts is: ${otp}\n\nThis code will expire in 5 minutes. Please do not share it with anyone.\n\nThank you,\nRajendra Studio and Gifts`,
           html: generateCustomerOtpEmailHtml(otp, cleanEmail)
         });
@@ -1651,8 +1651,7 @@ app.post('/api/customer/auth/send-otp', async (req, res) => {
 
     return res.json({
       success: true,
-      message: 'Passcode sent to your email! (Tip: Check Spam/Junk folder if delayed)',
-      passcode: otp
+      message: 'Passcode sent to your email! (Tip: Check Spam/Junk folder if delayed)'
     });
 
   } catch (err) {
@@ -1686,56 +1685,53 @@ app.post('/api/customer/auth/verify-otp', async (req, res) => {
     const cleanEmail = email.trim().toLowerCase();
     const cleanOtp = otp.toString().trim();
     const stored = customerOtps.get(cleanEmail);
-    const isMasterPin = (cleanOtp === '999999' || cleanOtp === '123456');
 
-    if (!stored && !isMasterPin) {
+    if (!stored) {
       return res.status(400).json({
         success: false,
         message: 'No active OTP request found. Please request a new OTP.'
       });
     }
 
-    if (stored) {
-      // Check expiration
-      if (Date.now() > stored.expiresAt && !isMasterPin) {
-        customerOtps.delete(cleanEmail);
-        return res.status(400).json({
-          success: false,
-          message: 'OTP has expired (valid for 5 minutes). Please request a new one.'
-        });
-      }
+    // Check expiration
+    if (Date.now() > stored.expiresAt) {
+      customerOtps.delete(cleanEmail);
+      return res.status(400).json({
+        success: false,
+        message: 'OTP has expired (valid for 5 minutes). Please request a new one.'
+      });
+    }
 
-      // Check max attempts
-      if ((stored.attempts || 0) >= 3 && !isMasterPin) {
+    // Check max attempts
+    if ((stored.attempts || 0) >= 3) {
+      customerOtps.delete(cleanEmail);
+      return res.status(429).json({
+        success: false,
+        message: 'Too many incorrect attempts. Please request a new OTP.'
+      });
+    }
+
+    // Verify OTP exact match
+    if (stored.otp !== cleanOtp) {
+      stored.attempts = (stored.attempts || 0) + 1;
+      const maxAttempts = 3;
+      const remainingAttempts = maxAttempts - stored.attempts;
+
+      if (stored.attempts >= maxAttempts) {
         customerOtps.delete(cleanEmail);
         return res.status(429).json({
           success: false,
-          message: 'Too many incorrect attempts. Please request a new OTP.'
+          message: 'Too many incorrect attempts (3 of 3 used). Please request a new OTP.'
         });
       }
 
-      // Verify OTP exact match
-      if (stored.otp !== cleanOtp && !isMasterPin) {
-        stored.attempts = (stored.attempts || 0) + 1;
-        const maxAttempts = 3;
-        const remainingAttempts = maxAttempts - stored.attempts;
-
-        if (stored.attempts >= maxAttempts) {
-          customerOtps.delete(cleanEmail);
-          return res.status(429).json({
-            success: false,
-            message: 'Too many incorrect attempts (3 of 3 used). Please request a new OTP.'
-          });
-        }
-
-        return res.status(400).json({
-          success: false,
-          message: `Incorrect OTP. Please enter the valid 6-digit code (${remainingAttempts} ${remainingAttempts === 1 ? 'attempt' : 'attempts'} remaining).`
-        });
-      }
-
-      customerOtps.delete(cleanEmail);
+      return res.status(400).json({
+        success: false,
+        message: `Incorrect OTP. Please enter the valid 6-digit code (${remainingAttempts} ${remainingAttempts === 1 ? 'attempt' : 'attempts'} remaining).`
+      });
     }
+
+    customerOtps.delete(cleanEmail);
 
     const customerName = (req.body.name && req.body.name.trim()) || (stored && stored.name) || '';
     const customerPhone = (req.body.phone && req.body.phone.trim()) || (stored && stored.phone) || '';
@@ -1840,7 +1836,7 @@ app.post('/api/customer/auth/resend-otp', async (req, res) => {
         await transporter.sendMail({
           from: fromAddress,
           to: cleanEmail,
-          subject: `🔐 Your Rajesh Framing Login Passcode: ${otp}`,
+          subject: `🔐 Your Rajendra Studio Login Passcode: ${otp}`,
           text: `Hello,\n\nYour new One-Time Passcode (OTP) is: ${otp}\n\nValid for 5 minutes. Do not share with anyone.\n\nRajendra Studio and Gifts`,
           html: generateCustomerOtpEmailHtml(otp, cleanEmail)
         });
@@ -1852,8 +1848,7 @@ app.post('/api/customer/auth/resend-otp', async (req, res) => {
 
     return res.json({
       success: true,
-      message: 'New passcode sent to your email! (Tip: Check Spam/Junk folder if delayed)',
-      passcode: otp
+      message: 'New passcode sent to your email! (Tip: Check Spam/Junk folder if delayed)'
     });
 
   } catch (err) {
