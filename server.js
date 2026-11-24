@@ -1218,13 +1218,39 @@ app.post('/api/auth/login-request', async (req, res) => {
 });
 
 /**
- * Direct Login: Disabled - Strict Email OTP authentication compulsory
+ * Direct Login / Demo Mode 1-Click Login (Instant Admin Access without OTP)
  */
-app.post('/api/auth/login', async (req, res) => {
-  return res.status(403).json({
-    success: false,
-    message: 'Direct instant login is disabled. Administrative access strictly requires 2-factor email OTP verification.'
-  });
+app.post(['/api/auth/demo-login', '/api/auth/login'], async (req, res) => {
+  try {
+    const config = await db.getAdminConfig();
+    const adminEmail = (req.body && req.body.email ? req.body.email.trim().toLowerCase() : (config.adminEmail || 'dahejsupport@gmail.com')).toLowerCase();
+    
+    // Generate secure admin token
+    const token = generateAdminToken(adminEmail);
+    const sessionExpiresAt = Date.now() + 12 * 60 * 60 * 1000; // 12 hours
+
+    activeSessions.set(token, {
+      email: adminEmail,
+      createdAt: Date.now(),
+      expiresAt: sessionExpiresAt
+    });
+    saveSessions();
+
+    console.log(`⚡ [DEMO 1-CLICK LOGIN SUCCESS] Admin ${adminEmail} authenticated instantly without OTP.`);
+
+    return res.json({
+      success: true,
+      message: 'Demo Login Successful! Redirecting to Dashboard...',
+      token,
+      admin: {
+        email: adminEmail,
+        name: config.adminName || 'Dahej Support Admin'
+      }
+    });
+  } catch (err) {
+    console.error('Error in /api/auth/demo-login:', err);
+    return res.status(500).json({ success: false, message: 'Server error during demo login.' });
+  }
 });
 
 /**

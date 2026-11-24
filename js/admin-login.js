@@ -23,6 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initLoginCredentialsForm();
   initOtpVerificationForm();
   initPasswordToggle();
+  initDemoQuickLogin();
 });
 
 let currentAdminEmail = '';
@@ -219,6 +220,66 @@ function initLoginCredentialsForm() {
       sendOtpBtn.disabled = false;
       btnText.textContent = '📩 Sign In via Email OTP';
       spinner.style.display = 'none';
+    }
+  });
+}
+
+/* --- 1-Click Demo Quick Login (Instant Access Without OTP) --- */
+function initDemoQuickLogin() {
+  const demoBtn = document.getElementById('demoQuickLoginBtn');
+  if (!demoBtn) return;
+
+  demoBtn.addEventListener('click', async (e) => {
+    e.preventDefault();
+    hideAlert();
+
+    const emailInput = document.getElementById('adminEmail');
+    const passInput = document.getElementById('adminPassword');
+    const btnText = document.getElementById('demoLoginBtnText');
+    const spinner = document.getElementById('demoLoginSpinner');
+
+    // Auto-fill fields with demo admin credentials
+    if (emailInput) emailInput.value = 'dahejsupport@gmail.com';
+    if (passInput) passInput.value = 'Admin123';
+
+    demoBtn.disabled = true;
+    if (btnText) btnText.textContent = '⚡ Logging in as Admin...';
+    if (spinner) spinner.style.display = 'inline-block';
+
+    try {
+      const response = await requestApi('/api/auth/demo-login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: 'dahejsupport@gmail.com', password: 'Admin123' })
+      });
+
+      const result = await parseResponseJson(response);
+
+      if (response && response.ok && result && result.success) {
+        showAlert('success', '⚡ 1-Click Demo Login Successful! Entering Admin Dashboard...');
+
+        // Save session token in BOTH sessionStorage and localStorage
+        sessionStorage.setItem('rf_admin_token', result.token);
+        sessionStorage.setItem('rf_admin_user', JSON.stringify(result.admin));
+        localStorage.setItem('rf_admin_token', result.token);
+        localStorage.setItem('rf_admin_user', JSON.stringify(result.admin));
+
+        const hasHtml = window.location.pathname.endsWith('.html') || window.location.protocol === 'file:';
+        setTimeout(() => {
+          window.location.href = hasHtml ? 'admin.html' : 'admin';
+        }, 500);
+      } else {
+        showAlert('danger', (result && result.message) ? result.message : 'Demo login failed. Please try again.');
+        demoBtn.disabled = false;
+        if (btnText) btnText.textContent = '⚡ 1-Click Demo Login (No OTP)';
+        if (spinner) spinner.style.display = 'none';
+      }
+    } catch (err) {
+      console.error('Demo login error:', err);
+      showAlert('danger', 'Could not reach server for demo login. Please make sure the server is running.');
+      demoBtn.disabled = false;
+      if (btnText) btnText.textContent = '⚡ 1-Click Demo Login (No OTP)';
+      if (spinner) spinner.style.display = 'none';
     }
   });
 }
