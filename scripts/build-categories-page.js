@@ -132,7 +132,7 @@ function generateCategoriesPage() {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Our Categories | Rajendra Studio and Gifts - Custom Frames &amp; Personalized Printing</title>
+  <title>Our Categories | Dahej Support - Custom Frames &amp; Personalized Printing</title>
   <link rel="icon" type="image/png" href="assets/images/favicon.png" />
   <link rel="shortcut icon" href="favicon.ico" />
   <link rel="apple-touch-icon" href="assets/images/favicon.png" />
@@ -141,7 +141,7 @@ function generateCategoriesPage() {
   <meta name="theme-color" content="#111111" />
 
   <!-- Open Graph -->
-  <meta property="og:title" content="Our Categories | Rajendra Studio and Gifts" />
+  <meta property="og:title" content="Our Categories | Dahej Support" />
   <meta property="og:description" content="Explore our 5 signature handcrafted categories: Framing, Personalized Printing, Office Stationery, Canvas Art &amp; Keepsake Gifts." />
   <meta property="og:image" content="assets/images/hero_showcase.jpg" />
   <meta property="og:type" content="website" />
@@ -159,8 +159,8 @@ function generateCategoriesPage() {
   <header class="site-header" id="siteHeader">
     <div class="container">
       <nav class="navbar" aria-label="Main Navigation">
-        <a href="/" class="brand-logo" aria-label="Rajendra Studio &amp; Photo Gifts Homepage">
-          <img src="assets/images/logo-horizontal.png" alt="Rajendra Studio &amp; Photo Gifts" class="brand-logo-img" />
+        <a href="/" class="brand-logo" aria-label="Dahej Support Homepage">
+          <img src="assets/images/logo-horizontal.png" alt="Dahej Support" class="brand-logo-img" />
         </a>
 
         <!-- Desktop Navigation Menu -->
@@ -255,7 +255,7 @@ function generateCategoriesPage() {
   <aside class="mobile-drawer" aria-label="Mobile Navigation">
     <div class="drawer-header">
       <div class="brand-text-wrap" style="display: flex; align-items: center;">
-        <img src="assets/images/logo-horizontal.png" alt="Rajendra Studio &amp; Photo Gifts" style="height: 36px; width: auto; max-width: 180px; object-fit: contain;" />
+        <img src="assets/images/logo-horizontal.png" alt="Dahej Support" style="height: 36px; width: auto; max-width: 180px; object-fit: contain;" />
       </div>
       <button class="drawer-close" aria-label="Close menu">&times;</button>
     </div>
@@ -343,7 +343,7 @@ ${categoriesSectionHtml}
 
   <!-- Floating Actions (WhatsApp & Back to Top) -->
   <div class="floating-actions-wrap">
-    <a href="https://wa.me/919601574966?text=Hello%20Rajendra%20Studio%20%26%20Framing,%20I%20have%20an%20enquiry." target="_blank" rel="noopener noreferrer" class="floating-whatsapp-btn pulse-ring" aria-label="Chat on WhatsApp">
+    <a href="https://wa.me/919601574966?text=Hello%20Dahej%20Support,%20I%20have%20an%20enquiry." target="_blank" rel="noopener noreferrer" class="floating-whatsapp-btn pulse-ring" aria-label="Chat on WhatsApp">
       <svg viewBox="0 0 24 24" fill="currentColor">
         <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.312.045-.698.058-2.18-.553-1.638-.673-2.684-2.336-2.766-2.445-.082-.109-.661-.88-.661-1.678 0-.798.419-1.189.569-1.353.15-.164.33-.205.441-.205.111 0 .222.001.32.006.103.004.24-.039.375.285.144.344.49 1.196.533 1.284.043.088.072.19.014.305-.058.115-.087.186-.173.287-.087.1-.183.224-.262.301-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86.174.086.275.072.376-.044.101-.116.433-.506.549-.68.116-.174.232-.145.39-.087.159.058 1.009.477 1.182.564.173.087.289.13.332.204.043.074.043.431-.101.836z"></path>
       </svg>
@@ -364,7 +364,7 @@ ${categoriesSectionHtml}
         <!-- Brand Summary -->
         <div class="footer-brand">
           <div style="display: inline-flex; align-items: center; background: #FFFFFF; padding: 6px 14px; border-radius: 8px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
-            <img src="assets/images/logo-horizontal.png" alt="Rajendra Studio &amp; Photo Gifts" style="height: 38px; width: auto; max-width: 200px; display: block;" />
+            <img src="assets/images/logo-horizontal.png" alt="Dahej Support" style="height: 38px; width: auto; max-width: 200px; display: block;" />
           </div>
           <p class="footer-tagline">Frames • Printing • Personalized Products</p>
           <p class="footer-desc">
@@ -412,7 +412,7 @@ ${categoriesSectionHtml}
                 <polyline points="22,6 12,13 2,6"></polyline>
               </svg>
               <div>
-                <a href="mailto:info@rajendrastudioandgifts.in">info@rajendrastudioandgifts.in</a>
+                <a href="mailto:jobs@dahejsupport.com">jobs@dahejsupport.com</a>
               </div>
             </div>
 
@@ -437,7 +437,7 @@ ${categoriesSectionHtml}
               </svg>
               <span>MAIN STUDIO &amp; SHOWROOM</span>
             </div>
-            <h4 class="footer-map-title">Rajendra Studio &amp; Framing <span class="footer-map-subtitle">(Main Studio)</span></h4>
+            <h4 class="footer-map-title">Dahej Support <span class="footer-map-subtitle">(Main Studio)</span></h4>
             <div class="footer-map-address">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
@@ -446,7 +446,7 @@ ${categoriesSectionHtml}
               <span>Dahej GIDC, Bharuch, Gujarat 392130</span>
             </div>
             <div class="footer-map-frame-wrap">
-              <iframe title="Rajendra Studio Location Map" src="https://maps.google.com/maps?q=Dahej+GIDC%2C+Bharuch%2C+Gujarat+392130&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=&amp;output=embed" width="100%" height="130" style="border:0; display:block;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+              <iframe title="Dahej Support Location Map" src="https://maps.google.com/maps?q=Dahej+GIDC%2C+Bharuch%2C+Gujarat+392130&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=&amp;output=embed" width="100%" height="130" style="border:0; display:block;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>
             <a href="https://maps.google.com/?q=Dahej+GIDC,+Bharuch,+Gujarat+392130" target="_blank" rel="noopener noreferrer" class="footer-map-btn">
               <span>View on Google Maps</span>
@@ -461,7 +461,7 @@ ${categoriesSectionHtml}
 
       <!-- Bottom Bar -->
       <div class="footer-bottom">
-        <p>&copy; 2026 Rajendra Studio and Photo gifts. All Rights Reserved.</p>
+        <p>&copy; 2026 Dahej Support and Photo gifts. All Rights Reserved.</p>
         <div class="footer-bottom-links">
           <a href="about">Privacy Policy</a>
           <a href="about">Terms of Service</a>

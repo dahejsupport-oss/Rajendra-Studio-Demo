@@ -1,6 +1,6 @@
 /**
  * make-responsive.js
- * Comprehensive Responsive Optimization Script for Rajesh Framing / Dahej Support
+ * Comprehensive Responsive Optimization Script for Dahej Support / Dahej Support
  */
 
 const fs = require('fs');

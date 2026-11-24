@@ -29,13 +29,13 @@ console.log('Updated data/products.json');
 let jsContent = fs.readFileSync(jsDataPath, 'utf8');
 const businessInfoMatch = jsContent.match(/\/\/ Business contact data[\s\S]*$/);
 const businessInfoStr = businessInfoMatch ? businessInfoMatch[0] : `const BUSINESS_INFO = {
-  name: "Rajendra Studio & Framing",
+  name: "Dahej Support",
   tagline: "Frames, Printing & Personalized Products",
   phone: "+91 96015 74966",
   phoneRaw: "+919601574966",
   whatsapp: "+91 96015 74966",
   whatsappNumber: "919601574966",
-  email: "info@rajendrastudioandgifts.in",
+  email: "jobs@dahejsupport.com",
   address: "Dahej GIDC, Bharuch, Gujarat 392130",
   workingHours: "Mon - Sat: 9:30 AM - 8:30 PM | Sun: 10:00 AM - 2:00 PM",
   establishedYear: 2008,

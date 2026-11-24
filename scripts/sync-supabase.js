@@ -288,7 +288,7 @@ async function syncToSupabase() {
         id: 'default',
         admin_email: config.adminEmail,
         admin_password: config.adminPassword,
-        admin_name: config.adminName || 'Rajesh Kumar',
+        admin_name: config.adminName || 'Dahej Support Admin',
         smtp: config.smtp || null,
         updated_at: new Date().toISOString()
       }, { onConflict: 'id' });

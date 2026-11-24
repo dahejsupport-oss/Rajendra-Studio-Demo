@@ -1,6 +1,6 @@
 /**
  * fix-mobile-cards.js
- * Comprehensive Mobile Responsive Fix for Rajesh Framing Product Cards
+ * Comprehensive Mobile Responsive Fix for Dahej Support Product Cards
  */
 
 const fs = require('fs');

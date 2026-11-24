@@ -232,7 +232,7 @@ const whyChooseSectionHtml = `
       <div class="container">
         <div class="section-header reveal">
           <span class="eyebrow">Trust &amp; Heritage</span>
-          <h2 class="section-title">Why Choose Rajendra Studio &amp; Framing?</h2>
+          <h2 class="section-title">Why Choose Dahej Support?</h2>
           <p class="section-subtitle">
             Every frame we build and print we produce reflects our dedication to preserving your most treasured milestones with perfection and permanence.
           </p>
@@ -297,7 +297,7 @@ const whyChooseSectionHtml = `
 function updateHomepageHtml(filePath) {
   let html = fs.readFileSync(filePath, 'utf-8');
 
-  // Replace everything from `<main id="mainContent">` up to `<!-- 6. About` or `About Rajesh Framing` / `About Rajendra Studio`
+  // Replace everything from `<main id="mainContent">` up to `<!-- 6. About` or `About Dahej Support` / `About Dahej Support`
   // with `<main id="mainContent">\n` + full5CategoriesHtml + whyChooseSectionHtml
   const mainRegex = /<main id="mainContent">[\s\S]*?(<!-- 6\.\s*About)/i;
 

@@ -46,7 +46,7 @@ window.markPickupReadyQuick = async (id) => {
       },
       body: JSON.stringify({
         status: 'Shipped',
-        notes: 'Your order is ready! Please pick up your custom frame from Rajesh Framing Studio, Dahej.',
+        notes: 'Your order is ready! Please pick up your custom frame from Dahej Support Studio, Dahej.',
         notifyCustomer: true
       })
     });

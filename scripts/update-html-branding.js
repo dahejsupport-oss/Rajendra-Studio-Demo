@@ -20,10 +20,10 @@ htmlFiles.forEach(file => {
     if (!fs.existsSync(filePath)) return;
     let content = fs.readFileSync(filePath, 'utf8');
 
-    content = content.replace(/alt="Rajendra Studio &amp; Photo Gifts"/g, 'alt="Dahej Support"');
-    content = content.replace(/alt="Rajendra Studio & Photo Gifts"/g, 'alt="Dahej Support"');
-    content = content.replace(/title="Back to Rajendra Studio &amp; Photo Gifts Website"/g, 'title="Back to Dahej Support Website"');
-    content = content.replace(/title="Back to Rajendra Studio & Photo Gifts Website"/g, 'title="Back to Dahej Support Website"');
+    content = content.replace(/alt="Dahej Support"/g, 'alt="Dahej Support"');
+    content = content.replace(/alt="Dahej Support"/g, 'alt="Dahej Support"');
+    content = content.replace(/title="Back to Dahej Support Website"/g, 'title="Back to Dahej Support Website"');
+    content = content.replace(/title="Back to Dahej Support Website"/g, 'title="Back to Dahej Support Website"');
 
     // Admin branding
     content = content.replace(
