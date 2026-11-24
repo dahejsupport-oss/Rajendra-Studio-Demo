@@ -13,15 +13,15 @@ const https = require('https');
 
 // Brevo API Configuration
 const BREVO_API_KEY = process.env.BREVO_API_KEY || '';
-const SENDER_EMAIL = process.env.BREVO_SENDER_EMAIL || 'shop@rajendrastudioandgifts.in';
-const SENDER_NAME = process.env.BREVO_SENDER_NAME || 'Rajendra Studio & Gifts';
-const SHOP_ALERT_EMAIL = process.env.SHOP_NOTIFICATION_EMAIL || 'shop@rajendrastudioandgifts.in';
+const SENDER_EMAIL = process.env.BREVO_SENDER_EMAIL || 'jobs@dahejsupport.com';
+const SENDER_NAME = process.env.BREVO_SENDER_NAME || 'Dahej Support';
+const SHOP_ALERT_EMAIL = process.env.SHOP_NOTIFICATION_EMAIL || 'jobs@dahejsupport.com';
 
 // Brevo Channel 2: Order Confirmations & Admin Order Acceptance
 const BREVO_ORDER_API_KEY = process.env.BREVO_ORDER_API_KEY || '';
-const ORDER_SENDER_EMAIL = process.env.BREVO_ORDER_EMAIL || 'order@rajendrastudioandgifts.in';
-const ORDER_SENDER_NAME = process.env.BREVO_ORDER_NAME || 'Rajendra Studio Orders';
-const ORDER_ALERT_EMAIL = process.env.ORDER_NOTIFICATION_EMAIL || 'order@rajendrastudioandgifts.in';
+const ORDER_SENDER_EMAIL = process.env.BREVO_ORDER_EMAIL || 'jobs@dahejsupport.com';
+const ORDER_SENDER_NAME = process.env.BREVO_ORDER_NAME || 'Dahej Support Orders';
+const ORDER_ALERT_EMAIL = process.env.ORDER_NOTIFICATION_EMAIL || 'jobs@dahejsupport.com';
 
 const STUDIO_INFO = {
   name: 'Rajendra Studio & Framing',
@@ -30,7 +30,7 @@ const STUDIO_INFO = {
   mapsUrl: 'https://maps.app.goo.gl/cNKG3Da6yA8E8L5j8',
   phone: process.env.STUDIO_PHONE || '+91 95107 57513',
   whatsapp: process.env.STUDIO_WHATSAPP ? `https://wa.me/${process.env.STUDIO_WHATSAPP}` : 'https://wa.me/919510757513',
-  email: 'shop@rajendrastudioandgifts.in',
+  email: process.env.STUDIO_EMAIL || 'jobs@dahejsupport.com',
   hours: '9:30 AM – 9:00 PM (Monday to Sunday)'
 };
 
@@ -141,7 +141,7 @@ async function sendBrevoEmail(options) {
 
   // Automatic Failover: Try Brevo Secondary Order API Key if primary fails
   if (BREVO_ORDER_API_KEY && options.apiKey !== BREVO_ORDER_API_KEY) {
-    console.log('🔄 [Brevo Failover] Retrying email via secondary Brevo channel (order@rajendrastudioandgifts.in)...');
+    console.log('🔄 [Brevo Failover] Retrying email via secondary Brevo channel (help@dahejsupport.com)...');
     const secondaryOptions = {
       ...options,
       apiKey: BREVO_ORDER_API_KEY,

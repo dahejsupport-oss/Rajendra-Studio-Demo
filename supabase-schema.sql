@@ -370,326 +370,37 @@ CREATE POLICY "Allow Read Admin Config" ON public.admin_config FOR SELECT USING 
 DROP POLICY IF EXISTS "Allow Upsert Admin Config" ON public.admin_config;
 CREATE POLICY "Allow Upsert Admin Config" ON public.admin_config FOR ALL USING (true) WITH CHECK (true);
 
--- =============================================================================
--- 11. SEED MASTER CATEGORIES DATA (5 DEFAULT + 2 CUSTOM STUDIO CATEGORIES)
--- =============================================================================
-INSERT INTO public.categories (id, name, icon, "desc", badge, color, bg, is_default, created_at)
-VALUES
-(
-  'frames',
-  'Studio & Framing',
-  '🖼️',
-  'Classic wood and acrylic glass frames, certificate frames, collage memory boxes, and gallery wall displays.',
-  'Studio & Framing',
-  '#854d0e',
-  'rgba(234, 179, 8, 0.15)',
-  TRUE,
-  '2026-01-01T00:00:00.000Z'
-),
-(
-  'personalized',
-  'Personalized Printing',
-  '☕',
-  'Custom printed ceramic mugs, insulated bottles, custom apparel, and personalized daily keepsakes.',
-  'Personalized Printing',
-  '#1e40af',
-  'rgba(59, 130, 246, 0.15)',
-  TRUE,
-  '2026-01-01T00:00:00.000Z'
-),
-(
-  'office',
-  'Office Printing',
-  '📁',
-  'Corporate presentation folders, customized file binders, business cards, letterheads, and executive desk accessories.',
-  'Office Printing',
-  '#166534',
-  'rgba(34, 197, 94, 0.15)',
-  TRUE,
-  '2026-01-01T00:00:00.000Z'
-),
-(
-  'custom',
-  'Custom Printing',
-  '🎨',
-  'Museum-grade canvas gallery wraps, edge-to-edge acrylic prints, metallic prints, and bespoke art installations.',
-  'Custom Printing',
-  '#6b21a8',
-  'rgba(168, 85, 247, 0.15)',
-  TRUE,
-  '2026-01-01T00:00:00.000Z'
-),
-(
-  'gifts',
-  'Photo Gifts & Keepsakes',
-  '🎁',
-  'Personalized 3D photo crystals, acrylic desktop plaques, customized keychains, and commemorative photo clocks.',
-  'Photo Gifts & Keepsakes',
-  '#9d174d',
-  'rgba(236, 72, 153, 0.15)',
-  TRUE,
-  '2026-01-01T00:00:00.000Z'
-),
-(
-  'canvas-gallery',
-  'Canvas Gallery',
-  '🖼️',
-  'Museum-quality wrapped canvas prints and framed canvas arts.',
-  'Premium Canvas',
-  '#c99a3d',
-  'rgba(201, 154, 61, 0.15)',
-  FALSE,
-  '2026-10-25T19:23:35.568Z'
-),
-(
-  'luxury-art',
-  'Luxury Art Collection',
-  '🎨',
-  'Exclusive handcrafted museum gallery art frames and master prints.',
-  'Luxury Art',
-  '#d97706',
-  'rgba(201, 154, 61, 0.15)',
-  FALSE,
-  '2026-10-26T04:07:08.823Z'
-)
-ON CONFLICT (id) DO UPDATE SET
-  name = EXCLUDED.name,
-  icon = EXCLUDED.icon,
-  "desc" = EXCLUDED."desc",
-  badge = EXCLUDED.badge,
-  color = EXCLUDED.color,
-  bg = EXCLUDED.bg,
-  is_default = EXCLUDED.is_default,
-  updated_at = NOW();
+-- Grant schema and table permissions to all roles
+GRANT USAGE ON SCHEMA public TO anon, authenticated, service_role;
+GRANT ALL ON ALL TABLES IN SCHEMA public TO anon, authenticated, service_role;
+GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO anon, authenticated, service_role;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO anon, authenticated, service_role;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO anon, authenticated, service_role;
 
 -- =============================================================================
--- 12. SEED MASTER PRODUCTS CATALOG (CURRENT VERIFIED PRODUCTS)
--- =============================================================================
-INSERT INTO public.products (
-  id, name, category, category_label, price, price_display, rating, reviews_count,
-  badge, image, images, short_description, description, material, printing_type,
-  status, in_stock, stock_qty, lead_time, sizes, finishes
-)
-VALUES
-(
-  'glass-frame-classic',
-  'Glass Photo Frame',
-  'frames',
-  'Glass Frames',
-  655,
-  'Starting from ₹655',
-  4.9,
-  128,
-  'Bestseller',
-  'assets/images/glass_frame.jpg',
-  '["assets/images/glass_frame.jpg", "assets/images/glass_frame_blue.jpg", "assets/images/glass_frame_silver.jpg", "assets/images/glass_frame_black.jpg"]'::jsonb,
-  'Elegant glass frames designed to preserve your favorite memories with beveled edges and modern metallic standoffs.',
-  'Our signature Glass Photo Frame is crafted from optically refined, ultra-clear float glass with diamond-polished beveled edges. Designed to elevate portraits, wedding milestones, and fine art, it features solid brass or gold-finished standoffs that create an elegant floating presence on any desk or wall.',
-  'Optically Clear Float Glass (4mm / 6mm) with Diamond Beveled Edge',
-  '12-Color Archival Pigment Print (Fade-resistant 50+ yrs)',
-  'In Stock',
-  TRUE,
-  100,
-  '24 - 48 Hours',
-  '[{"name":"6\" × 8\"","price":655},{"name":"8\" × 10\"","price":955},{"name":"10\" × 12\"","price":1355},{"name":"12\" × 18\"","price":1855},{"name":"Custom Size","price":2255}]'::jsonb,
-  '[{"id":"gold-standoffs","name":"Warm Gold Standoffs","color":"#C99A3D","image":"assets/images/glass_frame.jpg","priceDelta":0},{"id":"royal-blue-glass","name":"Royal Sapphire Blue Accent","color":"#1E3A8A","image":"assets/images/glass_frame_blue.jpg","priceDelta":30},{"id":"silver-standoffs","name":"Brushed Silver Standoffs","color":"#CBD5E1","image":"assets/images/glass_frame_silver.jpg","priceDelta":60},{"id":"black-standoffs","name":"Matte Black Standoffs","color":"#111111","image":"assets/images/glass_frame_black.jpg","priceDelta":90}]'::jsonb
-),
-(
-  'plastic-frame-gallery',
-  'Plastic Photo Frame',
-  'frames',
-  'Plastic Frames',
-  439,
-  'Starting from ₹439',
-  4.8,
-  94,
-  'Popular',
-  'assets/images/plastic_frame_black.jpg',
-  '["assets/images/plastic_frame_black.jpg", "assets/images/plastic_frame_blue.jpg", "assets/images/plastic_frame_white.jpg", "assets/images/plastic_frame_walnut.jpg"]'::jsonb,
-  'Durable, lightweight customized polymer frames with archival museum mat board in timeless matte finishes.',
-  'Manufactured from high-density, eco-friendly structural polymer, our Plastic Photo Frames deliver clean architectural lines without excessive weight. Paired with 1.5mm archival conservation mat board and crystal-clear glazing, these frames are ideal for expansive gallery walls, corridors, and family travel photos.',
-  'High-density Engineered Polymer with Conservation Mat',
-  'Ultra HD Fine Art Photographic Printing (300 DPI)',
-  'In Stock',
-  TRUE,
-  100,
-  'Same Day / 24 Hours',
-  '[{"name":"8\" × 10\"","price":439},{"name":"10\" × 12\"","price":619},{"name":"12\" × 18\"","price":909},{"name":"16\" × 24\"","price":1439},{"name":"20\" × 30\"","price":2039}]'::jsonb,
-  '[{"id":"matte-black","name":"Studio Matte Black","color":"#111111","image":"assets/images/plastic_frame_black.jpg","priceDelta":0},{"id":"royal-blue","name":"Royal Sapphire Blue","color":"#1E3A8A","image":"assets/images/plastic_frame_blue.jpg","priceDelta":13},{"id":"pure-white","name":"Gallery Pure White","color":"#F8FAFC","image":"assets/images/plastic_frame_white.jpg","priceDelta":27},{"id":"warm-walnut","name":"Warm Walnut Grain","color":"#78350F","image":"assets/images/plastic_frame_walnut.jpg","priceDelta":41}]'::jsonb
-),
-(
-  'printed-water-bottle-steel',
-  'Bottle Printing',
-  'personalized',
-  'Personalized Printing',
-  519,
-  'Starting from ₹519',
-  4.9,
-  112,
-  'Trending',
-  'assets/images/printed_bottle.jpg',
-  '["assets/images/printed_bottle.jpg", "assets/images/printed_bottle_blue.jpg", "assets/images/printed_bottle_silver.jpg"]'::jsonb,
-  'Personalized printing on insulated stainless steel bottles for corporate branding, personal gifts, and fitness events.',
-  'Constructed from food-grade 304 stainless steel with double-wall vacuum insulation, our custom bottles keep beverages cold for 24 hours or hot for 12 hours. Personalize with your recipient name, company branding, or vibrant artistic wrap-around graphics that never wash out.',
-  'Food-Grade 304 Stainless Steel (Double-Wall Vacuum)',
-  'Full 360° Rotary UV Color Print or Laser Engraving',
-  'In Stock',
-  TRUE,
-  100,
-  '1 - 2 Business Days',
-  '[{"name":"500 ml","price":519},{"name":"750 ml","price":679},{"name":"1000 ml","price":849}]'::jsonb,
-  '[{"id":"matte-black","name":"Stealth Matte Black","color":"#111111","image":"assets/images/printed_bottle.jpg","priceDelta":0},{"id":"royal-blue","name":"Royal Metallic Blue","color":"#1E3A8A","image":"assets/images/printed_bottle_blue.jpg","priceDelta":16},{"id":"brushed-steel","name":"Brushed Silver Steel","color":"#94A3B8","image":"assets/images/printed_bottle_silver.jpg","priceDelta":31}]'::jsonb
-),
-(
-  'customized-coffee-mug',
-  'Mug Printing',
-  'personalized',
-  'Personalized Printing',
-  251,
-  'Starting from ₹251',
-  4.9,
-  230,
-  'Bestseller',
-  'assets/images/custom_mug.jpg',
-  '["assets/images/custom_mug.jpg", "assets/images/custom_mug_black.jpg", "assets/images/custom_mug_blue.jpg"]'::jsonb,
-  'Customized ceramic mugs with photos, names, logos or designs. Microwave safe with brilliant high-gloss sublimation.',
-  'Our custom mugs are crafted from premium grade-A ceramic with an ultra-glossy AAA coating designed for high-resolution heat sublimation transfers. Whether celebrating an anniversary with a family collage or equipping an office desk with team logos, these mugs deliver rich, fade-proof colors sip after sip.',
-  'Grade AAA Coated Ceramic (Microwave & Dishwasher Safe)',
-  'Full-Surface High-Definition Heat Sublimation Transfer',
-  'In Stock',
-  TRUE,
-  100,
-  'Same Day / 24 Hours',
-  '[{"name":"Standard 11 oz (325 ml)","price":251},{"name":"Jumbo 15 oz (450 ml)","price":341}]'::jsonb,
-  '[{"id":"glossy-white","name":"Classic Glossy White","color":"#FFFFFF","image":"assets/images/custom_mug.jpg","priceDelta":0},{"id":"inner-black","name":"Black Magic Color-Changing","color":"#111111","image":"assets/images/custom_mug_black.jpg","priceDelta":49},{"id":"inner-blue","name":"Royal Blue Duo-Tone","color":"#1E3A8A","image":"assets/images/custom_mug_blue.jpg","priceDelta":29}]'::jsonb
-),
-(
-  'custom-file-printing',
-  'File Printing',
-  'office',
-  'Office Printing',
-  145,
-  'Starting from ₹145',
-  4.8,
-  65,
-  'Office Essential',
-  'assets/images/printed_file.jpg',
-  '["assets/images/printed_file.jpg"]'::jsonb,
-  'Custom printed office document files, clip files, and corporate tender files with branded graphics and metal bindings.',
-  'Ensure your company, hospital, or institutional files project clean authority. Our custom printed office files feature reinforced spine construction, heavy-gauge board, and heavy-duty spring or lever arch clips capable of holding up to 350 sheets with zero page sagging.',
-  '350-450 GSM Heavy Board / Polypropylene with Metal Clip',
-  'High-Speed Offset & Screen Print with Matte Lamination',
-  'In Stock',
-  TRUE,
-  100,
-  '2 - 3 Business Days',
-  '[{"name":"Regular A4 Document File","price":145},{"name":"Box File / Lever Arch File","price":245}]'::jsonb,
-  '[{"id":"navy-blue","name":"Corporate Navy Blue","color":"#1E3A8A","image":"assets/images/printed_file.jpg","priceDelta":0},{"id":"matte-black","name":"Executive Black","color":"#111111","image":"assets/images/printed_file.jpg","priceDelta":10}]'::jsonb
-),
-(
-  'printed-office-folder-executive',
-  'Folder Printing',
-  'office',
-  'Office Printing',
-  189,
-  'Starting from ₹189',
-  4.9,
-  88,
-  'Corporate Choice',
-  'assets/images/printed_folder.jpg',
-  '["assets/images/printed_folder.jpg"]'::jsonb,
-  'Executive presentation folders with metallic gold foil stamping, debossed logos, and precision die-cut card pockets.',
-  'Make an unforgettable first impression at client presentations, proposal pitches, and conferences. Crafted from heavyweight 400 GSM cardstock, each folder features optional gold foil leafing, soft-touch matte lamination, and interior pockets engineered to hold brochures and business cards snugly.',
-  '400 GSM Imperial Art Card / Textured Leatherette',
-  'Metallic Hot Foil Stamping, Debossing & Spot UV',
-  'In Stock',
-  TRUE,
-  100,
-  '2 - 4 Business Days',
-  '[{"name":"Single Pocket (A4 Standard)","price":189},{"name":"Dual Pocket (Executive Presentation)","price":249}]'::jsonb,
-  '[{"id":"gold-foil-blue","name":"Midnight Blue with Gold Stamping","color":"#1E3A8A","image":"assets/images/printed_folder.jpg","priceDelta":0},{"id":"gold-foil-black","name":"Onyx Black with Gold Stamping","color":"#111111","image":"assets/images/printed_folder.jpg","priceDelta":20}]'::jsonb
-),
-(
-  'custom-fine-art-canvas',
-  'Custom Printing',
-  'custom',
-  'Custom Printing',
-  897,
-  'Starting from ₹897',
-  5.0,
-  145,
-  'Artisanal',
-  'assets/images/custom_canvas.jpg',
-  '["assets/images/custom_canvas.jpg"]'::jsonb,
-  'Bespoke fine art canvas gallery wraps, floating acrylic prints, and customized personalized gifting sets.',
-  'Transform your favorite photography or artwork into museum-grade statement pieces. We stretch heavy 380 GSM cotton canvas over hand-beveled dried pine stretcher bars, finished with protective UV coatings that prevent cracking, fading, and moisture damage for generations.',
-  '380 GSM Pure Cotton Canvas or 5mm Optical Cast Acrylic',
-  '12-Color Giclée Fine Art Archival Printing (1440 DPI)',
-  'In Stock',
-  TRUE,
-  100,
-  '2 - 3 Business Days',
-  '[{"name":"12\" × 18\" Canvas Wrap","price":897},{"name":"18\" × 24\" Canvas Wrap","price":1497},{"name":"24\" × 36\" Canvas Wrap","price":2397},{"name":"12\" × 18\" Floating Acrylic","price":1297},{"name":"18\" × 24\" Floating Acrylic","price":1997}]'::jsonb,
-  '[{"id":"stretched-pine","name":"Gallery Wrap (1.5\" Pine Stretcher)","color":"#854D0E","image":"assets/images/custom_canvas.jpg","priceDelta":0},{"id":"floating-gold","name":"Floating Outer Gold Frame","color":"#C99A3D","image":"assets/images/custom_canvas.jpg","priceDelta":150},{"id":"floating-black","name":"Floating Outer Black Frame","color":"#111111","image":"assets/images/custom_canvas.jpg","priceDelta":100}]'::jsonb
-)
-ON CONFLICT (id) DO UPDATE SET
-  name = EXCLUDED.name,
-  category = EXCLUDED.category,
-  category_label = EXCLUDED.category_label,
-  price = EXCLUDED.price,
-  price_display = EXCLUDED.price_display,
-  sizes = EXCLUDED.sizes,
-  finishes = EXCLUDED.finishes,
-  status = EXCLUDED.status,
-  updated_at = NOW();
-
--- =============================================================================
--- 13. SEED DEFAULT ADMIN CONFIGURATION
+-- 11. SEED DEFAULT ADMIN CONFIGURATION
 -- =============================================================================
 INSERT INTO public.admin_config (id, admin_email, secondary_admin_email, admin_password, admin_name, smtp)
 VALUES (
   'default',
-  'shop@rajendrastudioandgifts.in',
-  'order@rajendrastudioandgifts.in',
-  'Admin@Rajesh2026',
-  'Rajendra Studio Admin',
+  'dahejsupport@gmail.com',
+  'dahejsupport@gmail.com',
+  'Admin123',
+  'Dahej Support Admin',
   '{
     "enabled": true,
     "service": "brevo",
     "host": "smtp-relay.brevo.com",
     "port": 587,
     "secure": false,
-    "user": "rajendrastudioframing@gmail.com",
+    "user": "jobs@dahejsupport.com",
     "pass": "",
-    "fromEmail": "Rajendra Studio & Framing <shop@rajendrastudioandgifts.in>"
+    "fromEmail": "Dahej Support <jobs@dahejsupport.com>"
   }'::jsonb
 )
 ON CONFLICT (id) DO UPDATE SET
+  admin_email = EXCLUDED.admin_email,
   secondary_admin_email = EXCLUDED.secondary_admin_email,
+  admin_name = EXCLUDED.admin_name,
+  smtp = EXCLUDED.smtp,
   updated_at = NOW();
-
--- =============================================================================
--- 14. SEED INITIAL CUSTOMERS
--- =============================================================================
-INSERT INTO public.customers (id, name, email, phone, registered_at, last_login_at, login_count, total_orders, total_spent, status)
-VALUES
-('CUST-0001', 'Kavya Tandel', 'tandelkavya1002@gmail.com', '+919510757513', '2026-09-26T11:45:20.094Z', NOW(), 1, 3, 1850, 'Active'),
-('CUST-0002', 'Kavya Tandel', 'rajeshframing0@gmail.com', '9510757513', '2026-09-26T09:40:46.446Z', NOW(), 1, 2, 899, 'Active'),
-('CUST-0014', 'Rajendra Studio Customer', 'shop@rajendrastudioandgifts.in', '9510757513', '2026-10-14T16:04:12.892Z', NOW(), 1, 0, 0, 'Active')
-ON CONFLICT (email) DO UPDATE SET
-  name = EXCLUDED.name,
-  phone = EXCLUDED.phone,
-  status = EXCLUDED.status;
-
--- =============================================================================
--- 15. SEED INITIAL VERIFIED REVIEWS
--- =============================================================================
-INSERT INTO public.reviews (id, product_id, author, city, rating, date, headline, comment, verified, helpful)
-VALUES
-('rev-1790625191990', 'glass-frame-classic', 'Kavya Tandel', 'Bharuch', 5, '2026-09-28', 'Absolute perfection from Rajesh Framing', 'Fast delivery to Bharuch, stunning packaging, and crystal clear photo print!', TRUE, 0),
-('rev-gfc-1', 'glass-frame-classic', 'Dr. Pratik Desai', 'Bharuch', 5, '2026-09-24', 'Museum quality float glass and impeccable brass standoffs!', 'Ordered an 18x24 glass frame for our family portrait. The diamond-beveled float glass clarity is stunning, and the metallic standoffs make it float off the wall like in an art gallery.', TRUE, 18),
-('rev-gfc-2', 'glass-frame-classic', 'Anjali Mehta', 'Dahej GIDC', 5, '2026-09-20', 'Fast 24-hr turnaround for our corporate executive awards', 'We needed 10 glass award frames customized with company logos on short notice. Rajesh Framing delivered all 10 within 24 hours. The archival print vibrant colors didn''t smudge or bleed. Exceptional studio service!', TRUE, 12),
-('rev-pfg-1', 'plastic-frame-gallery', 'Sanjay Patel', 'Bharuch', 5, '2026-09-22', 'Lightweight yet sturdy with authentic conservation matting', 'Used these frames to build a 9-photo memory wall in my home. The polymer build is ultra-clean with zero corner gaps, and the 1.5mm museum matting gives every picture a royal appearance.', TRUE, 15),
-('rev-pwb-1', 'printed-water-bottle-steel', 'Hardik Chauhan', 'Dahej GIDC', 5, '2026-09-21', 'Laser engraved finish doesn''t scratch even after daily factory use', 'Ordered insulated steel bottles with laser-etched names for our plant engineering team. Keeps water ice-cold throughout the humid afternoon shifts. Outstanding industrial quality.', TRUE, 21),
-('rev-ccm-1', 'customized-coffee-mug', 'Nisha Parekh', 'Bharuch', 5, '2026-09-23', 'Vibrant sublimation print with brilliant glossy finish', 'Gifted custom photo mugs to my colleagues for work anniversaries. Brilliant colors and completely microwave safe.', TRUE, 24)
-ON CONFLICT (id) DO NOTHING;

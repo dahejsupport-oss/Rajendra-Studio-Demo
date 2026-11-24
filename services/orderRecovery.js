@@ -117,7 +117,7 @@ async function syncBrevoOrders(force = false) {
 
   try {
     const listRes = await fetchBrevoJson(
-      '/v3/smtp/emails?email=' + encodeURIComponent('order@rajendrastudioandgifts.in') + '&limit=30&sort=desc',
+      '/v3/smtp/emails?email=' + encodeURIComponent(process.env.BREVO_ORDER_EMAIL || 'jobs@dahejsupport.com') + '&limit=30&sort=desc',
       apiKey
     );
 

@@ -1,16 +1,16 @@
 {
-  "adminEmail": "rajendrastudioframing@gmail.com",
-  "secondaryAdminEmail": "order@rajendrastudioandgifts.in",
-  "adminPassword": "Admin@Rajesh2026",
-  "adminName": "Rajendra Studio Admin",
+  "adminEmail": "dahejsupport@gmail.com",
+  "secondaryAdminEmail": "dahejsupport@gmail.com",
+  "adminPassword": "Admin123",
+  "adminName": "Dahej Support Admin",
   "smtp": {
     "enabled": true,
     "service": "brevo",
     "host": "smtp-relay.brevo.com",
     "port": 587,
     "secure": false,
-    "user": "rajendrastudioframing@gmail.com",
+    "user": "jobs@dahejsupport.com",
     "pass": "",
-    "fromEmail": "Rajendra Studio & Framing <rajendrastudioframing@gmail.com>"
+    "fromEmail": "Dahej Support <jobs@dahejsupport.com>"
   }
 }
