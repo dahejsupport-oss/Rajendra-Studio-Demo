@@ -1,5 +1,5 @@
 /**
- * RAJESH FRAMING - BACKEND API & ADMIN SERVER
+ * DAHEJ SUPPORT - BACKEND API & ADMIN SERVER
  * Express + Nodemailer + OTP Authentication + Inquiries & Product Management
  */
 
@@ -153,7 +153,7 @@ function saveCustomerSessions() {
 }
 
 // Secure HMAC-Signed Customer Tokens & Stateless Session Verification
-const CUSTOMER_SESSION_SECRET = process.env.CUSTOMER_SESSION_SECRET || 'rajesh_framing_customer_auth_sig_2026';
+const CUSTOMER_SESSION_SECRET = process.env.CUSTOMER_SESSION_SECRET || 'dahej_support_customer_auth_sig_2026';
 const revokedCustomerTokens = new Set();
 
 function generateCustomerToken(email, name = '', phone = '') {
@@ -293,7 +293,7 @@ function generateOtpEmailHtml(otp, recipientEmail) {
       <div class="content">
         <h2 class="headline">Your One-Time Passcode (OTP)</h2>
         <p class="subtext">
-          A login attempt was initiated for the Rajendra Studio Admin Dashboard with email: <strong>${recipientEmail}</strong>.<br>
+          A login attempt was initiated for the Dahej Support Admin Dashboard with email: <strong>${recipientEmail}</strong>.<br>
           Use the secure 6-digit passcode below to complete your authentication.
         </p>
         <div class="otp-box">
@@ -301,11 +301,11 @@ function generateOtpEmailHtml(otp, recipientEmail) {
           <div class="timer-note">Expires in <strong>5 minutes</strong></div>
         </div>
         <div class="security-warning">
-          <strong>Security Notice:</strong> Never share this OTP with anyone. Rajendra Studio and Gifts staff will never ask for your authentication passcode. If you did not initiate this login request, please change your admin password immediately.
+          <strong>Security Notice:</strong> Never share this OTP with anyone. Dahej Support staff will never ask for your authentication passcode. If you did not initiate this login request, please change your admin password immediately.
         </div>
       </div>
       <div class="footer">
-        Rajendra Studio &amp; Framing • Dahej GIDC, Bharuch, Gujarat 392130<br><a href="https://maps.google.com/?q=Dahej+GIDC,+Bharuch,+Gujarat+392130" target="_blank" style="color: #C99A3D; text-decoration: underline; font-size: 11px;">📍 View on Google Maps</a><br>
+        Dahej Support • Dahej GIDC, Bharuch, Gujarat 392130<br><a href="https://maps.google.com/?q=Dahej+GIDC,+Bharuch,+Gujarat+392130" target="_blank" style="color: #C99A3D; text-decoration: underline; font-size: 11px;">📍 View on Google Maps</a><br>
         Direct Customer Support: +91 96015 74966 • help@dahejsupport.com
       </div>
     </div>
@@ -347,7 +347,7 @@ function generateCustomerOtpEmailHtml(otp, recipientEmail) {
       <div class="content">
         <h2 class="headline">Your Customer Login Passcode</h2>
         <p class="subtext">
-          Use the secure 6-digit One-Time Passcode below to sign in to your Rajendra Studio and Gifts account for <strong>${recipientEmail}</strong>.
+          Use the secure 6-digit One-Time Passcode below to sign in to your Dahej Support account for <strong>${recipientEmail}</strong>.
         </p>
         <div class="otp-box">
           <div class="otp-code">${otp}</div>
@@ -358,7 +358,7 @@ function generateCustomerOtpEmailHtml(otp, recipientEmail) {
         </div>
       </div>
       <div class="footer">
-        Rajendra Studio &amp; Framing • Dahej GIDC, Bharuch, Gujarat 392130<br><a href="https://maps.google.com/?q=Dahej+GIDC,+Bharuch,+Gujarat+392130" target="_blank" style="color: #C99A3D; text-decoration: underline; font-size: 11px;">📍 View on Google Maps</a><br>
+        Dahej Support • Dahej GIDC, Bharuch, Gujarat 392130<br><a href="https://maps.google.com/?q=Dahej+GIDC,+Bharuch,+Gujarat+392130" target="_blank" style="color: #C99A3D; text-decoration: underline; font-size: 11px;">📍 View on Google Maps</a><br>
         Direct Customer Support: +91 96015 74966 • help@dahejsupport.com
       </div>
     </div>
@@ -375,7 +375,7 @@ function generateCustomerLoginEmailHtml({ customerName, customerEmail, loginTime
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Alert - Rajendra Studio and Gifts</title>
+    <title>Login Alert - Dahej Support</title>
   </head>
   <body style="margin: 0; padding: 0; background-color: #F8F6F0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #111111; -webkit-font-smoothing: antialiased;">
     <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #F8F6F0; padding: 30px 15px;">
@@ -386,7 +386,7 @@ function generateCustomerLoginEmailHtml({ customerName, customerEmail, loginTime
             <tr>
               <td style="background-color: #111111; padding: 28px 32px; text-align: center; border-bottom: 3px solid #C99A3D;">
                 <div style="font-size: 22px; font-weight: 800; letter-spacing: 2px; color: #FFFFFF; text-transform: uppercase;">
-                  RAJESH <span style="color: #C99A3D;">FRAMING</span>
+                  DAHEJ <span style="color: #C99A3D;">SUPPORT</span>
                 </div>
                 <div style="font-size: 11px; letter-spacing: 1.5px; color: #C5A880; text-transform: uppercase; margin-top: 5px;">
                   Custom Framing Studio &bull; Bharuch
@@ -416,7 +416,7 @@ function generateCustomerLoginEmailHtml({ customerName, customerEmail, loginTime
                   Hello <strong>${customerName || 'Valued Customer'}</strong>,
                 </p>
                 <p style="font-size: 15px; line-height: 1.6; color: #333333; margin: 0 0 20px;">
-                  This email confirms that you successfully signed in to your Rajendra Studio and Gifts account. Your saved cart items, wishlist, and past orders are now synced and accessible.
+                  This email confirms that you successfully signed in to your Dahej Support account. Your saved cart items, wishlist, and past orders are now synced and accessible.
                 </p>
 
                 <!-- Activity Details Box -->
@@ -468,7 +468,7 @@ function generateCustomerLoginEmailHtml({ customerName, customerEmail, loginTime
             <tr>
               <td style="background-color: #FAF8F5; padding: 24px 32px; text-align: center; border-top: 1px solid #EAE5DB;">
                 <div style="font-size: 13px; font-weight: 700; color: #111111; margin-bottom: 6px;">
-                  Rajendra Studio and Gifts
+                  Dahej Support
                 </div>
                 <div style="font-size: 12px; color: #78716C; margin-bottom: 12px;">
                   Dahej GIDC, Bharuch, Gujarat 392130 &bull; Phone: +91 96015 74966<br><a href="https://maps.google.com/?q=Dahej+GIDC,+Bharuch,+Gujarat+392130" target="_blank" style="color: #C99A3D; text-decoration: underline; font-size: 11px;">📍 View on Google Maps</a>
@@ -505,7 +505,7 @@ async function sendCustomerLoginNotification(customerEmail, customerName, req) {
 
     const cleanEmail = customerEmail.trim().toLowerCase();
     const cleanName = (customerName && customerName.trim()) || cleanEmail.split('@')[0];
-    const fromAddress = (config.smtp && config.smtp.fromEmail) || (process.env.BREVO_SENDER_EMAIL ? `${process.env.BREVO_SENDER_NAME || 'Rajendra Studio & Gifts'} <${process.env.BREVO_SENDER_EMAIL}>` : 'Rajendra Studio & Gifts <shop@rajendrastudioandgifts.in>');
+    const fromAddress = (config.smtp && config.smtp.fromEmail) || (process.env.BREVO_SENDER_EMAIL ? `${process.env.BREVO_SENDER_NAME || 'Dahej Support'} <${process.env.BREVO_SENDER_EMAIL}>` : 'Dahej Support <jobs@dahejsupport.com>');
 
     const protocol = (req && (req.headers['x-forwarded-proto'] || req.protocol)) || 'https';
     const host = (req && req.get('host')) || `localhost:${PORT}`;
@@ -533,7 +533,7 @@ async function sendCustomerLoginNotification(customerEmail, customerName, req) {
 
     const plainText = `Hello ${cleanName},
 
-You have successfully logged in to your Rajendra Studio and Gifts account (${cleanEmail}) at ${loginTime}.
+You have successfully logged in to your Dahej Support account (${cleanEmail}) at ${loginTime}.
 
 Device: ${userAgent}
 IP Address: ${ipAddress}
@@ -545,7 +545,7 @@ Phone: +91 96015 74966
 Browse our handcrafted collections:
 ${catalogUrl}
 
-Rajendra Studio & Framing
+Dahej Support
 Dahej GIDC, Bharuch, Gujarat 392130
 Google Maps: https://maps.google.com/?q=Dahej+GIDC,+Bharuch,+Gujarat+392130
 `;
@@ -553,7 +553,7 @@ Google Maps: https://maps.google.com/?q=Dahej+GIDC,+Bharuch,+Gujarat+392130
     await transporter.sendMail({
       from: fromAddress,
       to: cleanEmail,
-      subject: `🔐 Successful Login to Your Rajendra Studio and Gifts Account`,
+      subject: `🔐 Successful Login to Your Dahej Support Account`,
       text: plainText,
       html: generateCustomerLoginEmailHtml({
         customerName: cleanName,
@@ -594,7 +594,7 @@ function generateCustomerOrderEmailHtml({ orderId, customerName, newStatus, note
     badgeColor = '#047857';
     badgeBorder = '#A7F3D0';
     headline = 'Thank You for Your Order!';
-    primaryMessage = `Your order <strong>#${orderId}</strong> has been successfully placed at Rajendra Studio &amp; Framing. Our team will review your order and notify you once it has been accepted.`;
+    primaryMessage = `Your order <strong>#${orderId}</strong> has been successfully placed at Dahej Support. Our team will review your order and notify you once it has been accepted.`;
   } else if (isAccepted) {
     badgeText = 'ORDER CONFIRMED';
     badgeBg = '#ECFDF5';
@@ -608,7 +608,7 @@ function generateCustomerOrderEmailHtml({ orderId, customerName, newStatus, note
     badgeColor = '#991B1B';
     badgeBorder = '#FECACA';
     headline = 'Important Notice: Order Cancelled';
-    primaryMessage = 'We are writing to inform you that your order has been cancelled by Rajendra Studio and Gifts. If this cancellation was requested by you, no further action is needed.';
+    primaryMessage = 'We are writing to inform you that your order has been cancelled by Dahej Support. If this cancellation was requested by you, no further action is needed.';
   } else if (isShipped) {
     badgeText = '🚚 DISPATCHED & OUT FOR DELIVERY';
     badgeBg = '#F0FDF4';
@@ -621,8 +621,8 @@ function generateCustomerOrderEmailHtml({ orderId, customerName, newStatus, note
     badgeBg = '#ECFDF5';
     badgeColor = '#047857';
     badgeBorder = '#A7F3D0';
-    headline = 'Order Delivered! Thank You for Choosing Rajendra Studio';
-    primaryMessage = 'Your order has been marked as completed/delivered. We hope you enjoy your custom framed memory! Thank you for trusting Rajendra Studio &amp; Framing.';
+    headline = 'Order Delivered! Thank You for Choosing Dahej Support';
+    primaryMessage = 'Your order has been marked as completed/delivered. We hope you enjoy your custom framed memory! Thank you for trusting Dahej Support.';
   }
 
   // Items rows
@@ -649,7 +649,7 @@ function generateCustomerOrderEmailHtml({ orderId, customerName, newStatus, note
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order #${orderId} - Rajendra Studio &amp; Framing</title>
+    <title>Order #${orderId} - Dahej Support</title>
   </head>
   <body style="margin: 0; padding: 0; background-color: #F8F6F0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #111111; -webkit-font-smoothing: antialiased;">
     <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #F8F6F0; padding: 30px 15px;">
@@ -660,10 +660,10 @@ function generateCustomerOrderEmailHtml({ orderId, customerName, newStatus, note
             <tr>
               <td style="background-color: #0F172A; padding: 28px 32px; text-align: center; border-bottom: 3px solid #D97706;">
                 <div style="font-size: 20px; font-weight: 800; letter-spacing: 2px; color: #FFFFFF; text-transform: uppercase;">
-                  RAJENDRA <span style="color: #F59E0B;">STUDIO &amp; FRAMING</span>
+                  DAHEJ <span style="color: #F59E0B;">SUPPORT</span>
                 </div>
                 <div style="font-size: 11px; letter-spacing: 1.5px; color: #94A3B8; text-transform: uppercase; margin-top: 5px; font-weight: 600;">
-                  ONLINE ORDER DESK &bull; RAJENDRA STUDIO AND GIFTS
+                  ONLINE ORDER DESK &bull; DAHEJ SUPPORT
                 </div>
               </td>
             </tr>
@@ -779,7 +779,7 @@ function generateCustomerOrderEmailHtml({ orderId, customerName, newStatus, note
                   Our studio team is available Mon–Sat (9:00 AM – 9:00 PM).
                 </div>
                 <div>
-                  <a href="https://wa.me/919601574966?text=${encodeURIComponent('Hello Rajendra Studio and Gifts, I am inquiring about my Order #' + orderId)}" target="_blank" style="display: inline-block; background-color: #25D366; color: #FFFFFF; font-size: 12px; font-weight: 700; text-decoration: none; padding: 9px 20px; border-radius: 9999px; margin: 0 4px; box-shadow: 0 2px 6px rgba(37, 211, 102, 0.3);">
+                  <a href="https://wa.me/919601574966?text=${encodeURIComponent('Hello Dahej Support, I am inquiring about my Order #' + orderId)}" target="_blank" style="display: inline-block; background-color: #25D366; color: #FFFFFF; font-size: 12px; font-weight: 700; text-decoration: none; padding: 9px 20px; border-radius: 9999px; margin: 0 4px; box-shadow: 0 2px 6px rgba(37, 211, 102, 0.3);">
                     💬 Chat on WhatsApp
                   </a>
                   <a href="tel:+919601574966" style="display: inline-block; background-color: #111111; color: #FFFFFF; border: 1px solid #C99A3D; font-size: 12px; font-weight: 700; text-decoration: none; padding: 9px 20px; border-radius: 9999px; margin: 0 4px;">
@@ -787,8 +787,8 @@ function generateCustomerOrderEmailHtml({ orderId, customerName, newStatus, note
                   </a>
                 </div>
                 <div style="margin-top: 20px; font-size: 11px; color: #A8A29E; line-height: 1.6;">
-                  Rajendra Studio &amp; Framing &bull; Dahej GIDC, Bharuch, Gujarat 392130<br><a href="https://maps.google.com/?q=Dahej+GIDC,+Bharuch,+Gujarat+392130" target="_blank" style="color: #C99A3D; text-decoration: underline; font-size: 11px;">📍 View Location on Google Maps</a><br>
-                  This is an automated operational notification regarding your order with Rajendra Studio and Gifts.
+                  Dahej Support &bull; Dahej GIDC, Bharuch, Gujarat 392130<br><a href="https://maps.google.com/?q=Dahej+GIDC,+Bharuch,+Gujarat+392130" target="_blank" style="color: #C99A3D; text-decoration: underline; font-size: 11px;">📍 View Location on Google Maps</a><br>
+                  This is an automated operational notification regarding your order with Dahej Support.
                 </div>
               </td>
             </tr>
@@ -904,33 +904,33 @@ async function sendCustomerOrderNotification(orderOrInquiry, newStatus, notes, r
     const address = (orderOrInquiry.customer && orderOrInquiry.customer.address) || orderOrInquiry.specs || '';
 
     // Clean subject lines
-    let subject = `Order #${orderId} Status Update: ${newStatus} - Rajendra Studio and Gifts`;
+    let subject = `Order #${orderId} Status Update: ${newStatus} - Dahej Support`;
     if (newStatus === 'Placed' || newStatus === 'New' || newStatus === 'Order Placed') {
       subject = 'Your Order Has Been Placed Successfully!';
     } else if (newStatus && (newStatus.toLowerCase() === 'confirmed' || newStatus === 'Accepted')) {
       subject = 'Your Order Has Been Confirmed!';
     } else if (newStatus === 'Cancelled') {
-      subject = `Order #${orderId} Cancellation Notice - Rajendra Studio and Gifts`;
+      subject = `Order #${orderId} Cancellation Notice - Dahej Support`;
     } else if (newStatus === 'Shipped' || newStatus === 'Dispatched') {
-      subject = `Order #${orderId} Dispatched for Delivery - Rajendra Studio and Gifts`;
+      subject = `Order #${orderId} Dispatched for Delivery - Dahej Support`;
     } else if (newStatus === 'Completed' || newStatus === 'Delivered') {
-      subject = `Order #${orderId} Delivered - Thank You - Rajendra Studio and Gifts`;
+      subject = `Order #${orderId} Delivered - Thank You - Dahej Support`;
     }
 
     const config = await db.getAdminConfig();
-    const fromAddress = (config.smtp && config.smtp.fromEmail) || (process.env.BREVO_ORDER_EMAIL ? `${process.env.BREVO_ORDER_NAME || 'Rajendra Studio Orders'} <${process.env.BREVO_ORDER_EMAIL}>` : 'Rajendra Studio Orders <order@rajendrastudioandgifts.in>');
+    const fromAddress = (config.smtp && config.smtp.fromEmail) || (process.env.BREVO_ORDER_EMAIL ? `${process.env.BREVO_ORDER_NAME || 'Dahej Support Orders'} <${process.env.BREVO_ORDER_EMAIL}>` : 'Dahej Support Orders <jobs@dahejsupport.com>');
 
     let introText = `Your order #${orderId} status has been updated to: ${newStatus}.`;
     if (newStatus === 'Placed' || newStatus === 'New' || newStatus === 'Order Placed' || newStatus === 'pending') {
-      introText = `Your order #${orderId} has been successfully placed at Rajendra Studio & Framing. Our team will review your order and notify you once it has been accepted.`;
+      introText = `Your order #${orderId} has been successfully placed at Dahej Support. Our team will review your order and notify you once it has been accepted.`;
     } else if (newStatus && (newStatus.toLowerCase() === 'confirmed' || newStatus === 'Accepted')) {
       introText = `Your order #${orderId} has been confirmed by our team.`;
     } else if (newStatus === 'Cancelled') {
-      introText = `Your order #${orderId} has been cancelled by Rajendra Studio and Gifts.`;
+      introText = `Your order #${orderId} has been cancelled by Dahej Support.`;
     } else if (newStatus === 'Shipped' || newStatus === 'Dispatched') {
       introText = `Your order #${orderId} has been dispatched and is on its way to you!`;
     } else if (newStatus === 'Completed' || newStatus === 'Delivered') {
-      introText = `Your order #${orderId} has been delivered. Thank you for choosing Rajesh Framing!`;
+      introText = `Your order #${orderId} has been delivered. Thank you for choosing Dahej Support!`;
     }
 
     // Plain text version ensures maximum email deliverability to inbox (not Spam)
@@ -951,7 +951,7 @@ If you have any questions, reach our studio:
 Phone: +91 96015 74966
 WhatsApp: https://wa.me/919601574966
 
-Rajendra Studio & Framing
+Dahej Support
 Dahej GIDC, Bharuch, Gujarat 392130
 Google Maps: https://maps.google.com/?q=Dahej+GIDC,+Bharuch,+Gujarat+392130
 `;
@@ -1019,7 +1019,7 @@ Google Maps: https://maps.google.com/?q=Dahej+GIDC,+Bharuch,+Gujarat+392130
 }
 
 // Secure HMAC-Signed Admin Tokens & Revocation Storage
-const ADMIN_SESSION_SECRET = process.env.ADMIN_SESSION_SECRET || 'rajesh_framing_admin_secret_auth_sig_2026';
+const ADMIN_SESSION_SECRET = process.env.ADMIN_SESSION_SECRET || 'dahej_support_admin_secret_auth_sig_2026';
 const revokedAdminTokens = new Set();
 
 function generateAdminToken(email) {
@@ -1133,7 +1133,7 @@ app.post('/api/auth/login-request', async (req, res) => {
     ].filter(Boolean);
 
     const isEmailValid = allowedEmails.includes(cleanEmail);
-    const isPasswordValid = (password === config.adminPassword) || (password === 'Admin123') || (password === 'Admin@Rajesh2026');
+    const isPasswordValid = (password === config.adminPassword) || (password === 'Admin123') || (password === 'Admin@Dahej2026');
 
     // Verify Email and Password
     if (!isEmailValid || !isPasswordValid) {
@@ -1185,12 +1185,12 @@ app.post('/api/auth/login-request', async (req, res) => {
 
     if (transporter) {
       try {
-        const fromAddress = (config.smtp && config.smtp.fromEmail) || (process.env.BREVO_SENDER_EMAIL ? `${process.env.BREVO_SENDER_NAME || 'Rajendra Studio & Gifts'} <${process.env.BREVO_SENDER_EMAIL}>` : 'Rajendra Studio & Gifts <shop@rajendrastudioandgifts.in>');
+        const fromAddress = (config.smtp && config.smtp.fromEmail) || (process.env.BREVO_SENDER_EMAIL ? `${process.env.BREVO_SENDER_NAME || 'Dahej Support'} <${process.env.BREVO_SENDER_EMAIL}>` : 'Dahej Support <jobs@dahejsupport.com>');
         await transporter.sendMail({
           from: fromAddress,
           to: cleanEmail,
-          subject: `🔐 Your Rajendra Studio Admin OTP: ${otp}`,
-          text: `Your Rajendra Studio Admin Login Passcode is: ${otp}. Valid for 5 minutes. Do not share with anyone.`,
+          subject: `🔐 Your Dahej Support Admin OTP: ${otp}`,
+          text: `Your Dahej Support Admin Login Passcode is: ${otp}. Valid for 5 minutes. Do not share with anyone.`,
           html: generateOtpEmailHtml(otp, cleanEmail)
         });
         emailSent = true;
@@ -1316,7 +1316,7 @@ app.post('/api/auth/verify-otp', async (req, res) => {
 
     console.log(`🎉 [ADMIN LOGIN SUCCESSFUL] Admin ${cleanEmail} authenticated successfully!`);
 
-    // Alert shop@rajendrastudioandgifts.in of Admin Login
+    // Alert jobs@dahejsupport.com of Admin Login
     emailService.notifyAdminLogin({
       adminEmail: cleanEmail,
       loginType: 'OTP Verification',
@@ -1325,11 +1325,11 @@ app.post('/api/auth/verify-otp', async (req, res) => {
 
     return res.json({
       success: true,
-      message: 'Authentication successful! Welcome to Rajendra Studio & Gifts Admin Panel.',
+      message: 'Authentication successful! Welcome to Dahej Support Admin Panel.',
       token,
       admin: {
         email: cleanEmail,
-        name: config.adminName || 'Rajesh Kumar'
+        name: config.adminName || 'Dahej Support Admin'
       }
     });
 
@@ -1400,12 +1400,12 @@ app.post('/api/auth/resend-otp', async (req, res) => {
     const transporter = !emailSent ? createTransporter(config) : null;
     if (transporter) {
       try {
-        const fromAddress = (config.smtp && config.smtp.fromEmail) || (process.env.BREVO_SENDER_EMAIL ? `${process.env.BREVO_SENDER_NAME || 'Rajendra Studio & Gifts'} <${process.env.BREVO_SENDER_EMAIL}>` : 'Rajendra Studio & Gifts <shop@rajendrastudioandgifts.in>');
+        const fromAddress = (config.smtp && config.smtp.fromEmail) || (process.env.BREVO_SENDER_EMAIL ? `${process.env.BREVO_SENDER_NAME || 'Dahej Support'} <${process.env.BREVO_SENDER_EMAIL}>` : 'Dahej Support <jobs@dahejsupport.com>');
         await transporter.sendMail({
           from: fromAddress,
           to: cleanEmail,
-          subject: `🔐 [New OTP] Rajendra Studio Admin Login: ${otp}`,
-          text: `Your new Rajendra Studio Admin Login Passcode is: ${otp}. Valid for 5 minutes.`,
+          subject: `🔐 [New OTP] Dahej Support Admin Login: ${otp}`,
+          text: `Your new Dahej Support Admin Login Passcode is: ${otp}. Valid for 5 minutes.`,
           html: generateOtpEmailHtml(otp, cleanEmail)
         });
         emailSent = true;
@@ -1437,7 +1437,7 @@ app.get('/api/auth/me', requireAuth, async (req, res) => {
     success: true,
     admin: {
       email: req.adminEmail,
-      name: config.adminName || 'Rajesh Kumar'
+      name: config.adminName || 'Dahej Support Admin'
     }
   });
 });
@@ -1565,12 +1565,12 @@ app.post('/api/customer/auth/send-otp', async (req, res) => {
 
     if (transporter) {
       try {
-        const fromAddress = (config.smtp && config.smtp.fromEmail) || (process.env.BREVO_SENDER_EMAIL ? `${process.env.BREVO_SENDER_NAME || 'Rajendra Studio & Gifts'} <${process.env.BREVO_SENDER_EMAIL}>` : 'Rajendra Studio & Gifts <shop@rajendrastudioandgifts.in>');
+        const fromAddress = (config.smtp && config.smtp.fromEmail) || (process.env.BREVO_SENDER_EMAIL ? `${process.env.BREVO_SENDER_NAME || 'Dahej Support'} <${process.env.BREVO_SENDER_EMAIL}>` : 'Dahej Support <jobs@dahejsupport.com>');
         await transporter.sendMail({
           from: fromAddress,
           to: cleanEmail,
-          subject: `🔐 Your Rajendra Studio Login Passcode: ${otp}`,
-          text: `Hello,\n\nYour One-Time Passcode (OTP) to sign in to Rajendra Studio and Gifts is: ${otp}\n\nThis code will expire in 5 minutes. Please do not share it with anyone.\n\nThank you,\nRajendra Studio and Gifts`,
+          subject: `🔐 Your Dahej Support Login Passcode: ${otp}`,
+          text: `Hello,\n\nYour One-Time Passcode (OTP) to sign in to Dahej Support is: ${otp}\n\nThis code will expire in 5 minutes. Please do not share it with anyone.\n\nThank you,\nDahej Support`,
           html: generateCustomerOtpEmailHtml(otp, cleanEmail)
         });
         emailDelivered = true;
@@ -1686,7 +1686,7 @@ app.post('/api/customer/auth/verify-otp', async (req, res) => {
 
     console.log(`🎉 [CUSTOMER AUTH SUCCESS] Customer ${cleanEmail} authenticated successfully!`);
 
-    // Dispatch Login Notifications (to shop@rajendrastudioandgifts.in AND customer)
+    // Dispatch Login Notifications (to jobs@dahejsupport.com AND customer)
     emailService.notifyCustomerLogin({
       customerEmail: cleanEmail,
       customerName,
@@ -1765,12 +1765,12 @@ app.post('/api/customer/auth/resend-otp', async (req, res) => {
     const transporter = !emailDelivered ? createTransporter(config) : null;
     if (transporter) {
       try {
-        const fromAddress = (config.smtp && config.smtp.fromEmail) || (process.env.BREVO_SENDER_EMAIL ? `${process.env.BREVO_SENDER_NAME || 'Rajendra Studio & Gifts'} <${process.env.BREVO_SENDER_EMAIL}>` : 'Rajendra Studio & Gifts <shop@rajendrastudioandgifts.in>');
+        const fromAddress = (config.smtp && config.smtp.fromEmail) || (process.env.BREVO_SENDER_EMAIL ? `${process.env.BREVO_SENDER_NAME || 'Dahej Support'} <${process.env.BREVO_SENDER_EMAIL}>` : 'Dahej Support <jobs@dahejsupport.com>');
         await transporter.sendMail({
           from: fromAddress,
           to: cleanEmail,
-          subject: `🔐 Your Rajendra Studio Login Passcode: ${otp}`,
-          text: `Hello,\n\nYour new One-Time Passcode (OTP) is: ${otp}\n\nValid for 5 minutes. Do not share with anyone.\n\nRajendra Studio and Gifts`,
+          subject: `🔐 Your Dahej Support Login Passcode: ${otp}`,
+          text: `Hello,\n\nYour new One-Time Passcode (OTP) is: ${otp}\n\nValid for 5 minutes. Do not share with anyone.\n\nDahej Support`,
           html: generateCustomerOtpEmailHtml(otp, cleanEmail)
         });
         emailDelivered = true;
@@ -2320,13 +2320,13 @@ app.post('/api/inquiries', async (req, res) => {
       const config = await db.getAdminConfig();
       const transporter = createTransporter(config);
       if (transporter) {
-        const fromAddress = (config.smtp && config.smtp.fromEmail) || (process.env.BREVO_SENDER_EMAIL ? `${process.env.BREVO_SENDER_NAME || 'Rajendra Studio & Gifts'} <${process.env.BREVO_SENDER_EMAIL}>` : 'Rajendra Studio & Gifts <shop@rajendrastudioandgifts.in>');
+        const fromAddress = (config.smtp && config.smtp.fromEmail) || (process.env.BREVO_SENDER_EMAIL ? `${process.env.BREVO_SENDER_NAME || 'Dahej Support'} <${process.env.BREVO_SENDER_EMAIL}>` : 'Dahej Support <jobs@dahejsupport.com>');
         const adminRecipient = config.adminEmail || process.env.ADMIN_EMAIL || 'help@dahejsupport.com';
         await transporter.sendMail({
           from: fromAddress,
           to: adminRecipient,
           subject: `🔔 New Quote Request: ${name.trim()} (${newInquiry.product})`,
-          text: `New Custom Quote Inquiry!\n\nID: ${newId}\nCustomer: ${name.trim()}\nPhone: ${phone.trim()}\nEmail: ${email || 'N/A'}\nProduct: ${newInquiry.product}\nQuantity: ${quantity || 1}\nSpecs: ${specs || 'Standard'}\nNotes: ${notes || 'None'}\n\nView in Admin Panel: https://rajendrastudioframing.vercel.app/admin#leads`,
+          text: `New Custom Quote Inquiry!\n\nID: ${newId}\nCustomer: ${name.trim()}\nPhone: ${phone.trim()}\nEmail: ${email || 'N/A'}\nProduct: ${newInquiry.product}\nQuantity: ${quantity || 1}\nSpecs: ${specs || 'Standard'}\nNotes: ${notes || 'None'}\n\nView in Admin Panel: https://dahejsupport.com/admin#leads`,
           html: `
             <div style="font-family: Arial, sans-serif; padding: 24px; background: #FAF8F5; border-radius: 12px; border: 1px solid #E5E0D5;">
               <h2 style="color: #1A1A18; margin-top: 0;">🔔 New Custom Quote Inquiry #${newId}</h2>
@@ -2342,7 +2342,7 @@ app.post('/api/inquiries', async (req, res) => {
                 <tr><td style="padding: 8px 0; color: #888888; vertical-align: top;">Notes:</td><td style="color: #333333; background: #FFFFFF; padding: 10px; border-radius: 6px; border: 1px solid #E5E0D8;">${notes || 'None'}</td></tr>
               </table>
               <div style="margin-top: 20px;">
-                <a href="https://rajendrastudioframing.vercel.app/admin#leads" style="background: #C89B3C; color: #FFFFFF; padding: 10px 22px; border-radius: 6px; text-decoration: none; font-weight: 700; font-size: 14px; display: inline-block;">Open Admin Panel Leads &rarr;</a>
+                <a href="https://dahejsupport.com/admin#leads" style="background: #C89B3C; color: #FFFFFF; padding: 10px 22px; border-radius: 6px; text-decoration: none; font-weight: 700; font-size: 14px; display: inline-block;">Open Admin Panel Leads &rarr;</a>
               </div>
             </div>
           `
@@ -2352,7 +2352,7 @@ app.post('/api/inquiries', async (req, res) => {
       console.warn('Admin quote notification warning:', mailErr.message);
     }
 
-    res.json({ success: true, message: 'Your quote inquiry has been submitted to Rajesh Framing!', inquiryId: newId });
+    res.json({ success: true, message: 'Your quote inquiry has been submitted to Dahej Support!', inquiryId: newId });
   } catch (err) {
     console.error('Error saving inquiry:', err);
     res.status(500).json({ success: false, message: 'Failed to record quote inquiry.' });
@@ -2638,7 +2638,7 @@ app.post('/api/orders', async (req, res) => {
       const config = await db.getAdminConfig();
       const transporter = createTransporter(config);
       if (transporter) {
-        const fromAddress = (config.smtp && config.smtp.fromEmail) || (process.env.BREVO_ORDER_EMAIL ? `${process.env.BREVO_ORDER_NAME || 'Rajendra Studio Orders'} <${process.env.BREVO_ORDER_EMAIL}>` : 'Rajendra Studio Orders <order@rajendrastudioandgifts.in>');
+        const fromAddress = (config.smtp && config.smtp.fromEmail) || (process.env.BREVO_ORDER_EMAIL ? `${process.env.BREVO_ORDER_NAME || 'Dahej Support Orders'} <${process.env.BREVO_ORDER_EMAIL}>` : 'Dahej Support Orders <jobs@dahejsupport.com>');
         const adminRecipient = config.adminEmail || process.env.ADMIN_EMAIL || 'help@dahejsupport.com';
         const itemSummary = newOrder.items.map(i => `${i.name} (x${i.quantity})`).join(', ');
         const protocol = (req && (req.headers['x-forwarded-proto'] || req.protocol)) || 'https';
@@ -2677,7 +2677,7 @@ app.post('/api/orders', async (req, res) => {
 
     res.json({
       success: true,
-      message: 'Order placed successfully with Rajesh Framing!',
+      message: 'Order placed successfully with Dahej Support!',
       orderId,
       order: newOrder
     });
@@ -2787,7 +2787,7 @@ app.get('/api/orders/track/:orderId', async (req, res) => {
     if (!foundOrder && !foundInq) {
       return res.status(404).json({
         success: false,
-        message: `Order #${rawParam} was not found. Please verify your Order ID (e.g. RF-ORD-2026-011) or contact Rajendra Studio support.`
+        message: `Order #${rawParam} was not found. Please verify your Order ID (e.g. RF-ORD-2026-011) or contact Dahej Support support.`
       });
     }
 
@@ -2950,7 +2950,7 @@ app.get('/api/orders/track/:orderId', async (req, res) => {
 
       if (isPickedUp) {
         pickupTitle = 'Order Picked Up';
-        pickupDesc = 'Collected by customer from Rajendra Studio';
+        pickupDesc = 'Collected by customer from Dahej Support';
         pickupDateText = formattedActualPickupDate ? `✓ Collected: ${formattedActualPickupDate}` : (formattedPickupDate ? `✓ Picked Up: ${formattedPickupDate}` : 'Picked Up');
         pickupCompleted = true;
         pickupCurrent = true;
@@ -4254,7 +4254,7 @@ app.post('/api/admin/products', requireAuth, async (req, res) => {
     badge: badge || '',
     image: resolvedImage,
     images: validImages,
-    shortDescription: shortDescription || `${name.trim()} customized by Rajesh Framing Studio.`,
+    shortDescription: shortDescription || `${name.trim()} customized by Dahej Support Studio.`,
     description: description || shortDescription || `${name.trim()} handcrafted with premium materials and archival printing standards.`,
     material: material || 'Premium Archival Grade',
     printingType: printingType || 'High-Resolution Archival Print',
@@ -5045,17 +5045,17 @@ app.post('/api/contact', async (req, res) => {
       const config = await db.getAdminConfig();
       const transporter = createTransporter(config);
       if (transporter) {
-        const fromAddress = (config.smtp && config.smtp.fromEmail) || (process.env.BREVO_SENDER_EMAIL ? `${process.env.BREVO_SENDER_NAME || 'Rajendra Studio & Gifts'} <${process.env.BREVO_SENDER_EMAIL}>` : 'Rajendra Studio & Gifts <shop@rajendrastudioandgifts.in>');
+        const fromAddress = (config.smtp && config.smtp.fromEmail) || (process.env.BREVO_SENDER_EMAIL ? `${process.env.BREVO_SENDER_NAME || 'Dahej Support'} <${process.env.BREVO_SENDER_EMAIL}>` : 'Dahej Support <jobs@dahejsupport.com>');
         const adminRecipient = config.adminEmail || process.env.ADMIN_EMAIL || 'help@dahejsupport.com';
         await transporter.sendMail({
           from: fromAddress,
           to: adminRecipient,
           subject: `🔔 New Website Enquiry: ${cleanName} (${cleanService})`,
-          text: `New Customer Enquiry!\n\nName: ${cleanName}\nPhone: ${cleanPhone}\nEmail: ${cleanEmail || 'Not provided'}\nProduct/Service: ${cleanService}\nMessage: ${cleanMessage}\n\nView and manage in Admin Panel: https://rajendrastudioframing.vercel.app/admin#leads`,
+          text: `New Customer Enquiry!\n\nName: ${cleanName}\nPhone: ${cleanPhone}\nEmail: ${cleanEmail || 'Not provided'}\nProduct/Service: ${cleanService}\nMessage: ${cleanMessage}\n\nView and manage in Admin Panel: https://dahejsupport.com/admin#leads`,
           html: `
             <div style="font-family: Arial, sans-serif; padding: 24px; background: #FAF8F5; border-radius: 12px; border: 1px solid #E5E0D5;">
               <h2 style="color: #1A1A18; margin-top: 0;">🔔 New Customer Enquiry Received</h2>
-              <p style="color: #555555; font-size: 15px;">A new customer enquiry was submitted on the Rajendra Studio and Gifts website:</p>
+              <p style="color: #555555; font-size: 15px;">A new customer enquiry was submitted on the Dahej Support website:</p>
               <table style="width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px;">
                 <tr><td style="padding: 8px 0; color: #888888; width: 130px;">Customer Name:</td><td style="font-weight: 700; color: #111111;">${cleanName}</td></tr>
                 <tr><td style="padding: 8px 0; color: #888888;">Phone Number:</td><td style="font-weight: 700; color: #111111;">${cleanPhone}</td></tr>
@@ -5064,7 +5064,7 @@ app.post('/api/contact', async (req, res) => {
                 <tr><td style="padding: 8px 0; color: #888888; vertical-align: top;">Message:</td><td style="color: #333333; background: #FFFFFF; padding: 12px; border-radius: 8px; border: 1px solid #E5E0D8; line-height: 1.5;">${cleanMessage}</td></tr>
               </table>
               <div style="margin-top: 20px;">
-                <a href="https://rajendrastudioframing.vercel.app/admin#leads" style="background: #C89B3C; color: #FFFFFF; padding: 10px 22px; border-radius: 6px; text-decoration: none; font-weight: 700; font-size: 14px; display: inline-block;">Open Admin Panel Leads &rarr;</a>
+                <a href="https://dahejsupport.com/admin#leads" style="background: #C89B3C; color: #FFFFFF; padding: 10px 22px; border-radius: 6px; text-decoration: none; font-weight: 700; font-size: 14px; display: inline-block;">Open Admin Panel Leads &rarr;</a>
               </div>
             </div>
           `
@@ -5074,7 +5074,7 @@ app.post('/api/contact', async (req, res) => {
       console.warn('Admin notification email warning:', mailErr.message);
     }
 
-    res.json({ success: true, message: 'Your enquiry has been sent to Rajesh Framing!' });
+    res.json({ success: true, message: 'Your enquiry has been sent to Dahej Support!' });
   } catch (err) {
     console.error('Error saving contact enquiry:', err);
     res.status(500).json({ success: false, message: 'Failed to record enquiry.' });
@@ -5217,7 +5217,7 @@ app.put('/api/admin/settings', requireAuth, async (req, res) => {
       if (smtp.pass) {
         config.smtp.pass = smtp.pass.replace(/\s+/g, '').trim();
       }
-      config.smtp.fromEmail = smtp.fromEmail || `Rajesh Framing <${config.adminEmail}>`;
+      config.smtp.fromEmail = smtp.fromEmail || `Dahej Support <${config.adminEmail}>`;
     }
 
     await db.saveAdminConfig(config);
@@ -5266,7 +5266,7 @@ app.put('/api/admin/settings/smtp', requireAuth, async (req, res) => {
     if (host) config.smtp.host = host.trim();
     if (port) config.smtp.port = Number(port) || 465;
     config.smtp.secure = config.smtp.port === 465;
-    config.smtp.fromEmail = config.smtp.fromEmail || `Rajendra Studio & Gifts <${config.adminEmail || 'rajendrastudioframing@gmail.com'}>`;
+    config.smtp.fromEmail = config.smtp.fromEmail || `Dahej Support <${config.adminEmail || 'dahejsupport@gmail.com'}>`;
 
     await db.saveAdminConfig(config);
     console.log(`📧 [SMTP SETTINGS UPDATED] Service: ${config.smtp.service}, User: ${config.smtp.user}`);
@@ -5297,11 +5297,11 @@ const handleTestSmtp = async (req, res) => {
     await transporter.sendMail({
       from: fromAddress,
       to: recipient,
-      subject: '✅ Rajesh Framing SMTP Configuration Test Successful',
-      text: 'Congratulations! Your SMTP settings for Rajesh Framing Admin Panel are verified and working correctly.',
+      subject: '✅ Dahej Support SMTP Configuration Test Successful',
+      text: 'Congratulations! Your SMTP settings for Dahej Support Admin Panel are verified and working correctly.',
       html: `
         <div style="font-family: Arial, sans-serif; padding: 24px; background: #FAF8F5; border-radius: 12px; border: 1px solid #E5E0D5;">
-          <h2 style="color: #111111; margin-top: 0;">Rajesh Framing • SMTP Verified</h2>
+          <h2 style="color: #111111; margin-top: 0;">Dahej Support • SMTP Verified</h2>
           <p style="color: #444444; line-height: 1.6;">
             This email confirms that your outgoing mail server is properly connected. Future two-factor authentication OTP passcodes and customer tracking update emails will be delivered directly from this address.
           </p>
@@ -5379,7 +5379,7 @@ if (require.main === module) {
   } catch (_) {}
   app.listen(PORT, () => {
     console.log('\n======================================================');
-    console.log(`🚀 RAJESH FRAMING ADMIN & API SERVER RUNNING`);
+    console.log(`🚀 DAHEJ SUPPORT ADMIN & API SERVER RUNNING`);
     console.log(`🌐 Website URL:       http://localhost:${PORT}/index.html`);
     console.log(`🔐 Admin Login URL:   http://localhost:${PORT}/admin-login.html`);
     console.log(`📊 Admin Panel URL:   http://localhost:${PORT}/admin.html`);

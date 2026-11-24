@@ -168,7 +168,7 @@ async function trackOrder(orderId) {
     }
   } catch (err) {
     console.error('Tracking fetch error:', err);
-    renderNotFound(cleanId, 'Unable to connect to Rajendra Studio server. Please check your internet connection and try again.', container);
+    renderNotFound(cleanId, 'Unable to connect to Dahej Support server. Please check your internet connection and try again.', container);
   }
 }
 
@@ -247,7 +247,7 @@ function renderTrackingResult(order, container) {
   `;
 
   // WhatsApp Support Text
-  const waText = encodeURIComponent(`Hello Rajendra Studio and Gifts, I am tracking my order #${order.orderId}. Could you please provide an update?`);
+  const waText = encodeURIComponent(`Hello Dahej Support, I am tracking my order #${order.orderId}. Could you please provide an update?`);
   const waLink = `https://wa.me/919601574966?text=${waText}`;
 
   // Customer Masked Details
@@ -392,7 +392,7 @@ function renderTrackingResult(order, container) {
 }
 
 function renderNotFound(orderId, message, container) {
-  const waText = encodeURIComponent(`Hello Rajendra Studio and Gifts, I cannot find my order #${orderId} on the website tracking tool. Could you please help check my order status?`);
+  const waText = encodeURIComponent(`Hello Dahej Support, I cannot find my order #${orderId} on the website tracking tool. Could you please help check my order status?`);
   const waLink = `https://wa.me/919601574966?text=${waText}`;
 
   container.innerHTML = `

@@ -475,7 +475,7 @@ function handleSendPhotoViaWhatsApp() {
   const pendingItem = cart[window._currentPendingPhotoCartIndex] || {};
   const prodName = pendingItem.name || 'Custom Photo Frame';
 
-  const message = `Hello Rajendra Studio and Gifts!\n\nI am placing an order for "${prodName}" on your website and sending my custom photo here for framing/printing.`;
+  const message = `Hello Dahej Support!\n\nI am placing an order for "${prodName}" on your website and sending my custom photo here for framing/printing.`;
   const url = `https://wa.me/919601574966?text=${encodeURIComponent(message)}`;
   window.open(url, '_blank');
 
@@ -828,7 +828,7 @@ async function submitCheckoutOrder(e) {
       // Configure WhatsApp Follow-up button
       const itemNames = cart.map(i => `${i.name} (x${i.quantity})`).join(', ');
       const waMsg = encodeURIComponent(
-        `Hello Rajendra Studio and Gifts!\n\n` +
+        `Hello Dahej Support!\n\n` +
         `I have just placed an order on your website:\n` +
         `• Order ID: ${orderId}\n` +
         `• Name: ${name}\n` +

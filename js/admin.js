@@ -4,7 +4,7 @@
  * Features: Order Card Rows, Leads Avatar Table, Products Catalog, CSV Export, WhatsApp Connect
  */
 
-const CLOUD_API_FALLBACK = 'https://rajendrastudioframing.vercel.app';
+const CLOUD_API_FALLBACK = 'https://dahejsupport.com';
 
 function resolveApiBase() {
   const isLocalDev = window.location.hostname === 'localhost' || 
@@ -388,9 +388,9 @@ function updateAdminProfileUI(admin) {
   const avatarEl = document.getElementById('sidebarAvatar');
   const headerAvatar = document.querySelector('.header-profile-avatar');
 
-  if (nameEl) nameEl.textContent = admin.name || 'Rajesh Kumar';
+  if (nameEl) nameEl.textContent = admin.name || 'Dahej Support Admin';
   
-  const initials = (admin.name || 'Rajesh Kumar')
+  const initials = (admin.name || 'Dahej Support Admin')
     .split(' ')
     .map(part => part[0])
     .join('')
@@ -1396,7 +1396,7 @@ function createOrderCardRowHTML(order) {
 
   const noteText = userNote || (order.notes && !order.notes.includes('None') ? order.notes : 'Standard Studio Packaging');
 
-  const waText = encodeURIComponent(`Hello ${order.name}, Rajendra Studio and Gifts here regarding your Order #${order.id} for ${cleanTitle}. Total: ₹${order.estimatedValue}.`);
+  const waText = encodeURIComponent(`Hello ${order.name}, Dahej Support here regarding your Order #${order.id} for ${cleanTitle}. Total: ₹${order.estimatedValue}.`);
 
   const custEmail = order.customerEmail || (order.customer && order.customer.email) || (order.email && order.email.includes('@') ? order.email : '');
 
@@ -1684,7 +1684,7 @@ window.openOrderDetailsModal = (orderId) => {
       minute: '2-digit'
     });
 
-    const waText = encodeURIComponent(`Hello ${order.name || 'Customer'}, Rajendra Studio and Gifts here regarding your Order #${displayOrderId} for ${order.product || 'Photo Frame'}. Status: ${displayStatus}. Total: ₹${order.estimatedValue || 0}.`);
+    const waText = encodeURIComponent(`Hello ${order.name || 'Customer'}, Dahej Support here regarding your Order #${displayOrderId} for ${order.product || 'Photo Frame'}. Status: ${displayStatus}. Total: ₹${order.estimatedValue || 0}.`);
     if (waBtn) waBtn.href = `https://wa.me/${cleanPhone}?text=${waText}`;
 
     // Structured items list with robust JSON string parsing & fallback splitting
@@ -2020,7 +2020,7 @@ window.printCurrentOrderReceipt = () => {
     <!DOCTYPE html>
     <html>
     <head>
-      <title>Order Receipt #${escapeHtml(order.id)} - Rajendra Studio and Gifts</title>
+      <title>Order Receipt #${escapeHtml(order.id)} - Dahej Support</title>
       <style>
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: #0f172a; padding: 32px; margin: 0; }
         .header { display: flex; justify-content: space-between; border-bottom: 2px solid #C99A3D; padding-bottom: 16px; margin-bottom: 24px; }
@@ -2042,7 +2042,7 @@ window.printCurrentOrderReceipt = () => {
     <body>
       <div class="header">
         <div>
-          <div class="brand">RAJESH <span>FRAMING</span></div>
+          <div class="brand">DAHEJ <span>SUPPORT</span></div>
           <div style="font-size: 12px; color: #64748b; margin-top: 2px;">Custom Framing &amp; Archival Printing Studio</div>
           <div style="font-size: 11px; color: #94a3b8;">Dahej GIDC, Bharuch, Gujarat 392130 • Tel: +91 96015 74966</div>
         </div>
@@ -2104,7 +2104,7 @@ window.printCurrentOrderReceipt = () => {
       ` : ''}
 
       <div class="footer">
-        Thank you for choosing Rajendra Studio and Gifts! For inquiries or re-prints, WhatsApp us at +91 96015 74966.
+        Thank you for choosing Dahej Support! For inquiries or re-prints, WhatsApp us at +91 96015 74966.
       </div>
       <script>
         window.onload = function() { window.print(); };
@@ -2147,7 +2147,7 @@ function renderAllLeads(leads) {
     const dateFormatted = isNaN(dateObj) ? '12 Jun 2026<br><span style="font-size: 0.72rem; color: var(--text-muted);">10:45 AM</span>' : `${dateObj.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}<br><span style="font-size: 0.72rem; color: var(--text-muted);">${dateObj.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}</span>`;
 
     const inquiryType = lead.hasUpload ? 'Custom Frame' : (lead.product || 'Product Inquiry');
-    const waText = encodeURIComponent(`Hello ${lead.name}, Rajendra Studio and Gifts here regarding your inquiry for ${inquiryType}.`);
+    const waText = encodeURIComponent(`Hello ${lead.name}, Dahej Support here regarding your inquiry for ${inquiryType}.`);
 
     return `
       <tr class="admin-lead-row">
@@ -2589,7 +2589,7 @@ window.updateInquiryStatus = async (id, newStatus, customNotes = null) => {
     } else if (newStatus === 'Shipped') {
       payload.notes = 'Your order has been dispatched for delivery / studio pickup.';
     } else if (newStatus === 'Completed') {
-      payload.notes = 'Order delivered successfully. Thank you for choosing Rajesh Framing!';
+      payload.notes = 'Order delivered successfully. Thank you for choosing Dahej Support!';
     }
 
     const res = await apiFetch(`/api/admin/inquiries/${encodeURIComponent(cleanId)}/status`, {
@@ -3023,7 +3023,7 @@ window.exportOrdersToCSV = () => {
   });
 
   const today = new Date().toISOString().slice(0, 10);
-  downloadCSV(`Rajesh_Framing_Orders_${today}.csv`, headers, rows);
+  downloadCSV(`Dahej_Support_Orders_${today}.csv`, headers, rows);
   showToast('Orders Exported', `Successfully exported ${exportList.length} orders.`, 'success');
 };
 
@@ -3076,7 +3076,7 @@ window.exportLeadsToCSV = () => {
   });
 
   const today = new Date().toISOString().slice(0, 10);
-  downloadCSV(`Rajesh_Framing_Leads_${today}.csv`, headers, rows);
+  downloadCSV(`Dahej_Support_Leads_${today}.csv`, headers, rows);
   showToast('Leads Exported', `Successfully exported ${exportList.length} leads.`, 'success');
 };
 
@@ -3133,7 +3133,7 @@ window.exportProductsToCSV = async () => {
     ]);
 
     const today = new Date().toISOString().slice(0, 10);
-    downloadCSV(`Rajesh_Framing_Products_${today}.csv`, headers, rows);
+    downloadCSV(`Dahej_Support_Products_${today}.csv`, headers, rows);
     showToast('Products Exported', `Successfully exported ${prods.length} products.`, 'success');
   } catch (err) {
     console.error('Error exporting products:', err);
@@ -3196,7 +3196,7 @@ window.exportCustomersToCSV = async () => {
     ]);
 
     const today = new Date().toISOString().slice(0, 10);
-    downloadCSV(`Rajesh_Framing_Customers_${today}.csv`, headers, rows);
+    downloadCSV(`Dahej_Support_Customers_${today}.csv`, headers, rows);
     showToast('Customers Exported', `Successfully exported ${custs.length} customer accounts.`, 'success');
   } catch (err) {
     console.error('Error exporting customers:', err);
@@ -3721,7 +3721,7 @@ window.markPickupReadyQuick = async (id) => {
       },
       body: JSON.stringify({
         status: 'Shipped',
-        notes: 'Your order is ready! Please pick up your custom frame from Rajesh Framing Studio, Dahej.',
+        notes: 'Your order is ready! Please pick up your custom frame from Dahej Support Studio, Dahej.',
         notifyCustomer: true
       })
     });
@@ -3759,7 +3759,7 @@ window.markOrderCompletedQuick = async (id) => {
       },
       body: JSON.stringify({
         status: 'Completed',
-        notes: 'Order collected and handed over successfully. Thank you for choosing Rajendra Studio!',
+        notes: 'Order collected and handed over successfully. Thank you for choosing Dahej Support!',
         notifyCustomer: true
       })
     });
@@ -4085,7 +4085,7 @@ window.viewInquiryDetail = (id) => {
   titleEl.textContent = `Order / Inquiry #${inq.id}`;
 
   const cleanPhone = (inq.phone || '').replace(/\D/g, '');
-  const waText = encodeURIComponent(`Hello ${inq.name}, Rajendra Studio and Gifts here regarding your Order #${inq.id} for ${inq.product}.`);
+  const waText = encodeURIComponent(`Hello ${inq.name}, Dahej Support here regarding your Order #${inq.id} for ${inq.product}.`);
   if (waBtn) waBtn.href = `https://wa.me/${cleanPhone}?text=${waText}`;
 
   bodyEl.innerHTML = `
@@ -7038,7 +7038,7 @@ function renderCustomersTable(customers) {
       ? `${lastLogin.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}<br><span style="font-size: 0.72rem; color: var(--text-muted);">${lastLogin.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}</span>`
       : 'Just now';
 
-    const waText = encodeURIComponent(`Hello ${cust.name || 'Customer'}, Rajendra Studio and Gifts here. Thank you for registering with us!`);
+    const waText = encodeURIComponent(`Hello ${cust.name || 'Customer'}, Dahej Support here. Thank you for registering with us!`);
     const totalOrders = Number(cust.totalOrders) || 0;
     const totalSpent = Number(cust.totalSpent) || 0;
     const logins = Number(cust.loginCount) || 1;
@@ -7215,7 +7215,7 @@ function renderContactMessages(messages) {
 
     const cleanPhone = (msg.phone || '').replace(/\D/g, '');
     const subject = msg.subject || msg.service || 'General Inquiry';
-    const waText = encodeURIComponent(`Hello ${msg.name}, Rajendra Studio and Gifts here responding to your message regarding ${subject}.`);
+    const waText = encodeURIComponent(`Hello ${msg.name}, Dahej Support here responding to your message regarding ${subject}.`);
 
     return `
       <tr class="admin-message-row">
@@ -7285,7 +7285,7 @@ window.viewMessageDetail = (id) => {
 
   const cleanPhone = (msg.phone || '').replace(/\D/g, '');
   const subject = msg.subject || msg.service || 'General Inquiry';
-  const waText = encodeURIComponent(`Hello ${msg.name}, Rajendra Studio and Gifts here regarding your message about ${subject}.`);
+  const waText = encodeURIComponent(`Hello ${msg.name}, Dahej Support here regarding your message about ${subject}.`);
   if (waBtn) waBtn.href = `https://wa.me/${cleanPhone}?text=${waText}`;
 
   const rawDate = msg.createdAt || msg.created_at || msg.date || Date.now();
@@ -7547,7 +7547,7 @@ function initSettingsForms() {
       const adminEmailInput = document.getElementById('settingAdminEmail');
       const targetEmail = (userEmailInput && userEmailInput.value.trim()) || 
                           (adminEmailInput && adminEmailInput.value.trim()) || 
-                          'info@rajendrastudioandgifts.in';
+                          'jobs@dahejsupport.com';
 
       testSmtpBtn.disabled = true;
       const originalText = testSmtpBtn.textContent;

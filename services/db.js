@@ -1,5 +1,5 @@
 /**
- * RAJESH FRAMING - DATABASE ADAPTER
+ * DAHEJ SUPPORT - DATABASE ADAPTER
  * Seamless dual-mode database:
  * 1. Cloud Mode: Powered by Supabase (PostgreSQL) when SUPABASE_URL is configured
  * 2. Local Mode: Falls back gracefully to data/*.json for local offline development
@@ -54,7 +54,7 @@ function invalidateCategoriesCache() {
 
 function getWritableFilePath(filePath) {
   if (process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME) {
-    const tmpDir = path.join(os.tmpdir(), 'rajesh_framing_data');
+    const tmpDir = path.join(os.tmpdir(), 'dahej_support_data');
     try {
       if (!fs.existsSync(tmpDir)) {
         fs.mkdirSync(tmpDir, { recursive: true });
@@ -157,13 +157,13 @@ function recordDeletedOrderIds(ids) {
 function syncProductsDataFiles(products) {
   try {
     const businessInfo = {
-      name: "Rajendra Studio & Framing",
+      name: "Dahej Support",
       tagline: "Frames, Printing & Personalized Products",
       phone: process.env.STUDIO_PHONE || "+91 96015 74966",
       phoneRaw: "+919601574966",
       whatsapp: process.env.STUDIO_PHONE || "+91 96015 74966",
       whatsappNumber: process.env.STUDIO_WHATSAPP || "919601574966",
-      email: "info@rajendrastudioandgifts.in",
+      email: "jobs@dahejsupport.com",
       address: "Dahej GIDC, Bharuch, Gujarat 392130",
       workingHours: "Mon - Sat: 9:30 AM - 8:30 PM | Sun: 10:00 AM - 2:00 PM",
       establishedYear: 2008,
@@ -173,7 +173,7 @@ function syncProductsDataFiles(products) {
     };
 
     const fileContent = `/**
- * RAJENDRA STUDIO & FRAMING - MASTER PRODUCTS CATALOG DATA
+ * DAHEJ SUPPORT - MASTER PRODUCTS CATALOG DATA
  * Total: ${products.length} products - Auto-synced from Admin Panel
  */
 
@@ -214,7 +214,7 @@ if (typeof module !== 'undefined' && module.exports) {
 function syncCategoriesDataFiles(categories) {
   try {
     const fileContent = `/**
- * RAJENDRA STUDIO & FRAMING - MASTER CATEGORIES DATA
+ * DAHEJ SUPPORT - MASTER CATEGORIES DATA
  * Total: ${categories.length} categories - Auto-synced from Admin Panel
  */
 

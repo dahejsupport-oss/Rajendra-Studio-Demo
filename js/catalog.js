@@ -604,7 +604,7 @@ window.quickWhatsApp = function(productId, event) {
   const productPrice = product ? `₹${product.price}` : '';
   const productCategory = (product && product.categoryLabel) ? `Category: ${product.categoryLabel}` : '';
 
-  const message = `Hello Rajendra Studio and Gifts!\n\nI am interested in:\n• Product: ${productName}${productPrice ? `\n• Price: ${productPrice}` : ''}${productCategory ? `\n• ${productCategory}` : ''}\n\nPlease share more details and customization options.`;
+  const message = `Hello Dahej Support!\n\nI am interested in:\n• Product: ${productName}${productPrice ? `\n• Price: ${productPrice}` : ''}${productCategory ? `\n• ${productCategory}` : ''}\n\nPlease share more details and customization options.`;
 
   const waUrl = `https://wa.me/919601574966?text=${encodeURIComponent(message)}`;
   window.open(waUrl, '_blank');

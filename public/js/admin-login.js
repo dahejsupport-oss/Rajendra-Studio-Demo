@@ -30,7 +30,7 @@ let otpCountdownTimer = null;
 let countdownSeconds = 60;
 
 // Cloud fallback endpoint in case local server is not running
-const CLOUD_API_FALLBACK = 'https://rajendrastudioframing.vercel.app';
+const CLOUD_API_FALLBACK = 'https://dahejsupport.com';
 
 function getInitialApiBase() {
   const isLocalDev = window.location.hostname === 'localhost' || 
@@ -296,7 +296,7 @@ function initOtpVerificationForm() {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            email: currentAdminEmail || 'rajendrastudioframing@gmail.com',
+            email: currentAdminEmail || 'dahejsupport@gmail.com',
             otp: otp
           })
         });

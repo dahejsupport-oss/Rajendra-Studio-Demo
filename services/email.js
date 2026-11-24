@@ -1,12 +1,12 @@
 /**
- * RAJENDRA STUDIO & FRAMING - UNIFIED BREVO EMAIL SERVICE
+ * DAHEJ SUPPORT - UNIFIED BREVO EMAIL SERVICE
  * Handles transactional emails via Brevo API:
- * 1. Customer Login Alert (sent to shop@rajendrastudioandgifts.in + customer)
- * 2. Admin Login Alert (sent to shop@rajendrastudioandgifts.in)
+ * 1. Customer Login Alert (sent to jobs@dahejsupport.com + customer)
+ * 2. Admin Login Alert (sent to jobs@dahejsupport.com)
  * 3. Customer OTP Verification Code (sent to customer)
  * 4. Admin OTP Verification Code (sent to admin)
- * 5. Order "Ready for Pick Up at Shop" (sent to customer + shop@rajendrastudioandgifts.in)
- * 6. New Order Placed Alert (sent to customer + shop@rajendrastudioandgifts.in)
+ * 5. Order "Ready for Pick Up at Shop" (sent to customer + jobs@dahejsupport.com)
+ * 6. New Order Placed Alert (sent to customer + jobs@dahejsupport.com)
  */
 
 const https = require('https');
@@ -24,8 +24,8 @@ const ORDER_SENDER_NAME = process.env.BREVO_ORDER_NAME || 'Dahej Support Orders'
 const ORDER_ALERT_EMAIL = process.env.ORDER_NOTIFICATION_EMAIL || 'jobs@dahejsupport.com';
 
 const STUDIO_INFO = {
-  name: 'Rajendra Studio & Framing',
-  tagline: 'Custom Framing & Gifts Studio • Rajendra Studio and Gifts',
+  name: 'Dahej Support',
+  tagline: 'Custom Framing & Gifts Studio • Dahej Support',
   address: 'Dahej GIDC, Bharuch, Gujarat 392130',
   mapsUrl: 'https://maps.google.com/?q=Dahej+GIDC,+Bharuch,+Gujarat+392130',
   phone: process.env.STUDIO_PHONE || '+91 96015 74966',
@@ -158,7 +158,7 @@ async function sendBrevoEmail(options) {
 
 /**
  * 1. CUSTOMER LOGIN NOTIFICATION
- * Notifies both shop@rajendrastudioandgifts.in and the customer
+ * Notifies both jobs@dahejsupport.com and the customer
  */
 async function notifyCustomerLogin({ customerEmail, customerName = '', customerPhone = '', req = null }) {
   if (!customerEmail || !customerEmail.includes('@')) return;
@@ -183,7 +183,7 @@ async function notifyCustomerLogin({ customerEmail, customerName = '', customerP
     userAgent = 'Apple Mac';
   }
 
-  // A) Shop Alert to shop@rajendrastudioandgifts.in
+  // A) Shop Alert to jobs@dahejsupport.com
   const shopAlertSubject = `👤 [Customer Login] ${cleanName} (${cleanEmail}) Logged In`;
   const shopAlertHtml = `
     <!DOCTYPE html>
@@ -193,7 +193,7 @@ async function notifyCustomerLogin({ customerEmail, customerName = '', customerP
       <div style="max-width: 580px; margin: 0 auto; background: #fff; border-radius: 14px; overflow: hidden; border: 1px solid #E5E0D5; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
         <div style="background: #111; padding: 22px 28px; border-bottom: 3px solid #C99A3D; text-align: center;">
           <h2 style="color: #fff; margin:0; font-size: 19px; letter-spacing: 1px; text-transform: uppercase;">
-            RAJENDRA <span style="color: #C99A3D;">STUDIO &amp; FRAMING</span>
+            DAHEJ <span style="color: #C99A3D;">SUPPORT</span>
           </h2>
           <div style="color: #A0A5B1; font-size: 11px; margin-top: 4px; text-transform: uppercase;">Customer Activity Alert</div>
         </div>
@@ -203,7 +203,7 @@ async function notifyCustomerLogin({ customerEmail, customerName = '', customerP
           </div>
           <h3 style="margin: 0 0 12px; font-size: 18px; color: #111;">Customer Just Logged In to the Website</h3>
           <p style="font-size: 14px; color: #555; line-height: 1.5; margin-bottom: 20px;">
-            A customer has successfully authenticated on Rajendra Studio &amp; Framing online portal.
+            A customer has successfully authenticated on Dahej Support online portal.
           </p>
           <table style="width: 100%; border-collapse: collapse; font-size: 14px; background: #FAF9F6; border-radius: 8px; border: 1px solid #EFEAE0;">
             <tr><td style="padding: 10px 14px; font-weight: 600; color: #666; width: 130px; border-bottom: 1px solid #EFEAE0;">Customer Name:</td><td style="padding: 10px 14px; font-weight: 700; color: #111; border-bottom: 1px solid #EFEAE0;">${cleanName}</td></tr>
@@ -214,7 +214,7 @@ async function notifyCustomerLogin({ customerEmail, customerName = '', customerP
             <tr><td style="padding: 10px 14px; font-weight: 600; color: #666;">IP Address:</td><td style="padding: 10px 14px; color: #111;">${ipAddress}</td></tr>
           </table>
           <div style="margin-top: 24px; text-align: center;">
-            <a href="https://rajendrastudioandgifts.in/admin#customers" style="display: inline-block; background: #111; color: #fff; text-decoration: none; padding: 11px 22px; border-radius: 8px; font-size: 13px; font-weight: 700;">View in Admin Panel &rarr;</a>
+            <a href="https://dahejsupport.com/admin#customers" style="display: inline-block; background: #111; color: #fff; text-decoration: none; padding: 11px 22px; border-radius: 8px; font-size: 13px; font-weight: 700;">View in Admin Panel &rarr;</a>
           </div>
         </div>
         <div style="background: #FAF8F5; padding: 14px 24px; text-align: center; font-size: 11px; color: #888; border-top: 1px solid #E5E0D5;">
@@ -226,7 +226,7 @@ async function notifyCustomerLogin({ customerEmail, customerName = '', customerP
   `;
 
   // B) Welcome / Security Email to Customer
-  const customerSubject = `🔐 Successful Login to Rajendra Studio & Framing Account`;
+  const customerSubject = `🔐 Successful Login to Dahej Support Account`;
   const customerHtml = `
     <!DOCTYPE html>
     <html>
@@ -235,9 +235,9 @@ async function notifyCustomerLogin({ customerEmail, customerName = '', customerP
       <div style="max-width: 580px; margin: 0 auto; background: #fff; border-radius: 14px; overflow: hidden; border: 1px solid #E5E0D5; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
         <div style="background: #111; padding: 24px 28px; border-bottom: 3px solid #C99A3D; text-align: center;">
           <h2 style="color: #fff; margin:0; font-size: 20px; letter-spacing: 1px; text-transform: uppercase;">
-            RAJENDRA <span style="color: #C99A3D;">STUDIO &amp; FRAMING</span>
+            DAHEJ <span style="color: #C99A3D;">SUPPORT</span>
           </h2>
-          <div style="color: #C5A880; font-size: 11px; margin-top: 4px; text-transform: uppercase;">Custom Framing Studio • Rajendra Studio and Gifts</div>
+          <div style="color: #C5A880; font-size: 11px; margin-top: 4px; text-transform: uppercase;">Custom Framing Studio • Dahej Support</div>
         </div>
         <div style="padding: 28px;">
           <div style="background: #ECFDF5; border: 1px solid #A7F3D0; color: #065F46; padding: 8px 14px; border-radius: 8px; font-weight: 700; font-size: 12px; display: inline-block; margin-bottom: 16px;">
@@ -245,14 +245,14 @@ async function notifyCustomerLogin({ customerEmail, customerName = '', customerP
           </div>
           <h3 style="margin: 0 0 10px; font-size: 18px; color: #111;">Hello ${cleanName},</h3>
           <p style="font-size: 14px; color: #555; line-height: 1.6; margin-bottom: 20px;">
-            You have successfully signed in to your <strong>Rajendra Studio &amp; Framing</strong> account (<code>${cleanEmail}</code>) at <strong>${timeIST}</strong>.
+            You have successfully signed in to your <strong>Dahej Support</strong> account (<code>${cleanEmail}</code>) at <strong>${timeIST}</strong>.
           </p>
           <div style="background: #FAF9F6; border: 1px solid #EAE5DB; border-radius: 10px; padding: 16px; margin-bottom: 22px;">
             <div style="font-size: 13px; color: #666; margin-bottom: 6px;"><strong>Device:</strong> ${userAgent}</div>
             <div style="font-size: 13px; color: #666;"><strong>Security Notice:</strong> If you did not perform this login, please contact us immediately on WhatsApp or Phone: <a href="tel:+919601574966" style="color: #8C6A1E; font-weight: 700;">+91 96015 74966</a>.</div>
           </div>
           <div style="text-align: center; margin: 24px 0 10px;">
-            <a href="https://rajendrastudioandgifts.in/products" style="display: inline-block; background: #C99A3D; color: #111; font-weight: 800; text-decoration: none; padding: 12px 26px; border-radius: 8px; font-size: 14px;">Browse Premium Framing Collection &rarr;</a>
+            <a href="https://dahejsupport.com/products" style="display: inline-block; background: #C99A3D; color: #111; font-weight: 800; text-decoration: none; padding: 12px 26px; border-radius: 8px; font-size: 14px;">Browse Premium Framing Collection &rarr;</a>
           </div>
         </div>
         <div style="background: #FAF8F5; padding: 16px 24px; text-align: center; font-size: 11px; color: #888; border-top: 1px solid #E5E0D5;">
@@ -276,14 +276,14 @@ async function notifyCustomerLogin({ customerEmail, customerName = '', customerP
       to: cleanEmail,
       subject: customerSubject,
       htmlContent: customerHtml,
-      textContent: `Hello ${cleanName},\n\nYou have successfully logged in to Rajendra Studio & Framing on ${timeIST}.\n\nIf this was not you, please contact us at ${STUDIO_INFO.phone}.`
+      textContent: `Hello ${cleanName},\n\nYou have successfully logged in to Dahej Support on ${timeIST}.\n\nIf this was not you, please contact us at ${STUDIO_INFO.phone}.`
     })
   ]);
 }
 
 /**
  * 2. ADMIN LOGIN NOTIFICATION
- * Notifies shop@rajendrastudioandgifts.in whenever an admin logs in
+ * Notifies jobs@dahejsupport.com whenever an admin logs in
  */
 async function notifyAdminLogin({ adminEmail, loginType = 'Direct Password', req = null }) {
   const cleanEmail = (adminEmail || 'admin').trim().toLowerCase();
@@ -312,7 +312,7 @@ async function notifyAdminLogin({ adminEmail, loginType = 'Direct Password', req
       <div style="max-width: 580px; margin: 0 auto; background: #fff; border-radius: 14px; overflow: hidden; border: 1px solid #E5E0D5; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
         <div style="background: #111; padding: 22px 28px; border-bottom: 3px solid #C99A3D; text-align: center;">
           <h2 style="color: #fff; margin:0; font-size: 19px; letter-spacing: 1px; text-transform: uppercase;">
-            RAJENDRA <span style="color: #C99A3D;">STUDIO &amp; FRAMING</span>
+            DAHEJ <span style="color: #C99A3D;">SUPPORT</span>
           </h2>
           <div style="color: #A0A5B1; font-size: 11px; margin-top: 4px; text-transform: uppercase;">Security Alert &bull; Admin Access</div>
         </div>
@@ -353,7 +353,7 @@ async function notifyAdminLogin({ adminEmail, loginType = 'Direct Password', req
 
 /**
  * 3. ORDER "READY FOR PICK UP AT SHOP" NOTIFICATION
- * Sent to Customer + Copy to shop@rajendrastudioandgifts.in
+ * Sent to Customer + Copy to jobs@dahejsupport.com
  */
 /**
  * Format date nicely for display in customer emails
@@ -389,7 +389,7 @@ async function notifyOrderPickupReady({ order, pickupDate = null, notes = '', re
   let customerPhone = (order.customer && order.customer.phone) || order.phone || '';
 
   const protocol = (req && (req.headers['x-forwarded-proto'] || req.protocol)) || 'https';
-  const host = (req && req.get('host')) || 'rajendrastudioandgifts.in';
+  const host = (req && req.get('host')) || 'dahejsupport.com';
   const trackingUrl = `${protocol}://${host}/track-order.html?id=${encodeURIComponent(cleanId)}`;
 
   const rawPickupDate = pickupDate || (order && (order.pickupDate || order.pickup_date || order.confirmationDate || order.confirmation_date)) || null;
@@ -439,10 +439,10 @@ async function notifyOrderPickupReady({ order, pickupDate = null, notes = '', re
         <!-- Header -->
         <div style="background: #111; padding: 28px; text-align: center; border-bottom: 3px solid #C99A3D;">
           <h2 style="color: #fff; margin:0; font-size: 21px; letter-spacing: 2px; text-transform: uppercase;">
-            RAJENDRA <span style="color: #C99A3D;">STUDIO &amp; FRAMING</span>
+            DAHEJ <span style="color: #C99A3D;">SUPPORT</span>
           </h2>
           <div style="color: #C5A880; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; margin-top: 5px;">
-            Premium Framing Studio &bull; Rajendra Studio and Gifts
+            Premium Framing Studio &bull; Dahej Support
           </div>
         </div>
 
@@ -534,7 +534,7 @@ async function notifyOrderPickupReady({ order, pickupDate = null, notes = '', re
     </html>
   `;
 
-  // B) Shop Alert to shop@rajendrastudioandgifts.in
+  // B) Shop Alert to jobs@dahejsupport.com
   const shopSubject = `🛍️ [Ready For Pickup Alert] Order #${cleanId} Ready for Collection - ${customerName}`;
   const shopHtml = `
     <!DOCTYPE html>
@@ -544,7 +544,7 @@ async function notifyOrderPickupReady({ order, pickupDate = null, notes = '', re
       <div style="max-width: 580px; margin: 0 auto; background: #fff; border-radius: 14px; overflow: hidden; border: 1px solid #E5E0D5; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
         <div style="background: #111; padding: 20px 24px; border-bottom: 3px solid #C99A3D; text-align: center;">
           <h2 style="color: #fff; margin:0; font-size: 18px; text-transform: uppercase;">
-            RAJENDRA <span style="color: #C99A3D;">STUDIO &amp; FRAMING</span>
+            DAHEJ <span style="color: #C99A3D;">SUPPORT</span>
           </h2>
           <div style="color: #A0A5B1; font-size: 11px; margin-top: 4px;">Order Ready For Pickup Notification</div>
         </div>
@@ -567,7 +567,7 @@ async function notifyOrderPickupReady({ order, pickupDate = null, notes = '', re
           </table>
           ${notes ? `<div style="font-size: 13px; color: #555; background: #FFFBEB; padding: 10px 14px; border-radius: 6px; border: 1px solid #FDE68A; margin-bottom: 18px;"><strong>Note:</strong> ${notes}</div>` : ''}
           <div style="text-align: center;">
-            <a href="https://rajendrastudioandgifts.in/admin#orders" style="display: inline-block; background: #111; color: #fff; text-decoration: none; padding: 11px 22px; border-radius: 8px; font-size: 13px; font-weight: 700;">Manage in Admin Panel &rarr;</a>
+            <a href="https://dahejsupport.com/admin#orders" style="display: inline-block; background: #111; color: #fff; text-decoration: none; padding: 11px 22px; border-radius: 8px; font-size: 13px; font-weight: 700;">Manage in Admin Panel &rarr;</a>
           </div>
         </div>
       </div>
@@ -664,10 +664,10 @@ async function notifyOrderCancelledByAdmin({ order, notes = '', req = null }) {
         <!-- Header -->
         <div style="background: #111; padding: 28px; text-align: center; border-bottom: 3px solid #DC2626;">
           <h2 style="color: #fff; margin:0; font-size: 21px; letter-spacing: 2px; text-transform: uppercase;">
-            RAJENDRA <span style="color: #C99A3D;">STUDIO &amp; FRAMING</span>
+            DAHEJ <span style="color: #C99A3D;">SUPPORT</span>
           </h2>
           <div style="color: #C5A880; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; margin-top: 5px;">
-            Order Desk &bull; Rajendra Studio and Gifts
+            Order Desk &bull; Dahej Support
           </div>
         </div>
 
@@ -701,7 +701,7 @@ async function notifyOrderCancelledByAdmin({ order, notes = '', req = null }) {
 
           <!-- Support Contact -->
           <div style="margin-top: 24px; text-align: center;">
-            <a href="${STUDIO_INFO.whatsapp}?text=${encodeURIComponent('Hello Rajendra Studio and Gifts, I have a question regarding my cancelled order #' + cleanId)}." target="_blank" style="display: inline-block; background-color: #25D366; color: #FFFFFF; font-size: 13px; font-weight: 700; text-decoration: none; padding: 10px 20px; border-radius: 999px; margin: 4px; box-shadow: 0 2px 6px rgba(37, 211, 102, 0.25);">
+            <a href="${STUDIO_INFO.whatsapp}?text=${encodeURIComponent('Hello Dahej Support, I have a question regarding my cancelled order #' + cleanId)}." target="_blank" style="display: inline-block; background-color: #25D366; color: #FFFFFF; font-size: 13px; font-weight: 700; text-decoration: none; padding: 10px 20px; border-radius: 999px; margin: 4px; box-shadow: 0 2px 6px rgba(37, 211, 102, 0.25);">
               💬 WhatsApp Support
             </a>
             <a href="tel:${STUDIO_INFO.phone.replace(/[^0-9+]/g, '')}" style="display: inline-block; background-color: #111827; color: #FFFFFF; font-size: 13px; font-weight: 700; text-decoration: none; padding: 10px 20px; border-radius: 999px; margin: 4px;">
@@ -786,7 +786,7 @@ async function sendCustomerOtpEmail({ email, otp, name = '' }) {
 
   const cleanEmail = email.trim().toLowerCase();
   const cleanName = (name && name.trim()) || 'Valued Customer';
-  const subject = `Your Rajendra Studio Verification Code: ${otp}`;
+  const subject = `Your Dahej Support Verification Code: ${otp}`;
 
   const html = `
     <!DOCTYPE html>
@@ -796,21 +796,21 @@ async function sendCustomerOtpEmail({ email, otp, name = '' }) {
       <div style="max-width: 540px; margin: 0 auto; background: #fff; border-radius: 14px; overflow: hidden; border: 1px solid #E5E0D5; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
         <div style="background: #111; padding: 24px; border-bottom: 3px solid #C99A3D; text-align: center;">
           <h2 style="color: #fff; margin:0; font-size: 20px; text-transform: uppercase;">
-            RAJENDRA <span style="color: #C99A3D;">STUDIO &amp; FRAMING</span>
+            DAHEJ <span style="color: #C99A3D;">SUPPORT</span>
           </h2>
           <div style="color: #A0A5B1; font-size: 11px; margin-top: 4px; text-transform: uppercase;">Customer Sign In</div>
         </div>
         <div style="padding: 28px; text-align: center;">
           <h3 style="margin: 0 0 10px; font-size: 18px; color: #111;">Hello ${cleanName},</h3>
           <p style="font-size: 14px; color: #555; line-height: 1.5; margin-bottom: 20px;">
-            Here is your One-Time Passcode (OTP) to securely sign in to your Rajendra Studio customer account for <strong>${cleanEmail}</strong>:
+            Here is your One-Time Passcode (OTP) to securely sign in to your Dahej Support customer account for <strong>${cleanEmail}</strong>:
           </p>
           <div style="background: #FAF7F2; border: 2px dashed #C99A3D; border-radius: 12px; padding: 18px; margin: 16px auto; display: inline-block; min-width: 220px;">
             <div style="font-size: 36px; font-weight: 800; letter-spacing: 8px; color: #111; font-family: monospace;">${otp}</div>
             <div style="font-size: 12px; color: #888; margin-top: 6px;">Valid for <strong>5 minutes</strong> • Single use</div>
           </div>
           <div style="background: #FFFBEB; border-left: 4px solid #F59E0B; padding: 12px 14px; text-align: left; font-size: 12px; color: #92400E; margin-top: 24px; border-radius: 4px;">
-            <strong>Security Notice:</strong> Please do not share this passcode with anyone. Rajendra Studio team members will never ask for your code.
+            <strong>Security Notice:</strong> Please do not share this passcode with anyone. Dahej Support team members will never ask for your code.
           </div>
         </div>
         <div style="background: #FAF8F5; padding: 14px 24px; text-align: center; font-size: 11px; color: #888; border-top: 1px solid #E5E0D5;">
@@ -826,7 +826,7 @@ async function sendCustomerOtpEmail({ email, otp, name = '' }) {
     to: cleanEmail,
     subject: subject,
     htmlContent: html,
-    textContent: `Your Rajendra Studio login passcode is: ${otp}\nValid for 5 minutes.`
+    textContent: `Your Dahej Support login passcode is: ${otp}\nValid for 5 minutes.`
   });
 }
 
@@ -837,7 +837,7 @@ async function sendAdminOtpEmail({ email, otp }) {
   if (!email || !email.includes('@')) return { success: false, reason: 'Invalid email' };
 
   const cleanEmail = email.trim().toLowerCase();
-  const subject = `Your Rajendra Studio Admin Passcode: ${otp}`;
+  const subject = `Your Dahej Support Admin Passcode: ${otp}`;
 
   const html = `
     <!DOCTYPE html>
@@ -847,7 +847,7 @@ async function sendAdminOtpEmail({ email, otp }) {
       <div style="max-width: 540px; margin: 0 auto; background: #fff; border-radius: 14px; overflow: hidden; border: 1px solid #E5E0D5; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
         <div style="background: #111; padding: 24px; border-bottom: 3px solid #C99A3D; text-align: center;">
           <h2 style="color: #fff; margin:0; font-size: 20px; text-transform: uppercase;">
-            RAJENDRA <span style="color: #C99A3D;">STUDIO ADMIN</span>
+            DAHEJ <span style="color: #C99A3D;">SUPPORT ADMIN</span>
           </h2>
           <div style="color: #A0A5B1; font-size: 11px; margin-top: 4px; text-transform: uppercase;">Admin Verification</div>
         </div>
@@ -870,7 +870,7 @@ async function sendAdminOtpEmail({ email, otp }) {
     to: cleanEmail,
     subject: subject,
     htmlContent: html,
-    textContent: `Your Rajendra Studio Admin passcode is: ${otp}\nValid for 5 minutes.`
+    textContent: `Your Dahej Support Admin passcode is: ${otp}\nValid for 5 minutes.`
   });
 }
 
@@ -884,7 +884,7 @@ async function notifyNewOrderPlaced({ order, req = null }) {
 
 /**
  * Dedicated Brevo Order Channel Dispatcher
- * Dispatches strictly from order@rajendrastudioandgifts.in using Order API Key
+ * Dispatches strictly from jobs@dahejsupport.com using Order API Key
  */
 async function sendOrderBrevoEmail({ to, subject, htmlContent, textContent, bcc = null, replyTo = null, sender = null }) {
   const orderKey = BREVO_ORDER_API_KEY || BREVO_API_KEY;
@@ -926,7 +926,7 @@ async function sendOrderBrevoEmail({ to, subject, htmlContent, textContent, bcc 
 
 
 /**
- * 7. ORDER PLACEMENT NOTIFICATION (via order@rajendrastudioandgifts.in)
+ * 7. ORDER PLACEMENT NOTIFICATION (via jobs@dahejsupport.com)
  * Dispatched when a customer places an order
  */
 async function notifyOrderConfirmation({ order, req = null }) {
@@ -959,7 +959,7 @@ async function notifyOrderConfirmation({ order, req = null }) {
     || 'Custom Framing Photo';
 
   const protocol = (req && (req.headers['x-forwarded-proto'] || req.protocol)) || 'https';
-  const host = (req && req.get('host')) || 'rajendrastudioandgifts.in';
+  const host = (req && req.get('host')) || 'dahejsupport.com';
   const trackingUrl = `${protocol}://${host}/track-order.html?id=${encodeURIComponent(cleanId)}`;
 
   const timeIST = new Date().toLocaleString('en-IN', {
@@ -1014,10 +1014,10 @@ async function notifyOrderConfirmation({ order, req = null }) {
               <tr>
                 <td style="background-color: #0F172A; padding: 28px 24px; text-align: center; border-bottom: 3px solid #D97706;">
                   <div style="font-size: 20px; font-weight: 800; letter-spacing: 2px; color: #FFFFFF; text-transform: uppercase;">
-                    RAJENDRA <span style="color: #F59E0B;">STUDIO &amp; FRAMING</span>
+                    DAHEJ <span style="color: #F59E0B;">SUPPORT</span>
                   </div>
                   <div style="font-size: 11px; letter-spacing: 1.5px; color: #94A3B8; text-transform: uppercase; margin-top: 6px; font-weight: 600;">
-                    ONLINE ORDER DESK &bull; RAJENDRA STUDIO AND GIFTS
+                    ONLINE ORDER DESK &bull; DAHEJ SUPPORT
                   </div>
                 </td>
               </tr>
@@ -1032,7 +1032,7 @@ async function notifyOrderConfirmation({ order, req = null }) {
                     Thank You for Your Order!
                   </h1>
                   <p style="margin: 0; font-size: 14px; color: #047857; line-height: 1.5;">
-                    Your order #${cleanId} has been successfully placed at Rajendra Studio &amp; Framing. Our team will review your order and notify you once it has been accepted.
+                    Your order #${cleanId} has been successfully placed at Dahej Support. Our team will review your order and notify you once it has been accepted.
                   </p>
                   <div style="display: inline-block; margin-top: 14px; background-color: #FFFFFF; border: 1px solid #6EE7B7; border-radius: 8px; padding: 7px 16px; font-size: 13px; color: #065F46; font-weight: 700;">
                     Order ID: <span style="color: #D97706;">#${cleanId}</span> &bull; Placed on ${timeIST}
@@ -1078,7 +1078,7 @@ async function notifyOrderConfirmation({ order, req = null }) {
                   <div style="background-color: #FEF9C3; border: 1.5px solid #FDE047; border-radius: 10px; padding: 18px 20px; margin-bottom: 20px; color: #854D0E; font-size: 14px; line-height: 1.6;">
                     <p style="margin: 0 0 10px; font-size: 15px; color: #111827;">Hello <strong>${customerName}</strong>,</p>
                     <p style="margin: 0 0 10px; font-size: 15px; color: #854D0E; font-weight: 700;">Thank You for Your Order!</p>
-                    <p style="margin: 0 0 10px; font-size: 14px; color: #1F2937; line-height: 1.5;">Your order <strong>#${cleanId}</strong> has been successfully placed at Rajendra Studio &amp; Framing. Our team will review your order and notify you once it has been accepted.</p>
+                    <p style="margin: 0 0 10px; font-size: 14px; color: #1F2937; line-height: 1.5;">Your order <strong>#${cleanId}</strong> has been successfully placed at Dahej Support. Our team will review your order and notify you once it has been accepted.</p>
                     <p style="margin: 10px 0 0; font-size: 14px; color: #4B5563;">Thank you for shopping with us!</p>
                   </div>
 
@@ -1178,7 +1178,7 @@ async function notifyOrderConfirmation({ order, req = null }) {
                     </tr>
                   </table>
                   <div style="margin-top: 16px;">
-                    <a href="${STUDIO_INFO.whatsapp}?text=${encodeURIComponent('Hello Rajendra Studio and Gifts, I placed order #' + cleanId + ' and want to check details.')}" target="_blank" style="display: inline-block; background-color: #25D366; color: #FFFFFF; font-size: 12px; font-weight: 700; text-decoration: none; padding: 8px 16px; border-radius: 999px; margin: 0 4px; box-shadow: 0 2px 6px rgba(37, 211, 102, 0.25);">
+                    <a href="${STUDIO_INFO.whatsapp}?text=${encodeURIComponent('Hello Dahej Support, I placed order #' + cleanId + ' and want to check details.')}" target="_blank" style="display: inline-block; background-color: #25D366; color: #FFFFFF; font-size: 12px; font-weight: 700; text-decoration: none; padding: 8px 16px; border-radius: 999px; margin: 0 4px; box-shadow: 0 2px 6px rgba(37, 211, 102, 0.25);">
                       💬 WhatsApp Support
                     </a>
                     <a href="tel:${STUDIO_INFO.phone.replace(/[^0-9+]/g, '')}" style="display: inline-block; background-color: #FFFFFF; color: #1F2937; border: 1px solid #D1D5DB; font-size: 12px; font-weight: 700; text-decoration: none; padding: 8px 16px; border-radius: 999px; margin: 0 4px;">
@@ -1192,7 +1192,7 @@ async function notifyOrderConfirmation({ order, req = null }) {
               <tr>
                 <td style="background-color: #F9FAFB; padding: 22px 28px; text-align: center; border-top: 1px solid #E5E7EB; font-size: 12px; color: #6B7280; line-height: 1.5;">
                   <div style="font-weight: 700; color: #111827; margin-bottom: 4px;">
-                    ${STUDIO_INFO.name} &bull; Rajendra Studio and Gifts
+                    ${STUDIO_INFO.name} &bull; Dahej Support
                   </div>
                   <div>${STUDIO_INFO.address}</div><div style="margin-top: 4px;"><a href="https://maps.google.com/?q=Dahej+GIDC,+Bharuch,+Gujarat+392130" target="_blank" style="color: #8C6A1E; text-decoration: underline; font-size: 11px; font-weight: 600;">📍 Open Location on Google Maps</a></div>
                   <div style="margin-top: 4px;">Studio Hours: ${STUDIO_INFO.hours} &bull; Direct Order Desk: ${ORDER_SENDER_EMAIL}</div>
@@ -1210,7 +1210,7 @@ async function notifyOrderConfirmation({ order, req = null }) {
     </html>
   `;
 
-  // B) Order Admin Alert Email (sent to order@rajendrastudioandgifts.in)
+  // B) Order Admin Alert Email (sent to jobs@dahejsupport.com)
   const orderAlertSubject = `🛒 [New Online Order] #${cleanId} from ${customerName} (₹${total})`;
   const orderAlertHtml = `
     <!DOCTYPE html>
@@ -1220,7 +1220,7 @@ async function notifyOrderConfirmation({ order, req = null }) {
       <div style="max-width: 580px; margin: 0 auto; background: #fff; border-radius: 14px; overflow: hidden; border: 1px solid #E5E0D5;">
         <div style="background: #111; padding: 20px 24px; border-bottom: 3px solid #C99A3D; text-align: center;">
           <h2 style="color: #fff; margin:0; font-size: 18px; text-transform: uppercase;">
-            RAJENDRA <span style="color: #C99A3D;">STUDIO ORDERS</span>
+            DAHEJ <span style="color: #C99A3D;">SUPPORT ORDERS</span>
           </h2>
           <div style="color: #A0A5B1; font-size: 11px;">New Online Order Alert</div>
         </div>
@@ -1239,7 +1239,7 @@ async function notifyOrderConfirmation({ order, req = null }) {
             <tr><td style="padding: 10px 14px; font-weight: 600; color: #666;">Delivery Address:</td><td style="padding: 10px 14px; color: #111;">${deliveryAddress}</td></tr>
           </table>
           <div style="text-align: center; margin-top: 18px;">
-            <a href="https://rajendrastudioandgifts.in/admin#orders" style="display: inline-block; background: #111; color: #fff; text-decoration: none; padding: 11px 22px; border-radius: 8px; font-size: 13px; font-weight: 700;">Open in Admin Panel &rarr;</a>
+            <a href="https://dahejsupport.com/admin#orders" style="display: inline-block; background: #111; color: #fff; text-decoration: none; padding: 11px 22px; border-radius: 8px; font-size: 13px; font-weight: 700;">Open in Admin Panel &rarr;</a>
           </div>
         </div>
       </div>
@@ -1269,7 +1269,7 @@ async function notifyOrderConfirmation({ order, req = null }) {
       to: customerEmail,
       subject: customerSubject,
       htmlContent: customerHtml,
-      textContent: `Hello ${customerName},\n\nThank You for Your Order!\n\nYour order #${cleanId} has been successfully placed at Rajendra Studio & Framing. Our team will review your order and notify you once it has been accepted.\n\nThank you for shopping with us!`
+      textContent: `Hello ${customerName},\n\nThank You for Your Order!\n\nYour order #${cleanId} has been successfully placed at Dahej Support. Our team will review your order and notify you once it has been accepted.\n\nThank you for shopping with us!`
     }).then(res => {
       customerEmailResult = res;
       if (res && res.success) {
@@ -1301,7 +1301,7 @@ async function notifyOrderConfirmation({ order, req = null }) {
 }
 
 /**
- * 8. ORDER CONFIRMED BY ADMIN (via order@rajendrastudioandgifts.in)
+ * 8. ORDER CONFIRMED BY ADMIN (via jobs@dahejsupport.com)
  * Dispatched strictly when Admin confirms an order in the Admin Panel
  */
 async function notifyOrderAcceptedByAdmin({ order, pickupDate = null, confirmationDate = null, notes = '', req = null }) {
@@ -1326,7 +1326,7 @@ async function notifyOrderAcceptedByAdmin({ order, pickupDate = null, confirmati
     : (order.deliveryAddress || order.address || 'Studio Counter Pickup, Dahej'));
 
   const protocol = (req && (req.headers['x-forwarded-proto'] || req.protocol)) || 'https';
-  const host = (req && req.get('host')) || 'rajendrastudioandgifts.in';
+  const host = (req && req.get('host')) || 'dahejsupport.com';
   const trackingUrl = `${protocol}://${host}/track-order.html?id=${encodeURIComponent(cleanId)}`;
 
   const timeIST = new Date().toLocaleString('en-IN', {
@@ -1381,10 +1381,10 @@ async function notifyOrderAcceptedByAdmin({ order, pickupDate = null, confirmati
               <tr>
                 <td style="background-color: #0F172A; padding: 28px 24px; text-align: center; border-bottom: 3px solid #D97706;">
                   <div style="font-size: 20px; font-weight: 800; letter-spacing: 2px; color: #FFFFFF; text-transform: uppercase;">
-                    RAJENDRA <span style="color: #F59E0B;">STUDIO &amp; FRAMING</span>
+                    DAHEJ <span style="color: #F59E0B;">SUPPORT</span>
                   </div>
                   <div style="font-size: 11px; letter-spacing: 1.5px; color: #94A3B8; text-transform: uppercase; margin-top: 6px; font-weight: 600;">
-                    CUSTOMER ORDER DESK &bull; RAJENDRA STUDIO AND GIFTS
+                    CUSTOMER ORDER DESK &bull; DAHEJ SUPPORT
                   </div>
                 </td>
               </tr>
@@ -1462,12 +1462,12 @@ async function notifyOrderAcceptedByAdmin({ order, pickupDate = null, confirmati
 
                     <div style="margin-top: 14px; font-size: 13px; color: #1F2937; line-height: 1.6; background-color: #F0FDF4; border-radius: 8px; padding: 10px 14px; border: 1px dashed #A7F3D0;">
                       📍 <strong>Shop Address for Pickup:</strong><br>
-                      <strong>Rajendra Studio &amp; Framing</strong> &bull; Dahej GIDC, Bharuch, Gujarat 392130<br>
+                      <strong>Dahej Support</strong> &bull; Dahej GIDC, Bharuch, Gujarat 392130<br>
                       <div style="margin: 8px 0;"><a href="https://maps.google.com/?q=Dahej+GIDC,+Bharuch,+Gujarat+392130" target="_blank" style="display: inline-block; background-color: #C99A3D; color: #FFFFFF; font-size: 12px; font-weight: 700; text-decoration: none; padding: 7px 16px; border-radius: 6px;">🗺️ Open in Google Maps (Get Directions) &rarr;</a></div>
                       📞 <strong>Phone / WhatsApp:</strong> +91 96015 74966 &bull; ⏰ <strong>Studio Timings:</strong> 9:00 AM – 9:00 PM
                     </div>
 
-                    <p style="margin: 14px 0 0; font-size: 13px; color: #4B5563;">Thank you for shopping with Rajendra Studio &amp; Framing!</p>
+                    <p style="margin: 14px 0 0; font-size: 13px; color: #4B5563;">Thank you for shopping with Dahej Support!</p>
                   </div>
 
                   <p style="font-size: 13px; color: #6B7280; line-height: 1.5; margin: 0 0 18px;">
@@ -1556,7 +1556,7 @@ async function notifyOrderAcceptedByAdmin({ order, pickupDate = null, confirmati
                     </tr>
                   </table>
                   <div style="margin-top: 16px;">
-                    <a href="${STUDIO_INFO.whatsapp}?text=${encodeURIComponent('Hello Rajendra Studio and Gifts, I am following up on my confirmed order #' + cleanId)}." target="_blank" style="display: inline-block; background-color: #25D366; color: #FFFFFF; font-size: 12px; font-weight: 700; text-decoration: none; padding: 8px 16px; border-radius: 999px; margin: 0 4px; box-shadow: 0 2px 6px rgba(37, 211, 102, 0.25);">
+                    <a href="${STUDIO_INFO.whatsapp}?text=${encodeURIComponent('Hello Dahej Support, I am following up on my confirmed order #' + cleanId)}." target="_blank" style="display: inline-block; background-color: #25D366; color: #FFFFFF; font-size: 12px; font-weight: 700; text-decoration: none; padding: 8px 16px; border-radius: 999px; margin: 0 4px; box-shadow: 0 2px 6px rgba(37, 211, 102, 0.25);">
                       💬 WhatsApp Support
                     </a>
                     <a href="tel:${STUDIO_INFO.phone.replace(/[^0-9+]/g, '')}" style="display: inline-block; background-color: #FFFFFF; color: #1F2937; border: 1px solid #D1D5DB; font-size: 12px; font-weight: 700; text-decoration: none; padding: 8px 16px; border-radius: 999px; margin: 0 4px;">
@@ -1570,7 +1570,7 @@ async function notifyOrderAcceptedByAdmin({ order, pickupDate = null, confirmati
               <tr>
                 <td style="background-color: #F9FAFB; padding: 22px 28px; text-align: center; border-top: 1px solid #E5E7EB; font-size: 12px; color: #6B7280; line-height: 1.5;">
                   <div style="font-weight: 700; color: #111827; margin-bottom: 4px;">
-                    ${STUDIO_INFO.name} &bull; Rajendra Studio and Gifts
+                    ${STUDIO_INFO.name} &bull; Dahej Support
                   </div>
                   <div>${STUDIO_INFO.address}</div><div style="margin-top: 4px;"><a href="https://maps.google.com/?q=Dahej+GIDC,+Bharuch,+Gujarat+392130" target="_blank" style="color: #8C6A1E; text-decoration: underline; font-size: 11px; font-weight: 600;">📍 Open Location on Google Maps</a></div>
                   <div style="margin-top: 4px;">Studio Hours: ${STUDIO_INFO.hours} &bull; Direct Order Desk: ${ORDER_SENDER_EMAIL}</div>
@@ -1588,7 +1588,7 @@ async function notifyOrderAcceptedByAdmin({ order, pickupDate = null, confirmati
     </html>
   `;
 
-  // B) Order Admin Alert (sent to order@rajendrastudioandgifts.in)
+  // B) Order Admin Alert (sent to jobs@dahejsupport.com)
   const adminSubject = `🎨 [Order Accepted by Admin] #${cleanId} - ${customerName}`;
   const adminHtml = `
     <!DOCTYPE html>
@@ -1598,7 +1598,7 @@ async function notifyOrderAcceptedByAdmin({ order, pickupDate = null, confirmati
       <div style="max-width: 580px; margin: 0 auto; background: #fff; border-radius: 14px; overflow: hidden; border: 1px solid #E5E0D5;">
         <div style="background: #111; padding: 20px 24px; border-bottom: 3px solid #C99A3D; text-align: center;">
           <h2 style="color: #fff; margin:0; font-size: 18px; text-transform: uppercase;">
-            RAJENDRA <span style="color: #C99A3D;">STUDIO ORDERS</span>
+            DAHEJ <span style="color: #C99A3D;">SUPPORT ORDERS</span>
           </h2>
           <div style="color: #A0A5B1; font-size: 11px;">Admin Order Acceptance Log</div>
         </div>
@@ -1621,7 +1621,7 @@ async function notifyOrderAcceptedByAdmin({ order, pickupDate = null, confirmati
           </table>
           ${notes ? `<div style="font-size: 13px; color: #555; background: #FFFBEB; padding: 10px 14px; border-radius: 6px; border: 1px solid #FDE68A; margin-bottom: 18px;"><strong>Note:</strong> ${notes}</div>` : ''}
           <div style="text-align: center; margin-top: 18px;">
-            <a href="https://rajendrastudioandgifts.in/admin#orders" style="display: inline-block; background: #111; color: #fff; text-decoration: none; padding: 11px 22px; border-radius: 8px; font-size: 13px; font-weight: 700;">View in Admin Panel &rarr;</a>
+            <a href="https://dahejsupport.com/admin#orders" style="display: inline-block; background: #111; color: #fff; text-decoration: none; padding: 11px 22px; border-radius: 8px; font-size: 13px; font-weight: 700;">View in Admin Panel &rarr;</a>
           </div>
         </div>
       </div>
@@ -1647,7 +1647,7 @@ async function notifyOrderAcceptedByAdmin({ order, pickupDate = null, confirmati
         to: customerEmail,
         subject: customerSubject,
         htmlContent: customerHtml,
-        textContent: `Hello ${customerName},\n\nYour custom order #${cleanId} has been confirmed by our studio team!\n\nPRODUCT READY & SHOP PICKUP DATE: ${formattedPickupDate}\nYour product will be ready on ${formattedPickupDate}. Please visit our shop on this date to collect your handcrafted order.\n\nShop Address for Pickup:\nRajendra Studio & Framing\nDahej GIDC, Bharuch, Gujarat 392130\nGoogle Maps Location: https://maps.google.com/?q=Dahej+GIDC,+Bharuch,+Gujarat+392130\nPhone / WhatsApp: +91 96015 74966\nStudio Timings: 9:00 AM – 9:00 PM\n\nThank you for shopping with Rajendra Studio & Framing!`
+        textContent: `Hello ${customerName},\n\nYour custom order #${cleanId} has been confirmed by our studio team!\n\nPRODUCT READY & SHOP PICKUP DATE: ${formattedPickupDate}\nYour product will be ready on ${formattedPickupDate}. Please visit our shop on this date to collect your handcrafted order.\n\nShop Address for Pickup:\nDahej Support\nDahej GIDC, Bharuch, Gujarat 392130\nGoogle Maps Location: https://maps.google.com/?q=Dahej+GIDC,+Bharuch,+Gujarat+392130\nPhone / WhatsApp: +91 96015 74966\nStudio Timings: 9:00 AM – 9:00 PM\n\nThank you for shopping with Dahej Support!`
       });
       // Safety timeout of 5 seconds on customer email
       const timeoutTask = new Promise((_, reject) => setTimeout(() => reject(new Error('Brevo email timeout (5s)')), 5000));

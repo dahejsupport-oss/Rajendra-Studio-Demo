@@ -335,7 +335,7 @@ function createOrderCardHtml(order) {
   const customer = order.customer || {};
 
   // Craft WhatsApp Pre-filled message
-  const waMsg = encodeURIComponent(`Hello Rajendra Studio and Gifts! I have a question regarding my Order #${orderId} (${rawStatus}). Please share an update.`);
+  const waMsg = encodeURIComponent(`Hello Dahej Support! I have a question regarding my Order #${orderId} (${rawStatus}). Please share an update.`);
 
   return `
     <article class="order-card" id="orderCard_${escapeHtml(orderId)}">
@@ -630,11 +630,11 @@ function openInvoiceModal(orderId) {
     <div class="invoice-header">
       <div>
         <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
-          <img src="assets/images/logo-horizontal.png" alt="Rajendra Studio &amp; Photo Gifts" style="height: 42px; width: auto; object-fit: contain;" />
+          <img src="assets/images/logo-horizontal.png" alt="Dahej Support" style="height: 42px; width: auto; object-fit: contain;" />
         </div>
         <p style="font-size: 0.8rem; color: #6B7280; margin: 0; line-height: 1.4;">
-          Rajendra Studio &amp; Photo Gifts • Dahej GIDC, Bharuch, Gujarat 392130<br>
-          Direct Hotline: +91 96015 74966 • Support: info@rajendrastudioandgifts.in
+          Dahej Support • Dahej GIDC, Bharuch, Gujarat 392130<br>
+          Direct Hotline: +91 96015 74966 • Support: jobs@dahejsupport.com
         </p>
       </div>
       <div style="text-align: right;">

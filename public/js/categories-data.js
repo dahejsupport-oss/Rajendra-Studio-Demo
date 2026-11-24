@@ -1,5 +1,5 @@
 /**
- * RAJENDRA STUDIO & FRAMING - MASTER CATEGORIES DATA
+ * DAHEJ SUPPORT - MASTER CATEGORIES DATA
  * Total: 0 categories - Auto-synced from Admin Panel
  */
 

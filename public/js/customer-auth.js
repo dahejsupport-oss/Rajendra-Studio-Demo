@@ -6,7 +6,7 @@
 (function () {
   'use strict';
 
-  const CLOUD_API_FALLBACK = 'https://rajendrastudioframing.vercel.app';
+  const CLOUD_API_FALLBACK = 'https://dahejsupport.com';
 
   function getInitialApiBase() {
     const isLocalDev = window.location.hostname === 'localhost' || 
@@ -497,10 +497,10 @@
           <!-- Header -->
           <div class="cust-auth-modal-header">
             <div class="cust-auth-brand-badge" style="background: transparent; border: none; box-shadow: none; display: flex; align-items: center; justify-content: center;">
-              <img src="assets/images/logo-horizontal.png" alt="Rajendra Studio &amp; Photo Gifts" style="height: 40px; width: auto; max-width: 200px; object-fit: contain;" />
+              <img src="assets/images/logo-horizontal.png" alt="Dahej Support" style="height: 40px; width: auto; max-width: 200px; object-fit: contain;" />
             </div>
             <h3 class="cust-auth-title" id="custAuthModalTitle">Customer Sign In</h3>
-            <p class="cust-auth-subtitle" id="custAuthModalSubtitle">Sign in or create your account to place your order with Rajendra Studio & Photo Gifts.</p>
+            <p class="cust-auth-subtitle" id="custAuthModalSubtitle">Sign in or create your account to place your order with Dahej Support.</p>
           </div>
 
           <!-- Alert Banner -->
@@ -852,7 +852,7 @@
     const titleEl = document.getElementById('custAuthModalTitle');
     const subEl = document.getElementById('custAuthModalSubtitle');
     if (titleEl) titleEl.textContent = (ctx && ctx.title) ? ctx.title : 'Customer Sign In';
-    if (subEl) subEl.textContent = (ctx && ctx.subtitle) ? ctx.subtitle : 'Sign in or create your account to place your order with Rajendra Studio & Photo Gifts.';
+    if (subEl) subEl.textContent = (ctx && ctx.subtitle) ? ctx.subtitle : 'Sign in or create your account to place your order with Dahej Support.';
 
     // Clear OTP inputs
     for (let i = 1; i <= 6; i++) {

@@ -1,5 +1,5 @@
 /**
- * RAJENDRA STUDIO & FRAMING - MASTER PRODUCTS CATALOG DATA
+ * DAHEJ SUPPORT - MASTER PRODUCTS CATALOG DATA
  * Total: 0 products - Auto-synced from Admin Panel
  */
 
@@ -11,13 +11,13 @@ if (typeof window !== 'undefined') {
 
 // Business contact data
 const BUSINESS_INFO = {
-  "name": "Rajendra Studio & Framing",
+  "name": "Dahej Support",
   "tagline": "Frames, Printing & Personalized Products",
   "phone": "+91 96015 74966",
   "phoneRaw": "+919601574966",
   "whatsapp": "+91 96015 74966",
   "whatsappNumber": "919601574966",
-  "email": "info@rajendrastudioandgifts.in",
+  "email": "jobs@dahejsupport.com",
   "address": "Dahej GIDC, Bharuch, Gujarat 392130",
   "workingHours": "Mon - Sat: 9:30 AM - 8:30 PM | Sun: 10:00 AM - 2:00 PM",
   "establishedYear": 2008,
