@@ -3,7 +3,7 @@ const path = require('path');
 
 const rootDir = path.resolve(__dirname, '..');
 
-const WHATSAPP_URL = 'https://wa.me/919510757513?text=Hello%20Rajendra%20Studio%20%26%20Framing,%20I%20have%20an%20enquiry.';
+const WHATSAPP_URL = 'https://wa.me/919601574966?text=Hello%20Rajendra%20Studio%20%26%20Framing,%20I%20have%20an%20enquiry.';
 
 const FLOATING_ACTIONS_HTML = `  <!-- Floating Actions (WhatsApp & Back to Top) -->
   <div class="floating-actions-wrap">

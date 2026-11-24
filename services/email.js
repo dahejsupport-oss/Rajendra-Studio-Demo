@@ -26,10 +26,10 @@ const ORDER_ALERT_EMAIL = process.env.ORDER_NOTIFICATION_EMAIL || 'jobs@dahejsup
 const STUDIO_INFO = {
   name: 'Rajendra Studio & Framing',
   tagline: 'Custom Framing & Gifts Studio • Rajendra Studio and Gifts',
-  address: 'A/23 Chitrakut, Tulsidham chokdi, opp. ICICI Bank, Bharuch, Gujarat 392001',
-  mapsUrl: 'https://maps.app.goo.gl/cNKG3Da6yA8E8L5j8',
-  phone: process.env.STUDIO_PHONE || '+91 95107 57513',
-  whatsapp: process.env.STUDIO_WHATSAPP ? `https://wa.me/${process.env.STUDIO_WHATSAPP}` : 'https://wa.me/919510757513',
+  address: 'Dahej GIDC, Bharuch, Gujarat 392130',
+  mapsUrl: 'https://maps.google.com/?q=Dahej+GIDC,+Bharuch,+Gujarat+392130',
+  phone: process.env.STUDIO_PHONE || '+91 96015 74966',
+  whatsapp: process.env.STUDIO_WHATSAPP ? `https://wa.me/${process.env.STUDIO_WHATSAPP}` : 'https://wa.me/919601574966',
   email: process.env.STUDIO_EMAIL || 'jobs@dahejsupport.com',
   hours: '9:30 AM – 9:00 PM (Monday to Sunday)'
 };
@@ -218,7 +218,7 @@ async function notifyCustomerLogin({ customerEmail, customerName = '', customerP
           </div>
         </div>
         <div style="background: #FAF8F5; padding: 14px 24px; text-align: center; font-size: 11px; color: #888; border-top: 1px solid #E5E0D5;">
-          ${STUDIO_INFO.name} • ${STUDIO_INFO.address}<br><a href="https://maps.app.goo.gl/cNKG3Da6yA8E8L5j8" target="_blank" style="color: #8C6A1E; text-decoration: underline; font-size: 11px; font-weight: 600;">📍 Open Location on Google Maps</a>
+          ${STUDIO_INFO.name} • ${STUDIO_INFO.address}<br><a href="https://maps.google.com/?q=Dahej+GIDC,+Bharuch,+Gujarat+392130" target="_blank" style="color: #8C6A1E; text-decoration: underline; font-size: 11px; font-weight: 600;">📍 Open Location on Google Maps</a>
         </div>
       </div>
     </body>
@@ -249,14 +249,14 @@ async function notifyCustomerLogin({ customerEmail, customerName = '', customerP
           </p>
           <div style="background: #FAF9F6; border: 1px solid #EAE5DB; border-radius: 10px; padding: 16px; margin-bottom: 22px;">
             <div style="font-size: 13px; color: #666; margin-bottom: 6px;"><strong>Device:</strong> ${userAgent}</div>
-            <div style="font-size: 13px; color: #666;"><strong>Security Notice:</strong> If you did not perform this login, please contact us immediately on WhatsApp or Phone: <a href="tel:+919510757513" style="color: #8C6A1E; font-weight: 700;">+91 95107 57513</a>.</div>
+            <div style="font-size: 13px; color: #666;"><strong>Security Notice:</strong> If you did not perform this login, please contact us immediately on WhatsApp or Phone: <a href="tel:+919601574966" style="color: #8C6A1E; font-weight: 700;">+91 96015 74966</a>.</div>
           </div>
           <div style="text-align: center; margin: 24px 0 10px;">
             <a href="https://rajendrastudioandgifts.in/products" style="display: inline-block; background: #C99A3D; color: #111; font-weight: 800; text-decoration: none; padding: 12px 26px; border-radius: 8px; font-size: 14px;">Browse Premium Framing Collection &rarr;</a>
           </div>
         </div>
         <div style="background: #FAF8F5; padding: 16px 24px; text-align: center; font-size: 11px; color: #888; border-top: 1px solid #E5E0D5;">
-          ${STUDIO_INFO.name} • ${STUDIO_INFO.address}<br><a href="https://maps.app.goo.gl/cNKG3Da6yA8E8L5j8" target="_blank" style="color: #8C6A1E; text-decoration: underline; font-size: 11px; font-weight: 600;">📍 Open Location on Google Maps</a><br>
+          ${STUDIO_INFO.name} • ${STUDIO_INFO.address}<br><a href="https://maps.google.com/?q=Dahej+GIDC,+Bharuch,+Gujarat+392130" target="_blank" style="color: #8C6A1E; text-decoration: underline; font-size: 11px; font-weight: 600;">📍 Open Location on Google Maps</a><br>
           Helpline: ${STUDIO_INFO.phone} • Email: ${STUDIO_INFO.email}
         </div>
       </div>
@@ -336,7 +336,7 @@ async function notifyAdminLogin({ adminEmail, loginType = 'Direct Password', req
           </div>
         </div>
         <div style="background: #FAF8F5; padding: 14px 24px; text-align: center; font-size: 11px; color: #888; border-top: 1px solid #E5E0D5;">
-          ${STUDIO_INFO.name} • ${STUDIO_INFO.address}<br><a href="https://maps.app.goo.gl/cNKG3Da6yA8E8L5j8" target="_blank" style="color: #8C6A1E; text-decoration: underline; font-size: 11px; font-weight: 600;">📍 Open Location on Google Maps</a>
+          ${STUDIO_INFO.name} • ${STUDIO_INFO.address}<br><a href="https://maps.google.com/?q=Dahej+GIDC,+Bharuch,+Gujarat+392130" target="_blank" style="color: #8C6A1E; text-decoration: underline; font-size: 11px; font-weight: 600;">📍 Open Location on Google Maps</a>
         </div>
       </div>
     </body>
@@ -485,8 +485,8 @@ async function notifyOrderPickupReady({ order, pickupDate = null, notes = '', re
             </div>
             <div style="font-size: 13px; color: #666; margin-top: 10px; line-height: 1.6;">
               <strong>🕒 Shop Timings:</strong> ${STUDIO_INFO.hours}<br>
-              <strong>📞 Direct Helpline:</strong> <a href="tel:+919510757513" style="color: #8C6A1E; font-weight: 700; text-decoration: none;">+91 95107 57513</a><br>
-              <strong>💬 WhatsApp:</strong> <a href="${STUDIO_INFO.whatsapp}" style="color: #16A34A; font-weight: 700; text-decoration: none;">Chat on WhatsApp (+91 95107 57513)</a>
+              <strong>📞 Direct Helpline:</strong> <a href="tel:+919601574966" style="color: #8C6A1E; font-weight: 700; text-decoration: none;">+91 96015 74966</a><br>
+              <strong>💬 WhatsApp:</strong> <a href="${STUDIO_INFO.whatsapp}" style="color: #16A34A; font-weight: 700; text-decoration: none;">Chat on WhatsApp (+91 96015 74966)</a>
             </div>
             <div style="margin-top: 14px; padding-top: 12px; border-top: 1px solid #EBE6DC; font-size: 12px; color: #777;">
               💡 <em>Please show this email or share your Order ID (<strong>#${cleanId}</strong>) at our shop counter during collection.</em>
@@ -526,7 +526,7 @@ async function notifyOrderPickupReady({ order, pickupDate = null, notes = '', re
 
         <!-- Footer -->
         <div style="background: #FAF8F5; padding: 20px 24px; text-align: center; font-size: 11px; color: #888; border-top: 1px solid #E5E0D5;">
-          ${STUDIO_INFO.name} &bull; ${STUDIO_INFO.address}<br><a href="https://maps.app.goo.gl/cNKG3Da6yA8E8L5j8" target="_blank" style="color: #8C6A1E; text-decoration: underline; font-size: 11px; font-weight: 600;">📍 Open Location on Google Maps</a><br>
+          ${STUDIO_INFO.name} &bull; ${STUDIO_INFO.address}<br><a href="https://maps.google.com/?q=Dahej+GIDC,+Bharuch,+Gujarat+392130" target="_blank" style="color: #8C6A1E; text-decoration: underline; font-size: 11px; font-weight: 600;">📍 Open Location on Google Maps</a><br>
           For queries: ${STUDIO_INFO.phone} &bull; ${STUDIO_INFO.email}
         </div>
       </div>
@@ -712,7 +712,7 @@ async function notifyOrderCancelledByAdmin({ order, notes = '', req = null }) {
 
         <!-- Footer -->
         <div style="background: #FAF8F5; padding: 20px 24px; text-align: center; font-size: 11px; color: #888; border-top: 1px solid #E5E0D5;">
-          ${STUDIO_INFO.name} &bull; ${STUDIO_INFO.address}<br><a href="https://maps.app.goo.gl/cNKG3Da6yA8E8L5j8" target="_blank" style="color: #8C6A1E; text-decoration: underline; font-size: 11px; font-weight: 600;">📍 Open Location on Google Maps</a><br>
+          ${STUDIO_INFO.name} &bull; ${STUDIO_INFO.address}<br><a href="https://maps.google.com/?q=Dahej+GIDC,+Bharuch,+Gujarat+392130" target="_blank" style="color: #8C6A1E; text-decoration: underline; font-size: 11px; font-weight: 600;">📍 Open Location on Google Maps</a><br>
           For queries: ${STUDIO_INFO.phone} &bull; ${STUDIO_INFO.email}
         </div>
       </div>
@@ -814,7 +814,7 @@ async function sendCustomerOtpEmail({ email, otp, name = '' }) {
           </div>
         </div>
         <div style="background: #FAF8F5; padding: 14px 24px; text-align: center; font-size: 11px; color: #888; border-top: 1px solid #E5E0D5;">
-          ${STUDIO_INFO.name} • ${STUDIO_INFO.address}<br><a href="https://maps.app.goo.gl/cNKG3Da6yA8E8L5j8" target="_blank" style="color: #8C6A1E; text-decoration: underline; font-size: 11px; font-weight: 600;">📍 Open Location on Google Maps</a><br>
+          ${STUDIO_INFO.name} • ${STUDIO_INFO.address}<br><a href="https://maps.google.com/?q=Dahej+GIDC,+Bharuch,+Gujarat+392130" target="_blank" style="color: #8C6A1E; text-decoration: underline; font-size: 11px; font-weight: 600;">📍 Open Location on Google Maps</a><br>
           Helpline: ${STUDIO_INFO.phone}
         </div>
       </div>
@@ -1194,7 +1194,7 @@ async function notifyOrderConfirmation({ order, req = null }) {
                   <div style="font-weight: 700; color: #111827; margin-bottom: 4px;">
                     ${STUDIO_INFO.name} &bull; Rajendra Studio and Gifts
                   </div>
-                  <div>${STUDIO_INFO.address}</div><div style="margin-top: 4px;"><a href="https://maps.app.goo.gl/cNKG3Da6yA8E8L5j8" target="_blank" style="color: #8C6A1E; text-decoration: underline; font-size: 11px; font-weight: 600;">📍 Open Location on Google Maps</a></div>
+                  <div>${STUDIO_INFO.address}</div><div style="margin-top: 4px;"><a href="https://maps.google.com/?q=Dahej+GIDC,+Bharuch,+Gujarat+392130" target="_blank" style="color: #8C6A1E; text-decoration: underline; font-size: 11px; font-weight: 600;">📍 Open Location on Google Maps</a></div>
                   <div style="margin-top: 4px;">Studio Hours: ${STUDIO_INFO.hours} &bull; Direct Order Desk: ${ORDER_SENDER_EMAIL}</div>
                   <div style="margin-top: 10px; font-size: 11px; color: #9CA3AF;">
                     Handcrafted with care &bull; Precision photo printing &amp; custom picture framing
@@ -1462,9 +1462,9 @@ async function notifyOrderAcceptedByAdmin({ order, pickupDate = null, confirmati
 
                     <div style="margin-top: 14px; font-size: 13px; color: #1F2937; line-height: 1.6; background-color: #F0FDF4; border-radius: 8px; padding: 10px 14px; border: 1px dashed #A7F3D0;">
                       📍 <strong>Shop Address for Pickup:</strong><br>
-                      <strong>Rajendra Studio &amp; Framing</strong> &bull; A/23 Chitrakut, Tulsidham chokdi, opp. ICICI Bank, Bharuch, Gujarat 392001<br>
-                      <div style="margin: 8px 0;"><a href="https://maps.app.goo.gl/cNKG3Da6yA8E8L5j8" target="_blank" style="display: inline-block; background-color: #C99A3D; color: #FFFFFF; font-size: 12px; font-weight: 700; text-decoration: none; padding: 7px 16px; border-radius: 6px;">🗺️ Open in Google Maps (Get Directions) &rarr;</a></div>
-                      📞 <strong>Phone / WhatsApp:</strong> +91 95107 57513 &bull; ⏰ <strong>Studio Timings:</strong> 9:00 AM – 9:00 PM
+                      <strong>Rajendra Studio &amp; Framing</strong> &bull; Dahej GIDC, Bharuch, Gujarat 392130<br>
+                      <div style="margin: 8px 0;"><a href="https://maps.google.com/?q=Dahej+GIDC,+Bharuch,+Gujarat+392130" target="_blank" style="display: inline-block; background-color: #C99A3D; color: #FFFFFF; font-size: 12px; font-weight: 700; text-decoration: none; padding: 7px 16px; border-radius: 6px;">🗺️ Open in Google Maps (Get Directions) &rarr;</a></div>
+                      📞 <strong>Phone / WhatsApp:</strong> +91 96015 74966 &bull; ⏰ <strong>Studio Timings:</strong> 9:00 AM – 9:00 PM
                     </div>
 
                     <p style="margin: 14px 0 0; font-size: 13px; color: #4B5563;">Thank you for shopping with Rajendra Studio &amp; Framing!</p>
@@ -1572,7 +1572,7 @@ async function notifyOrderAcceptedByAdmin({ order, pickupDate = null, confirmati
                   <div style="font-weight: 700; color: #111827; margin-bottom: 4px;">
                     ${STUDIO_INFO.name} &bull; Rajendra Studio and Gifts
                   </div>
-                  <div>${STUDIO_INFO.address}</div><div style="margin-top: 4px;"><a href="https://maps.app.goo.gl/cNKG3Da6yA8E8L5j8" target="_blank" style="color: #8C6A1E; text-decoration: underline; font-size: 11px; font-weight: 600;">📍 Open Location on Google Maps</a></div>
+                  <div>${STUDIO_INFO.address}</div><div style="margin-top: 4px;"><a href="https://maps.google.com/?q=Dahej+GIDC,+Bharuch,+Gujarat+392130" target="_blank" style="color: #8C6A1E; text-decoration: underline; font-size: 11px; font-weight: 600;">📍 Open Location on Google Maps</a></div>
                   <div style="margin-top: 4px;">Studio Hours: ${STUDIO_INFO.hours} &bull; Direct Order Desk: ${ORDER_SENDER_EMAIL}</div>
                   <div style="margin-top: 10px; font-size: 11px; color: #9CA3AF;">
                     Handcrafted with care &bull; Precision photo printing &amp; custom picture framing
@@ -1647,7 +1647,7 @@ async function notifyOrderAcceptedByAdmin({ order, pickupDate = null, confirmati
         to: customerEmail,
         subject: customerSubject,
         htmlContent: customerHtml,
-        textContent: `Hello ${customerName},\n\nYour custom order #${cleanId} has been confirmed by our studio team!\n\nPRODUCT READY & SHOP PICKUP DATE: ${formattedPickupDate}\nYour product will be ready on ${formattedPickupDate}. Please visit our shop on this date to collect your handcrafted order.\n\nShop Address for Pickup:\nRajendra Studio & Framing\nA/23 Chitrakut, Tulsidham chokdi, opp. ICICI Bank, Bharuch, Gujarat 392001\nGoogle Maps Location: https://maps.app.goo.gl/cNKG3Da6yA8E8L5j8\nPhone / WhatsApp: +91 95107 57513\nStudio Timings: 9:00 AM – 9:00 PM\n\nThank you for shopping with Rajendra Studio & Framing!`
+        textContent: `Hello ${customerName},\n\nYour custom order #${cleanId} has been confirmed by our studio team!\n\nPRODUCT READY & SHOP PICKUP DATE: ${formattedPickupDate}\nYour product will be ready on ${formattedPickupDate}. Please visit our shop on this date to collect your handcrafted order.\n\nShop Address for Pickup:\nRajendra Studio & Framing\nDahej GIDC, Bharuch, Gujarat 392130\nGoogle Maps Location: https://maps.google.com/?q=Dahej+GIDC,+Bharuch,+Gujarat+392130\nPhone / WhatsApp: +91 96015 74966\nStudio Timings: 9:00 AM – 9:00 PM\n\nThank you for shopping with Rajendra Studio & Framing!`
       });
       // Safety timeout of 5 seconds on customer email
       const timeoutTask = new Promise((_, reject) => setTimeout(() => reject(new Error('Brevo email timeout (5s)')), 5000));

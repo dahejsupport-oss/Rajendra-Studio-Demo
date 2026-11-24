@@ -1167,7 +1167,7 @@ function setupPhotoUpload() {
 
     // Check size <= 1MB (Per user requirement: max 1MB per image)
     if (file.size > 1 * 1024 * 1024) {
-      alert('Photo is larger than 1MB. Please select an image under 1MB, or send high-resolution original photos directly to us on WhatsApp (+91 95107 57513)!');
+      alert('Photo is larger than 1MB. Please select an image under 1MB, or send high-resolution original photos directly to us on WhatsApp (+91 96015 74966)!');
       if (fileInput) fileInput.value = '';
       return;
     }
@@ -1279,7 +1279,7 @@ function setupPhotoUpload() {
       }
       message += `\n• Quantity: ${currentQuantity}\n• Price: ₹${currentPrice * currentQuantity}\n\nPlease share order details and design upload guidance.`;
 
-      const url = `https://wa.me/919510757513?text=${encodeURIComponent(message)}`;
+      const url = `https://wa.me/919601574966?text=${encodeURIComponent(message)}`;
       window.open(url, '_blank');
     });
   }

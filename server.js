@@ -305,8 +305,8 @@ function generateOtpEmailHtml(otp, recipientEmail) {
         </div>
       </div>
       <div class="footer">
-        Rajendra Studio &amp; Framing • A/23 Chitrakut, Tulsidham chokdi, opp. ICICI Bank, Bharuch, Gujarat 392001<br><a href="https://maps.app.goo.gl/cNKG3Da6yA8E8L5j8" target="_blank" style="color: #C99A3D; text-decoration: underline; font-size: 11px;">📍 View on Google Maps</a><br>
-        Direct Customer Support: +91 95107 57513 • help@dahejsupport.com
+        Rajendra Studio &amp; Framing • Dahej GIDC, Bharuch, Gujarat 392130<br><a href="https://maps.google.com/?q=Dahej+GIDC,+Bharuch,+Gujarat+392130" target="_blank" style="color: #C99A3D; text-decoration: underline; font-size: 11px;">📍 View on Google Maps</a><br>
+        Direct Customer Support: +91 96015 74966 • help@dahejsupport.com
       </div>
     </div>
   </body>
@@ -358,8 +358,8 @@ function generateCustomerOtpEmailHtml(otp, recipientEmail) {
         </div>
       </div>
       <div class="footer">
-        Rajendra Studio &amp; Framing • A/23 Chitrakut, Tulsidham chokdi, opp. ICICI Bank, Bharuch, Gujarat 392001<br><a href="https://maps.app.goo.gl/cNKG3Da6yA8E8L5j8" target="_blank" style="color: #C99A3D; text-decoration: underline; font-size: 11px;">📍 View on Google Maps</a><br>
-        Direct Customer Support: +91 95107 57513 • help@dahejsupport.com
+        Rajendra Studio &amp; Framing • Dahej GIDC, Bharuch, Gujarat 392130<br><a href="https://maps.google.com/?q=Dahej+GIDC,+Bharuch,+Gujarat+392130" target="_blank" style="color: #C99A3D; text-decoration: underline; font-size: 11px;">📍 View on Google Maps</a><br>
+        Direct Customer Support: +91 96015 74966 • help@dahejsupport.com
       </div>
     </div>
   </body>
@@ -444,7 +444,7 @@ function generateCustomerLoginEmailHtml({ customerName, customerEmail, loginTime
 
                 <!-- Security Note -->
                 <div style="background-color: #FFFDF7; border-left: 4px solid #C99A3D; padding: 12px 16px; border-radius: 6px; font-size: 13px; color: #555555; line-height: 1.5; border: 1px solid #F5E8D0; border-left-width: 4px;">
-                  <strong>Didn't log in?</strong> If you did not perform this login, someone else may be accessing your account. Please notify our studio immediately on WhatsApp at <strong style="color: #111111;">+91 95107 57513</strong>.
+                  <strong>Didn't log in?</strong> If you did not perform this login, someone else may be accessing your account. Please notify our studio immediately on WhatsApp at <strong style="color: #111111;">+91 96015 74966</strong>.
                 </div>
               </td>
             </tr>
@@ -471,10 +471,10 @@ function generateCustomerLoginEmailHtml({ customerName, customerEmail, loginTime
                   Rajendra Studio and Gifts
                 </div>
                 <div style="font-size: 12px; color: #78716C; margin-bottom: 12px;">
-                  A/23 Chitrakut, Tulsidham chokdi, opp. ICICI Bank, Bharuch, Gujarat 392001 &bull; Phone: +91 95107 57513<br><a href="https://maps.app.goo.gl/cNKG3Da6yA8E8L5j8" target="_blank" style="color: #C99A3D; text-decoration: underline; font-size: 11px;">📍 View on Google Maps</a>
+                  Dahej GIDC, Bharuch, Gujarat 392130 &bull; Phone: +91 96015 74966<br><a href="https://maps.google.com/?q=Dahej+GIDC,+Bharuch,+Gujarat+392130" target="_blank" style="color: #C99A3D; text-decoration: underline; font-size: 11px;">📍 View on Google Maps</a>
                 </div>
                 <div>
-                  <a href="https://wa.me/919510757513" target="_blank" style="display: inline-block; background-color: #25D366; color: #FFFFFF; font-size: 12px; font-weight: 700; text-decoration: none; padding: 8px 18px; border-radius: 9999px; margin: 0 4px; box-shadow: 0 2px 6px rgba(37, 211, 102, 0.3);">
+                  <a href="https://wa.me/919601574966" target="_blank" style="display: inline-block; background-color: #25D366; color: #FFFFFF; font-size: 12px; font-weight: 700; text-decoration: none; padding: 8px 18px; border-radius: 9999px; margin: 0 4px; box-shadow: 0 2px 6px rgba(37, 211, 102, 0.3);">
                     💬 Studio WhatsApp
                   </a>
                 </div>
@@ -539,15 +539,15 @@ Device: ${userAgent}
 IP Address: ${ipAddress}
 
 If you did not perform this login, please contact our studio immediately:
-WhatsApp: https://wa.me/919510757513
-Phone: +91 95107 57513
+WhatsApp: https://wa.me/919601574966
+Phone: +91 96015 74966
 
 Browse our handcrafted collections:
 ${catalogUrl}
 
 Rajendra Studio & Framing
-A/23 Chitrakut, Tulsidham chokdi, opp. ICICI Bank, Bharuch, Gujarat 392001
-Google Maps: https://maps.app.goo.gl/cNKG3Da6yA8E8L5j8
+Dahej GIDC, Bharuch, Gujarat 392130
+Google Maps: https://maps.google.com/?q=Dahej+GIDC,+Bharuch,+Gujarat+392130
 `;
 
     await transporter.sendMail({
@@ -779,15 +779,15 @@ function generateCustomerOrderEmailHtml({ orderId, customerName, newStatus, note
                   Our studio team is available Mon–Sat (9:00 AM – 9:00 PM).
                 </div>
                 <div>
-                  <a href="https://wa.me/919510757513?text=${encodeURIComponent('Hello Rajendra Studio and Gifts, I am inquiring about my Order #' + orderId)}" target="_blank" style="display: inline-block; background-color: #25D366; color: #FFFFFF; font-size: 12px; font-weight: 700; text-decoration: none; padding: 9px 20px; border-radius: 9999px; margin: 0 4px; box-shadow: 0 2px 6px rgba(37, 211, 102, 0.3);">
+                  <a href="https://wa.me/919601574966?text=${encodeURIComponent('Hello Rajendra Studio and Gifts, I am inquiring about my Order #' + orderId)}" target="_blank" style="display: inline-block; background-color: #25D366; color: #FFFFFF; font-size: 12px; font-weight: 700; text-decoration: none; padding: 9px 20px; border-radius: 9999px; margin: 0 4px; box-shadow: 0 2px 6px rgba(37, 211, 102, 0.3);">
                     💬 Chat on WhatsApp
                   </a>
-                  <a href="tel:+919510757513" style="display: inline-block; background-color: #111111; color: #FFFFFF; border: 1px solid #C99A3D; font-size: 12px; font-weight: 700; text-decoration: none; padding: 9px 20px; border-radius: 9999px; margin: 0 4px;">
-                    📞 +91 95107 57513
+                  <a href="tel:+919601574966" style="display: inline-block; background-color: #111111; color: #FFFFFF; border: 1px solid #C99A3D; font-size: 12px; font-weight: 700; text-decoration: none; padding: 9px 20px; border-radius: 9999px; margin: 0 4px;">
+                    📞 +91 96015 74966
                   </a>
                 </div>
                 <div style="margin-top: 20px; font-size: 11px; color: #A8A29E; line-height: 1.6;">
-                  Rajendra Studio &amp; Framing &bull; A/23 Chitrakut, Tulsidham chokdi, opp. ICICI Bank, Bharuch, Gujarat 392001<br><a href="https://maps.app.goo.gl/cNKG3Da6yA8E8L5j8" target="_blank" style="color: #C99A3D; text-decoration: underline; font-size: 11px;">📍 View Location on Google Maps</a><br>
+                  Rajendra Studio &amp; Framing &bull; Dahej GIDC, Bharuch, Gujarat 392130<br><a href="https://maps.google.com/?q=Dahej+GIDC,+Bharuch,+Gujarat+392130" target="_blank" style="color: #C99A3D; text-decoration: underline; font-size: 11px;">📍 View Location on Google Maps</a><br>
                   This is an automated operational notification regarding your order with Rajendra Studio and Gifts.
                 </div>
               </td>
@@ -948,12 +948,12 @@ Total Amount: ₹${Number(total || 0).toLocaleString('en-IN')}
 Delivery To: ${address || 'Studio Pickup / Bharuch'}
 
 If you have any questions, reach our studio:
-Phone: +91 95107 57513
-WhatsApp: https://wa.me/919510757513
+Phone: +91 96015 74966
+WhatsApp: https://wa.me/919601574966
 
 Rajendra Studio & Framing
-A/23 Chitrakut, Tulsidham chokdi, opp. ICICI Bank, Bharuch, Gujarat 392001
-Google Maps: https://maps.app.goo.gl/cNKG3Da6yA8E8L5j8
+Dahej GIDC, Bharuch, Gujarat 392130
+Google Maps: https://maps.google.com/?q=Dahej+GIDC,+Bharuch,+Gujarat+392130
 `;
 
     try {
@@ -2956,7 +2956,7 @@ app.get('/api/orders/track/:orderId', async (req, res) => {
         pickupCurrent = true;
       } else if (isReadyForPickup) {
         pickupTitle = 'Ready for Pick Up';
-        pickupDesc = 'Your order is ready for collection at Rajendra Studio (Opp. ICICI Bank, Tulsidham Chokdi, Bharuch)';
+        pickupDesc = 'Your order is ready for collection at Dahej Support Studio (Dahej GIDC, Bharuch, Gujarat 392130)';
         pickupDateText = formattedPickupDate ? `🗓️ Ready by: ${formattedPickupDate}` : 'Ready for Pick Up';
         pickupCompleted = false;
         pickupCurrent = true;

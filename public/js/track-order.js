@@ -248,7 +248,7 @@ function renderTrackingResult(order, container) {
 
   // WhatsApp Support Text
   const waText = encodeURIComponent(`Hello Rajendra Studio and Gifts, I am tracking my order #${order.orderId}. Could you please provide an update?`);
-  const waLink = `https://wa.me/919510757513?text=${waText}`;
+  const waLink = `https://wa.me/919601574966?text=${waText}`;
 
   // Customer Masked Details
   const cust = order.customer || {};
@@ -393,7 +393,7 @@ function renderTrackingResult(order, container) {
 
 function renderNotFound(orderId, message, container) {
   const waText = encodeURIComponent(`Hello Rajendra Studio and Gifts, I cannot find my order #${orderId} on the website tracking tool. Could you please help check my order status?`);
-  const waLink = `https://wa.me/919510757513?text=${waText}`;
+  const waLink = `https://wa.me/919601574966?text=${waText}`;
 
   container.innerHTML = `
     <div class="track-not-found-card">

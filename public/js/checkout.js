@@ -476,13 +476,13 @@ function handleSendPhotoViaWhatsApp() {
   const prodName = pendingItem.name || 'Custom Photo Frame';
 
   const message = `Hello Rajendra Studio and Gifts!\n\nI am placing an order for "${prodName}" on your website and sending my custom photo here for framing/printing.`;
-  const url = `https://wa.me/919510757513?text=${encodeURIComponent(message)}`;
+  const url = `https://wa.me/919601574966?text=${encodeURIComponent(message)}`;
   window.open(url, '_blank');
 
   window._photoSentViaWhatsApp = true;
   window._tempCheckoutUploadedPhoto = {
     fileUrl: 'WHATSAPP_PENDING',
-    fileName: 'Photo sent on WhatsApp (+91 95107 57513)'
+    fileName: 'Photo sent on WhatsApp (+91 96015 74966)'
   };
 
   const waBtnText = document.getElementById('btnWhatsAppText');
@@ -532,7 +532,7 @@ function proceedAfterPhotoConfirmation() {
   if (idx >= 0 && cart[idx]) {
     const photoToSave = window._tempCheckoutUploadedPhoto || {
       fileUrl: 'WHATSAPP_PENDING',
-      fileName: 'Photo sent on WhatsApp (+91 95107 57513)'
+      fileName: 'Photo sent on WhatsApp (+91 96015 74966)'
     };
     cart[idx].uploadedPhoto = photoToSave;
     cart[idx].photoConfirmed = true;
@@ -842,7 +842,7 @@ async function submitCheckoutOrder(e) {
 
       const waBtn = document.getElementById('successWhatsAppBtn');
       if (waBtn) {
-        waBtn.href = `https://wa.me/919510757513?text=${waMsg}`;
+        waBtn.href = `https://wa.me/919601574966?text=${waMsg}`;
       }
 
       const trackBtn = document.getElementById('successTrackBtn');
