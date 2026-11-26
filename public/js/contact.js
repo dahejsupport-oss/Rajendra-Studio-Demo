@@ -94,12 +94,41 @@ function initContactForm() {
     const service = document.getElementById('contactService') ? document.getElementById('contactService').value : 'General Inquiry';
     const message = document.getElementById('contactMessage').value.trim();
 
-    // Sync with backend API
+    const msgId = `MSG-${Date.now()}`;
+    const msgPayload = {
+      id: msgId,
+      name,
+      phone,
+      email: email || '',
+      service: service || 'General Inquiry',
+      message: message || '',
+      status: 'Unread',
+      created_at: new Date().toISOString()
+    };
+
+    // 1. Persist directly to Supabase Cloud REST API (guarantees cross-device availability on any platform)
+    try {
+      await fetch('https://dqgyrexdvpyfsphvahef.supabase.co/rest/v1/messages', {
+        method: 'POST',
+        headers: {
+          'apikey': 'sb_publishable_ZkRF8K6IhyekANlDX9SPMA_BPcSXZHw',
+          'Authorization': 'Bearer sb_publishable_ZkRF8K6IhyekANlDX9SPMA_BPcSXZHw',
+          'Content-Type': 'application/json',
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify(msgPayload)
+      });
+      console.log('✓ Contact inquiry saved directly to Supabase Cloud');
+    } catch (supaErr) {
+      console.warn('Supabase direct message push warning:', supaErr);
+    }
+
+    // 2. Sync with backend API
     try {
       const response = await fetch(`${API_BASE}/api/contact`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, phone, email, service, message })
+        body: JSON.stringify(msgPayload)
       });
       const resData = await response.json().catch(() => ({}));
       if (resData && resData.success) {

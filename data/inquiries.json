@@ -1,1 +1,17 @@
-[]
+[
+  {
+    "id": "INQ-2026-001",
+    "name": "Ramesh Patel",
+    "phone": "9876543210",
+    "email": "ramesh@example.com",
+    "product": "Acrylic Photo Framing",
+    "specs": "Contact Page Form Submission",
+    "quantity": 1,
+    "estimatedValue": 650,
+    "notes": "Need urgent framing for 3 family photos. Please contact soon.",
+    "status": "New",
+    "hasUpload": false,
+    "uploadFileName": null,
+    "createdAt": "2026-11-26T17:12:20.908Z"
+  }
+]

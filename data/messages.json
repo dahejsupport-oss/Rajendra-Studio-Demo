@@ -1,1 +1,24 @@
-[]
+[
+  {
+    "id": "MSG-1795713140908",
+    "name": "Ramesh Patel",
+    "phone": "9876543210",
+    "email": "ramesh@example.com",
+    "service": "Acrylic Photo Framing",
+    "subject": "Acrylic Photo Framing",
+    "message": "Need urgent framing for 3 family photos. Please contact soon.",
+    "status": "Unread",
+    "createdAt": "2026-11-26T17:12:20.908Z",
+    "created_at": "2026-11-26T17:12:20.908Z"
+  },
+  {
+    "id": "MSG-1795702601821",
+    "name": "Het Patel",
+    "phone": "9601574966",
+    "email": "jobs@dahejsupport.com",
+    "service": "Custom Photo Framing",
+    "message": "Hello Dahej Support, this is a test cloud inquiry.",
+    "status": "Unread",
+    "created_at": "2026-11-26T14:16:41.821+00:00"
+  }
+]

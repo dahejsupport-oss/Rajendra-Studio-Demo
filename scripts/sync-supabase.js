@@ -34,6 +34,15 @@ function readJsonFile(filename, defaultValue = []) {
   return defaultValue;
 }
 
+function writeJsonFile(filename, data) {
+  const filePath = path.join(DATA_DIR, filename);
+  try {
+    fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf8');
+  } catch (err) {
+    console.warn(`[Sync Warning] Failed to write ${filename}:`, err.message);
+  }
+}
+
 async function syncToSupabase() {
   console.log('\n======================================================');
   console.log('🔄 RAJESH FRAMING: SUPABASE CLOUD DATA SYNCHRONIZER');
@@ -303,27 +312,18 @@ async function syncToSupabase() {
     console.error('   ❌ Admin config sync failed:', err.message);
   }
 
-  // 8. SYNC CONTACT MESSAGES & PURGE TRIAL DATA
+  // 8. SYNC CONTACT MESSAGES (PRESERVE ALL MESSAGES IN SUPABASE)
   try {
-    const trialMessageIds = ['MSG-2026-001', 'MSG-2026-002'];
-    await supabase.from('messages').delete().in('id', trialMessageIds);
-    await supabase.from('messages').delete().ilike('id', 'MSG-TEST-%');
-    await supabase.from('messages').delete().ilike('name', '%Test%');
-    await supabase.from('messages').delete().ilike('email', '%test%');
-    await supabase.from('inquiries').delete().ilike('name', '%Test%');
-    await supabase.from('inquiries').delete().ilike('email', '%test%');
-    await supabase.from('admin_config').upsert({
-      id: 'all_contact_messages',
-      admin_name: 'All Contact Messages',
-      smtp: { messages: [], updatedAt: new Date().toISOString() },
-      updated_at: new Date().toISOString()
-    }, { onConflict: 'id' });
-
     const messages = readJsonFile('messages.json', []);
     if (messages.length === 0) {
-      console.log('✉️  Clearing contact messages in Supabase (empty messages.json)...');
-      await supabase.from('messages').delete().neq('id', '___keep_none___');
-      console.log('   ✅ Contact messages table cleared in Supabase.');
+      console.log('✉️  Checking Supabase Cloud for existing contact messages...');
+      const { data: cloudMsgs, error: cErr } = await supabase.from('messages').select('*').order('created_at', { ascending: false });
+      if (!cErr && Array.isArray(cloudMsgs) && cloudMsgs.length > 0) {
+        writeJsonFile('messages.json', cloudMsgs);
+        console.log(`   ✅ Restored ${cloudMsgs.length} messages from Supabase Cloud to messages.json.`);
+      } else {
+        console.log('   ℹ️ No contact messages found in Supabase Cloud.');
+      }
     } else {
       console.log(`✉️  Syncing ${messages.length} contact messages...`);
       for (const m of messages) {

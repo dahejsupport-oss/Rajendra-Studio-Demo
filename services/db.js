@@ -1792,14 +1792,8 @@ module.exports = {
       }
     } catch (_) {}
 
-    // Filter out all trial/test messages
-    allMsgs = allMsgs.filter(m => {
-      if (!m || !m.id) return false;
-      const cleanId = String(m.id).toLowerCase();
-      const isTrialId = cleanId === 'msg-2026-001' || cleanId === 'msg-2026-002' || cleanId.startsWith('msg-test-');
-      const isTestSender = (m.name && m.name.toLowerCase().includes('test')) || (m.email && m.email.toLowerCase().includes('test'));
-      return !isTrialId && !isTestSender;
-    });
+    // Retain all valid customer and inquiry messages
+    allMsgs = allMsgs.filter(m => Boolean(m && m.id));
 
     // Sort newest first
     allMsgs.sort((a, b) => new Date(b.createdAt || b.created_at || 0) - new Date(a.createdAt || a.created_at || 0));
@@ -2569,19 +2563,6 @@ module.exports = {
       }
 
       try {
-        await supabase.from('messages').delete().neq('id', '___keep_none___');
-        await supabase.from('admin_config').upsert({
-          id: 'all_contact_messages',
-          admin_name: 'All Contact Messages',
-          smtp: { messages: [], updatedAt: new Date().toISOString() },
-          updated_at: new Date().toISOString()
-        }, { onConflict: 'id' });
-        console.log('🧹 [PURGE] Purged all messages from Supabase');
-      } catch (e) {
-        console.warn('Supabase clean messages error:', e.message);
-      }
-
-      try {
         await supabase.from('customers').delete().neq('email', '___keep_none___');
         console.log('🧹 [PURGE] Purged all customers from Supabase');
       } catch (e) {
@@ -2600,15 +2581,13 @@ module.exports = {
     }
 
     writeJson(REVIEWS_FILE, []);
-    writeJson(MESSAGES_FILE, []);
     writeJson(CUSTOMERS_FILE, []);
     writeJson(path.join(DATA_DIR, 'customer-sessions.json'), {});
     global._rfMemoryStore['reviews'] = [];
-    global._rfMemoryStore['messages'] = [];
     global._rfMemoryStore['customers'] = [];
     global._rfMemoryStore['customerSessions'] = {};
 
-    return { success: true, message: 'All messages, customers, reviews, and test data cleanly purged.' };
+    return { success: true, message: 'Customers, reviews, and test data cleanly purged (customer messages preserved).' };
   },
 
   // Supabase client instance

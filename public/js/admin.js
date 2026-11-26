@@ -7126,6 +7126,11 @@ async function loadMessages() {
   }
 
   let fetched = false;
+  if (!Array.isArray(allMessages)) {
+    allMessages = [];
+  }
+
+  // 1. Fetch from Local/Backend API
   try {
     const res = await apiFetch(`/api/admin/messages?_t=${Date.now()}`);
     if (res && res.ok) {
@@ -7139,42 +7144,76 @@ async function loadMessages() {
     console.warn('Admin messages fetch note:', err.message);
   }
 
-  // Fallback: ONLY if server fetch completely failed (!fetched), check allInquiries for contact submissions!
-  if (!fetched && (!allMessages || allMessages.length === 0)) {
-    if (Array.isArray(allInquiries) && allInquiries.length > 0) {
-      const contactInqs = allInquiries.filter(i => {
-        if (!i || !i.id) return false;
-        const cleanId = String(i.id).toLowerCase().replace(/^#/, '');
-        if (typeof isDeleted === 'function' && isDeleted(cleanId)) return false;
-        return (i.specs && String(i.specs).toLowerCase().includes('contact')) ||
-               (i.notes && !i.items?.length && i.type !== 'order');
-      });
-      if (contactInqs.length > 0) {
-        allMessages = contactInqs.map(ci => ({
-          id: ci.id,
-          name: ci.name,
-          phone: ci.phone,
-          email: ci.email || '',
-          service: ci.product || 'General Inquiry',
-          subject: ci.product || 'General Inquiry',
-          message: ci.notes || ci.specs || '',
-          status: ci.status === 'Completed' ? 'Read' : 'Unread',
-          createdAt: ci.createdAt,
-          created_at: ci.createdAt
-        }));
+  // 2. Fetch directly from Supabase Cloud (ensures sync across all devices)
+  try {
+    const supaRes = await fetch('https://dqgyrexdvpyfsphvahef.supabase.co/rest/v1/messages?select=*&order=created_at.desc', {
+      headers: {
+        'apikey': 'sb_publishable_ZkRF8K6IhyekANlDX9SPMA_BPcSXZHw',
+        'Authorization': 'Bearer sb_publishable_ZkRF8K6IhyekANlDX9SPMA_BPcSXZHw'
       }
+    });
+    if (supaRes.ok) {
+      const supaData = await supaRes.json().catch(() => []);
+      if (Array.isArray(supaData) && supaData.length > 0) {
+        const existingIds = new Set(allMessages.map(m => m.id));
+        for (const sm of supaData) {
+          if (!existingIds.has(sm.id)) {
+            allMessages.push({
+              id: sm.id,
+              name: sm.name,
+              phone: sm.phone,
+              email: sm.email || '',
+              service: sm.service || 'General Inquiry',
+              subject: sm.service || 'General Inquiry',
+              message: sm.message || '',
+              status: sm.status || 'Unread',
+              createdAt: sm.created_at || new Date().toISOString(),
+              created_at: sm.created_at || new Date().toISOString()
+            });
+            existingIds.add(sm.id);
+          }
+        }
+      }
+    }
+  } catch (supaErr) {
+    console.warn('Supabase direct messages fetch note:', supaErr.message);
+  }
+
+  // Fallback: If no messages fetched, check allInquiries for contact submissions
+  if ((!allMessages || allMessages.length === 0) && Array.isArray(allInquiries) && allInquiries.length > 0) {
+    const contactInqs = allInquiries.filter(i => {
+      if (!i || !i.id) return false;
+      const cleanId = String(i.id).toLowerCase().replace(/^#/, '');
+      if (typeof isDeleted === 'function' && isDeleted(cleanId)) return false;
+      return (i.specs && String(i.specs).toLowerCase().includes('contact')) ||
+             (i.notes && !i.items?.length && i.type !== 'order');
+    });
+    if (contactInqs.length > 0) {
+      allMessages = contactInqs.map(ci => ({
+        id: ci.id,
+        name: ci.name,
+        phone: ci.phone,
+        email: ci.email || '',
+        service: ci.product || 'General Inquiry',
+        subject: ci.product || 'General Inquiry',
+        message: ci.notes || ci.specs || '',
+        status: ci.status === 'Completed' ? 'Read' : 'Unread',
+        createdAt: ci.createdAt,
+        created_at: ci.createdAt
+      }));
     }
   }
 
-  // Filter out any trial/test messages
+  // Filter out any locally deleted messages & sort newest first
   if (Array.isArray(allMessages)) {
     allMessages = allMessages.filter(m => {
       if (!m || !m.id) return false;
-      const cleanId = String(m.id).toLowerCase();
-      const isTrialId = cleanId === 'msg-2026-001' || cleanId === 'msg-2026-002' || cleanId.startsWith('msg-test-');
-      const isTestSender = (m.name && m.name.toLowerCase().includes('test')) || (m.email && m.email.toLowerCase().includes('test'));
-      return !isTrialId && !isTestSender;
+      const cleanId = String(m.id).toLowerCase().replace(/^#/, '');
+      if (window._deletedOrderIdsCache && window._deletedOrderIdsCache.has(cleanId)) return false;
+      return true;
     });
+
+    allMessages.sort((a, b) => new Date(b.createdAt || b.created_at || 0) - new Date(a.createdAt || a.created_at || 0));
   }
 
   renderContactMessages(allMessages || []);
@@ -7332,6 +7371,15 @@ window.deleteMessage = async (id) => {
         localStorage.setItem('rf_admin_deleted_ids', JSON.stringify(Array.from(window._deletedOrderIdsCache)));
       } catch (_) {}
     }
+
+    // Direct Supabase delete for instant cloud sync
+    fetch(`https://dqgyrexdvpyfsphvahef.supabase.co/rest/v1/messages?id=eq.${encodeURIComponent(cleanId)}`, {
+      method: 'DELETE',
+      headers: {
+        'apikey': 'sb_publishable_ZkRF8K6IhyekANlDX9SPMA_BPcSXZHw',
+        'Authorization': 'Bearer sb_publishable_ZkRF8K6IhyekANlDX9SPMA_BPcSXZHw'
+      }
+    }).catch(() => {});
 
     await apiFetch(`/api/admin/messages/${encodeURIComponent(cleanId)}`, {
       method: 'DELETE'

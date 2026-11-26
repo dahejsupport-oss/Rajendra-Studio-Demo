@@ -5031,9 +5031,11 @@ app.post('/api/contact', async (req, res) => {
     const nowIso = new Date().toISOString();
 
     // 1. Save to Contact Messages
-    const messages = await db.getMessages();
+    const msgId = (req.body && req.body.id && String(req.body.id).startsWith('MSG-'))
+      ? req.body.id.trim()
+      : `MSG-${Date.now()}`;
     const newMsg = {
-      id: `MSG-${new Date().getFullYear()}-${String(messages.length + 1).padStart(3, '0')}`,
+      id: msgId,
       name: cleanName,
       phone: cleanPhone,
       email: cleanEmail,
@@ -5414,14 +5416,5 @@ if (require.main === module) {
   });
 }
 
-// Initial startup purge to ensure fresh workflow testing
-setImmediate(async () => {
-  try {
-    await db.cleanTrialData();
-    console.log('🧹 [STARTUP] Customers and Messages clean-sync complete.');
-  } catch (err) {
-    console.warn('⚠️ [STARTUP] Notice during initial clean-sync:', err.message);
-  }
-});
-
+// Server exported for serverless environments
 module.exports = app;
